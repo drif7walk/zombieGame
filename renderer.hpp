@@ -42,7 +42,7 @@ private:
 		{
 			return 1;
 		}
-
+		int i = SDL_SetColorKey(surface, 1, 0xff00ff);
 		if ((ascii.texture = SDL_CreateTextureFromSurface(renderer, surface)) == nullptr)
 		{
 			return 1;
@@ -92,8 +92,6 @@ private:
 		}
 		*destination = original;
 		destination->y += destination->h;
-		
-		//	SDL_RenderCopy(renderer, texture, source, destination);
 	}
 
 	void drawText(char* string, SDL_Rect* destination, int scale)
