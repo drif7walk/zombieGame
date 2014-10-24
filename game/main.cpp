@@ -23,6 +23,7 @@ typedef enum
 	quitState
 } GameState;
 
+#define FPS 60
 
 int main(int argc, char** argv)
 {
@@ -48,6 +49,9 @@ int main(int argc, char** argv)
 
 	audio::load();
 
+	Uint32 waittime = 1000 / FPS;
+	Uint32 framestarttime = 0;
+	Sint32 delaytime;
 
 	while(state != quitState)
 	{
@@ -94,6 +98,11 @@ int main(int argc, char** argv)
 				}
 				audio::play(100, 50);
 				renderer->drawMenu(currentMenuButton);//zīmēt mainMenu
+
+				delaytime = waittime - (SDL_GetTicks() - framestarttime);
+				if (delaytime > 0)
+					SDL_Delay((Uint32)delaytime);
+				framestarttime = SDL_GetTicks();
 			}
 		}
 

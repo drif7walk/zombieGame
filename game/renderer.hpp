@@ -84,7 +84,7 @@ private:
 		{
 			destination->w = ascii.source.w;
 		}
-		for (int i = 0; i < strlen(string); i++)
+		for (unsigned int i = 0; i < strlen(string); i++)
 		{
 			drawCharacter(ptr, destination);
 			destination->x += destination->w;
