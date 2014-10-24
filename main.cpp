@@ -47,7 +47,6 @@ int main(int argc, char** argv)
 	}
 
 	audio::load();
-	audio::play(255, 255);
 
 
 	while(state != quitState)
@@ -93,7 +92,7 @@ int main(int argc, char** argv)
 					default: continue;
 					}
 				}
-				audio::play(255, 255/2);
+				audio::play(100, 50);
 				renderer->drawMenu(currentMenuButton);//zīmēt mainMenu
 			}
 		}

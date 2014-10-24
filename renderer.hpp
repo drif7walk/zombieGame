@@ -71,22 +71,30 @@ private:
 		SDL_RenderCopy(renderer, ascii.texture, &Src, destination);
 	}
 
-	void drawText(char string[], SDL_Rect* destination)
+	void drawText(char* string, SDL_Rect* destination)
 	{
 		char* ptr;
+		SDL_Rect original = *destination;
 		ptr = string;
 		destination->h = ascii.source.h;
 		destination->w = ascii.source.w;
 		for (int i = 0; i < strlen(string); i++)
 		{
 			drawCharacter(ptr, destination);
-			destination->x += ascii.source.w;
+			destination->x += destination->w;
 			ptr++;
 		}
-
+		*destination = original;
+		
 		//	SDL_RenderCopy(renderer, texture, source, destination);
 	}
 
+	void drawText(char* string, SDL_Rect* destination, int scale)
+	{
+		destination->w *= scale;
+		destination->h *= scale;
+		drawText(string, destination);
+	}
 
 public:
 	bool intitialize()
@@ -125,24 +133,29 @@ public:
 		SDL_Rect destination;
 		destination.x = 100;
 		destination.y = 100;
+		destination.h = ascii.source.h;
+
 		clear();
 
 		destination.x = 100 - ascii.source.w;
 		destination.y = 100 + currentMenuButton * ascii.source.h;
 		drawText(">", &destination);
 
+
+
 		destination.x = 100;
 		destination.y = 100;
 		drawText("New Game", &destination);
-		destination.y += ascii.source.h;
+		destination.y += destination.h;
 		destination.x = 100;
 		drawText("Options", &destination);
-		destination.y += ascii.source.h;
+		destination.y += destination.h;
 		destination.x = 100;
 		drawText("Highscore", &destination);
-		destination.y += ascii.source.h;
+		destination.y += destination.h;
 		destination.x = 100;
 		drawText("Quit", &destination);
+
 		
 		present();
 	}
