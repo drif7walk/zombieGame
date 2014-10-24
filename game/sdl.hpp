@@ -1,7 +1,7 @@
 ﻿#ifndef SDL_HPP
 #define SDL_HPP
 
-#include <SDL2\SDL.h>
+#include <SDL.h>
 #include <SDL_mixer.h>
 
 namespace sdl

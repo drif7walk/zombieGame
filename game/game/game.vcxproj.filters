@@ -15,21 +15,21 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\main.cpp">
+    <ClCompile Include="..\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\renderer.hpp">
+    <ClInclude Include="..\audio.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\sdl.hpp">
+    <ClInclude Include="..\renderer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\userInput.hpp">
+    <ClInclude Include="..\sdl.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\audio.hpp">
+    <ClInclude Include="..\userInput.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
