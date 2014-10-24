@@ -76,8 +76,14 @@ private:
 		char* ptr;
 		SDL_Rect original = *destination;
 		ptr = string;
-		destination->h = ascii.source.h;
-		destination->w = ascii.source.w;
+		if (destination->h < 0)
+		{
+			destination->h = ascii.source.h;
+		}
+		if (destination->w < 0)
+		{
+			destination->w = ascii.source.w;
+		}
 		for (int i = 0; i < strlen(string); i++)
 		{
 			drawCharacter(ptr, destination);
@@ -85,14 +91,15 @@ private:
 			ptr++;
 		}
 		*destination = original;
+		destination->y += destination->h;
 		
 		//	SDL_RenderCopy(renderer, texture, source, destination);
 	}
 
 	void drawText(char* string, SDL_Rect* destination, int scale)
 	{
-		destination->w *= scale;
-		destination->h *= scale;
+		destination->w = ascii.source.w * scale;
+		destination->h = ascii.source.h * scale;
 		drawText(string, destination);
 	}
 
@@ -131,30 +138,25 @@ public:
 	void drawMenu(CurrentMenuButton currentMenuButton)
 	{
 		SDL_Rect destination;
-		destination.x = 100;
-		destination.y = 100;
-		destination.h = ascii.source.h;
+
+		int textScale = 4;
+		int topRightX = 100;
+		int topRightY = 100;
+
 
 		clear();
 
-		destination.x = 100 - ascii.source.w;
-		destination.y = 100 + currentMenuButton * ascii.source.h;
-		drawText(">", &destination);
+		destination.x = topRightX - ascii.source.w * textScale;
+		destination.y = 100 + currentMenuButton * ascii.source.h * textScale;
+		drawText(">", &destination, textScale);
 
 
-
-		destination.x = 100;
-		destination.y = 100;
-		drawText("New Game", &destination);
-		destination.y += destination.h;
-		destination.x = 100;
-		drawText("Options", &destination);
-		destination.y += destination.h;
-		destination.x = 100;
-		drawText("Highscore", &destination);
-		destination.y += destination.h;
-		destination.x = 100;
-		drawText("Quit", &destination);
+		destination.x = topRightX;
+		destination.y = topRightY;
+		drawText("New Game", &destination, textScale);
+		drawText("Options", &destination, textScale);
+		drawText("Highscore", &destination, textScale);
+		drawText("Quit", &destination, textScale);
 
 		
 		present();
