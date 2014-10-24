@@ -139,26 +139,23 @@ public:
 	{
 		SDL_Rect destination;
 
-		int textScale = 4;
-		int topRightX = 100;
+		int textScale = 5;
+		int topRightX = 100 + ascii.source.w * textScale;
 		int topRightY = 100;
-
 
 		clear();
 
 		destination.x = topRightX - ascii.source.w * textScale;
-		destination.y = 100 + currentMenuButton * ascii.source.h * textScale;
+		destination.y = topRightY + currentMenuButton * ascii.source.h * textScale;
 		drawText(">", &destination, textScale);
-
-
+		
 		destination.x = topRightX;
 		destination.y = topRightY;
 		drawText("New Game", &destination, textScale);
 		drawText("Options", &destination, textScale);
 		drawText("Highscore", &destination, textScale);
 		drawText("Quit", &destination, textScale);
-
-		
+				
 		present();
 	}
 
