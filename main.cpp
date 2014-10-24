@@ -10,6 +10,7 @@ typedef enum
 
 #include "renderer.hpp"
 #include "sdl.hpp"
+#include "audio.hpp"
 //#include "userInput.hpp"
 
 typedef enum
@@ -45,6 +46,9 @@ int main(int argc, char** argv)
 		return 1;
 	}
 
+	audio::load();
+	audio::play(255, 255);
+
 
 	while(state != quitState)
 	{
@@ -62,19 +66,34 @@ int main(int argc, char** argv)
 					case SDL_KEYDOWN:
 						if (e.key.keysym.sym == SDLK_RETURN && currentMenuButton == quitButton)
 						{
-							state = quitState; //HA GAY
+							state = quitState;
 						}
-						if (e.key.keysym.sym == SDLK_UP && currentMenuButton != newGameButton)
+						if (e.key.keysym.sym == SDLK_UP)
 						{
-							currentMenuButton = (CurrentMenuButton)((int)currentMenuButton - 1);
+							if (currentMenuButton != newGameButton)
+							{
+								currentMenuButton = (CurrentMenuButton)((int)currentMenuButton - 1);
+							}
+							else
+							{
+								currentMenuButton = (CurrentMenuButton)3;
+							}
 						}
-						if (e.key.keysym.sym == SDLK_DOWN && currentMenuButton != quitButton)
+						if (e.key.keysym.sym == SDLK_DOWN)
 						{
-							currentMenuButton = (CurrentMenuButton)((int)currentMenuButton + 1);
+							if (currentMenuButton != quitButton)
+							{
+								currentMenuButton = (CurrentMenuButton)((int)currentMenuButton + 1);
+							}
+							else
+							{
+								currentMenuButton = (CurrentMenuButton)0;
+							}
 						}
 					default: continue;
 					}
 				}
+				audio::play(255, 255/2);
 				renderer->drawMenu(currentMenuButton);//zīmēt mainMenu
 			}
 		}
@@ -98,6 +117,8 @@ int main(int argc, char** argv)
 
 	renderer->~Renderer();
 	delete renderer;
+
+	audio::deinitialize();
 
 	SDL_Quit();
 

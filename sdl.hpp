@@ -2,15 +2,30 @@
 #define SDL_HPP
 
 #include <SDL2\SDL.h>
+#include <SDL_mixer.h>
 
 namespace sdl
 {
 	bool initialize()
 	{
-		if (SDL_Init(SDL_INIT_EVENTS | SDL_INIT_VIDEO) != 0)
+		if (SDL_Init(SDL_INIT_EVENTS | SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0)
 		{
 			return 1;
 		}
+
+		const int     AUDIO_FREQ = 44100;
+		const Uint16  AUDIO_FORMAT = MIX_DEFAULT_FORMAT;
+		const int     AUDIO_CHANNELS = 2;
+		const int     AUDIO_BUFFERS = 1024;
+
+		if (Mix_OpenAudio(AUDIO_FREQ, AUDIO_FORMAT, AUDIO_CHANNELS, AUDIO_BUFFERS) == -1) 
+		{
+			return 1;
+		}
+
+		Mix_AllocateChannels(16);
+
+
 		return 0;
 	}
 }
