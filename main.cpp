@@ -62,7 +62,7 @@ int main(int argc, char** argv)
 					case SDL_KEYDOWN:
 						if (e.key.keysym.sym == SDLK_RETURN && currentMenuButton == quitButton)
 						{
-							state = quitState;
+							state = quitState; //HA GAY
 						}
 						if (e.key.keysym.sym == SDLK_UP && currentMenuButton != newGameButton)
 						{
