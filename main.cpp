@@ -1,56 +1,104 @@
 #include <SDL2/SDL.h>
-using namespace std;
+
+typedef enum
+{
+	newGameButton,
+	optionsButton,
+	highscoresButton,
+	quitButton
+} CurrentMenuButton;
+
+#include "renderer.hpp"
+#include "sdl.hpp"
+//#include "userInput.hpp"
+
+typedef enum
+{
+	mainMenuState,
+	optionsState,
+	highscoreState,
+	gameplayState,
+	pauseMenuState,
+	quitState
+} GameState;
+
 
 int main(int argc, char** argv)
 {
+		
+	GameState state = mainMenuState;
+	CurrentMenuButton currentMenuButton = newGameButton;
+
 	SDL_Event e;
-	bool quit = false;
-	
-	/* XXX: Tā vietā, lai lādētu _visu_ pēcāk sadalīt šo if
-	vairākos if-os, kas salādē tikai izmantotos SDL modules. */
-	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
+
+	if (sdl::initialize() != 0)
 	{
+		SDL_Quit();
+		return 1;
+	}
+	
+	Renderer* renderer = new Renderer();
+	
+	if (renderer->intitialize() != 0)
+	{
+		SDL_Quit();
 		return 1;
 	}
 
-	/* Izveidot logu. */
-	SDL_Window* window = SDL_CreateWindow("hl2.exe", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, SDL_WINDOW_SHOWN);
 
-	/* C++11 */
-	if (window == nullptr)
+	while(state != quitState)
 	{
-		SDL_Quit();
-	}
-
-	/* Rendereris */
-	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-
-	double _fps = 1000 / 60.0f;
-
-	
-
-	while(!quit)
-	{
-		while(SDL_PollEvent(&e))
+		if (state == mainMenuState)
 		{
-			switch(e.type)
+			
+			while (state == mainMenuState)
 			{
-				case SDL_QUIT:
-					quit = true;
-				default: continue;	
+				while (SDL_PollEvent(&e))
+				{
+					switch (e.type)
+					{
+					case SDL_QUIT:
+						state = quitState;
+					case SDL_KEYDOWN:
+						if (e.key.keysym.sym == SDLK_RETURN && currentMenuButton == quitButton)
+						{
+							state = quitState;
+						}
+						if (e.key.keysym.sym == SDLK_UP && currentMenuButton != newGameButton)
+						{
+							currentMenuButton = (CurrentMenuButton)((int)currentMenuButton - 1);
+						}
+						if (e.key.keysym.sym == SDLK_DOWN && currentMenuButton != quitButton)
+						{
+							currentMenuButton = (CurrentMenuButton)((int)currentMenuButton + 1);
+						}
+					default: continue;
+					}
+				}
+				renderer->drawMenu(currentMenuButton);//zīmēt mainMenu
 			}
 		}
 
-		//renderer->Render(a, b, c);
-	
-		SDL_RenderClear(renderer);
-		SDL_RenderPresent(renderer);
+		if (state == optionsState)
+		{
 
-		SDL_Delay(_fps);
-		
+		}
+
+		if (state == highscoreState)
+		{
+
+		}
+
+		if (state == gameplayState)
+		{
+
+		}
+
 	}
 
-	SDL_DestroyWindow(window);
+	renderer->~Renderer();
+	delete renderer;
+
 	SDL_Quit();
 
 	return 0;
