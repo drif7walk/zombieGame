@@ -81,9 +81,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\audio.hpp" />
+    <ClInclude Include="..\mainMenu.hpp" />
+    <ClInclude Include="..\options.hpp" />
     <ClInclude Include="..\renderer.hpp" />
     <ClInclude Include="..\sdl.hpp" />
     <ClInclude Include="..\userInput.hpp" />
+    <ClInclude Include="..\utility.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

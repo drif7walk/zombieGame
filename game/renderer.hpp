@@ -1,9 +1,6 @@
 ﻿#ifndef RENDERER_HPP
 #define RENDERER_HPP
 
-#include <SDL.h>
-#include <string.h>
-
 class Renderer
 {
 public:
@@ -11,6 +8,7 @@ public:
 	{
 
 	}
+
 	~Renderer()
 	{
 		SDL_DestroyRenderer(renderer);
@@ -23,15 +21,6 @@ private:
 		SDL_Texture* texture;
 		SDL_Rect source;
 	};
-
-	inline void clear()
-	{
-		SDL_RenderClear(renderer);
-	}
-	inline void present()
-	{
-		SDL_RenderPresent(renderer);
-	}
 
 	bool loadASCII()
 	{
@@ -94,6 +83,7 @@ private:
 		destination->y += destination->h;
 	}
 
+public:
 	void drawText(char* string, SDL_Rect* destination, int scale)
 	{
 		destination->w = ascii.source.w * scale;
@@ -101,7 +91,6 @@ private:
 		drawText(string, destination);
 	}
 
-public:
 	bool intitialize()
 	{
 		window = SDL_CreateWindow("alpha.exe", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, SDL_WINDOW_SHOWN);
@@ -131,35 +120,22 @@ public:
 		clear();
 		//render
 		present();
+	}//varbut jaatdala ka ar mainMenu.hpp
+
+	inline void clear()
+	{
+		SDL_RenderClear(renderer);
 	}
 
-	void drawMenu(CurrentMenuButton currentMenuButton)
+	inline void present()
 	{
-		SDL_Rect destination;
-
-		int textScale = 5;
-		int topRightX = 100 + ascii.source.w * textScale;
-		int topRightY = 100;
-
-		clear();
-
-		destination.x = topRightX - ascii.source.w * textScale;
-		destination.y = topRightY + currentMenuButton * ascii.source.h * textScale;
-		drawText(">", &destination, textScale);
-		
-		destination.x = topRightX;
-		destination.y = topRightY;
-		drawText("New Game", &destination, textScale);
-		drawText("Options", &destination, textScale);
-		drawText("Highscore", &destination, textScale);
-		drawText("Quit", &destination, textScale);
-				
-		present();
+		SDL_RenderPresent(renderer);
 	}
 
 private:
 	SDL_Window* window;
 	SDL_Renderer* renderer;
+public:
 	asciiTexture ascii;
 };
 

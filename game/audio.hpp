@@ -1,7 +1,6 @@
 #ifndef AUDIO_HPP
 #define AUDIO_HPP
 
-#include <SDL_mixer.h>
 namespace audio
 {
 

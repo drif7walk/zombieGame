@@ -1,17 +1,7 @@
+
 #include <SDL.h>
-
-typedef enum
-{
-	newGameButton,
-	optionsButton,
-	highscoresButton,
-	quitButton
-} CurrentMenuButton;
-
-#include "renderer.hpp"
-#include "sdl.hpp"
-#include "audio.hpp"
-//#include "userInput.hpp"
+#include <SDL_mixer.h>
+#include <string.h>
 
 typedef enum
 {
@@ -23,15 +13,22 @@ typedef enum
 	quitState
 } GameState;
 
-#define FPS 60
+#include "utility.hpp"
+#include "renderer.hpp"
+#include "sdl.hpp"
+#include "audio.hpp"
+#include "options.hpp"
+#include "mainMenu.hpp"
+//#include "userInput.hpp"
 
 int main(int argc, char** argv)
 {
 		
 	GameState state = mainMenuState;
-	CurrentMenuButton currentMenuButton = newGameButton;
 
 	SDL_Event e;
+
+	Options* options = new Options();
 
 	if (sdl::initialize() != 0)
 	{
@@ -44,12 +41,15 @@ int main(int argc, char** argv)
 	if (renderer->intitialize() != 0)
 	{
 		SDL_Quit();
+		renderer->~Renderer();
 		return 1;
 	}
 
+	MainMenu* mainMenu = new MainMenu(renderer, &e, &state);
+
 	audio::load();
 
-	Uint32 waittime = 1000 / FPS;
+	Uint32 waittime = 1000 / options->getFPS();
 	Uint32 framestarttime = 0;
 	Sint32 delaytime;
 
@@ -60,45 +60,11 @@ int main(int argc, char** argv)
 			
 			while (state == mainMenuState)
 			{
-				while (SDL_PollEvent(&e))
-				{
-					switch (e.type)
-					{
-					case SDL_QUIT:
-						state = quitState;
-					case SDL_KEYDOWN:
-						if (e.key.keysym.sym == SDLK_RETURN && currentMenuButton == quitButton)
-						{
-							state = quitState;
-						}
-						if (e.key.keysym.sym == SDLK_UP)
-						{
-							if (currentMenuButton != newGameButton)
-							{
-								currentMenuButton = (CurrentMenuButton)((int)currentMenuButton - 1);
-							}
-							else
-							{
-								currentMenuButton = (CurrentMenuButton)3;
-							}
-						}
-						if (e.key.keysym.sym == SDLK_DOWN)
-						{
-							if (currentMenuButton != quitButton)
-							{
-								currentMenuButton = (CurrentMenuButton)((int)currentMenuButton + 1);
-							}
-							else
-							{
-								currentMenuButton = (CurrentMenuButton)0;
-							}
-						}
-					default: continue;
-					}
-				}
-				audio::play(100, 50);
-				renderer->drawMenu(currentMenuButton);//zīmēt mainMenu
+				mainMenu->userInput();
+				mainMenu->drawMenu();
 
+				audio::play(options->getVolume(), 50);
+				
 				delaytime = waittime - (SDL_GetTicks() - framestarttime);
 				if (delaytime > 0)
 					SDL_Delay((Uint32)delaytime);
@@ -125,6 +91,12 @@ int main(int argc, char** argv)
 
 	renderer->~Renderer();
 	delete renderer;
+
+	mainMenu->~MainMenu();
+	delete mainMenu;
+
+	options->~Options();
+	delete options;
 
 	audio::deinitialize();
 
