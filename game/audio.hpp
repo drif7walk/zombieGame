@@ -30,7 +30,7 @@ public:
 
 		if (Mix_Playing(0) == 0)
 		{
-			Mix_PlayChannel(curChannel, audio, 0);
+			Mix_PlayChannel(-1, audio, 0);
 		}
 	}
 

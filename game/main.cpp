@@ -6,16 +6,6 @@
 #include <SDL_mixer.h>
 #include <string.h>
 
-typedef enum
-{
-	mainMenuState,
-	settingsState,
-	highscoreState,
-	gameplayState,
-	pauseMenuState,
-	quitState
-} GameState;
-
 #include "utility.hpp"
 #include "renderer.hpp"
 #include "sdl.hpp"
@@ -26,7 +16,6 @@ typedef enum
 
 int main(int argc, char** argv)
 {
-		
 	GameState state = mainMenuState;
 
 	SDL_Event e;
