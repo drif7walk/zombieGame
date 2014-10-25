@@ -82,7 +82,7 @@
   <ItemGroup>
     <ClInclude Include="..\audio.hpp" />
     <ClInclude Include="..\mainMenu.hpp" />
-    <ClInclude Include="..\options.hpp" />
+    <ClInclude Include="..\settings.hpp" />
     <ClInclude Include="..\renderer.hpp" />
     <ClInclude Include="..\sdl.hpp" />
     <ClInclude Include="..\userInput.hpp" />

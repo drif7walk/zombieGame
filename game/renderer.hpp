@@ -47,24 +47,21 @@ private:
 		return 0;
 	}
 
-	void drawCharacter(char* charCode, SDL_Rect* destination)
+	void drawCharacter(const char* charCode, SDL_Rect* destination)
 	{
 		SDL_Rect Src = ascii.source;
-		if (*charCode > 125 || *charCode < 0)
-		{
-			*charCode = 0;
-		}
+
 		Src.y = ((int)*charCode / 16) * ascii.source.h;
 		Src.x = ((int)*charCode - ((int)*charCode / 16) * 16) * ascii.source.w;
 		
 		SDL_RenderCopy(renderer, ascii.texture, &Src, destination);
 	}
 
-	void drawText(char* string, SDL_Rect* destination)
+	void drawText(const char* string, SDL_Rect* destination)
 	{
 		char* ptr;
 		SDL_Rect original = *destination;
-		ptr = string;
+		ptr = (char*)string;
 		if (destination->h < 0)
 		{
 			destination->h = ascii.source.h;
@@ -84,7 +81,7 @@ private:
 	}
 
 public:
-	void drawText(char* string, SDL_Rect* destination, int scale)
+	void drawText(const char* string, SDL_Rect* destination, int scale)
 	{
 		destination->w = ascii.source.w * scale;
 		destination->h = ascii.source.h * scale;

@@ -1,3 +1,6 @@
+#define CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
 
 #include <SDL.h>
 #include <SDL_mixer.h>
@@ -6,7 +9,7 @@
 typedef enum
 {
 	mainMenuState,
-	optionsState,
+	settingsState,
 	highscoreState,
 	gameplayState,
 	pauseMenuState,
@@ -17,7 +20,7 @@ typedef enum
 #include "renderer.hpp"
 #include "sdl.hpp"
 #include "audio.hpp"
-#include "options.hpp"
+#include "settings.hpp"
 #include "mainMenu.hpp"
 //#include "userInput.hpp"
 
@@ -28,51 +31,41 @@ int main(int argc, char** argv)
 
 	SDL_Event e;
 
-	Options* options = new Options();
+	Settings* settings = new Settings();
 
 	if (sdl::initialize() != 0)
 	{
 		SDL_Quit();
+		delete settings;
 		return 1;
 	}
+
+	Audio* audio = new Audio();
 	
 	Renderer* renderer = new Renderer();
 	
-	if (renderer->intitialize() != 0)
+	if (renderer->intitialize() != 0)//ievieto contstructoraa
 	{
 		SDL_Quit();
-		renderer->~Renderer();
+		delete settings;
+		delete renderer;
+		delete audio;
 		return 1;
 	}
-
-	MainMenu* mainMenu = new MainMenu(renderer, &e, &state);
-
-	audio::load();
-
-	Uint32 waittime = 1000 / options->getFPS();
-	Uint32 framestarttime = 0;
-	Sint32 delaytime;
-
+	
 	while(state != quitState)
 	{
 		if (state == mainMenuState)
 		{
-			
-			while (state == mainMenuState)
+			MainMenu* mainMenu = new MainMenu(renderer, &e, &state, settings, audio);	//vajadzetu izveidot engine class
+			while (state == mainMenuState)												//shis jau paliek smiekliigi
 			{
-				mainMenu->userInput();
-				mainMenu->drawMenu();
-
-				audio::play(options->getVolume(), 50);
-				
-				delaytime = waittime - (SDL_GetTicks() - framestarttime);
-				if (delaytime > 0)
-					SDL_Delay((Uint32)delaytime);
-				framestarttime = SDL_GetTicks();
+				mainMenu->updateMainMenu();
 			}
+			delete mainMenu;
 		}
 
-		if (state == optionsState)
+		if (state == settingsState)
 		{
 
 		}
@@ -89,18 +82,12 @@ int main(int argc, char** argv)
 
 	}
 
-	renderer->~Renderer();
 	delete renderer;
-
-	mainMenu->~MainMenu();
-	delete mainMenu;
-
-	options->~Options();
-	delete options;
-
-	audio::deinitialize();
+	delete settings;
+	delete audio;
 
 	SDL_Quit();
 
+	_CrtDumpMemoryLeaks();
 	return 0;
 }
