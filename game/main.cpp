@@ -5,6 +5,9 @@
 #include <SDL.h>
 #include <SDL_mixer.h>
 #include <string.h>
+#include <vector>
+
+using namespace std;
 
 #include "utility.hpp"
 #include "settings.hpp"
@@ -13,6 +16,7 @@
 #include "audio.hpp"
 #include "engine.hpp"
 #include "mainMenu.hpp"
+#include "game.hpp"
 //#include "userInput.hpp"
 
 //DuPsys dereference everything
@@ -36,7 +40,7 @@ int main(int argc, char** argv)
 			{
 				mainMenu->updateMainMenu();
 			}
-			delete mainMenu;//main menu vairs nebus nepiecieshams 
+			delete mainMenu;//main menu vairs nebus nepiecieshams
 		}
 
 		if (*engine->state == settingsState)
@@ -51,7 +55,12 @@ int main(int argc, char** argv)
 
 		if (*engine->state == gameplayState)
 		{
-
+			Game* game = new Game(engine);
+			while (*engine->state == gameplayState)
+			{
+				game->updateGame();
+			}
+			delete game;
 		}
 
 	}

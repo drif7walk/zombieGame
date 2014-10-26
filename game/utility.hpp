@@ -16,4 +16,18 @@ typedef enum
 	quitState
 } GameState;
 
+typedef enum
+{
+	ASCII,
+	BLOCK,
+	SKY,
+	MAPTEXTURE
+}TextureIdentifier;
+
+typedef enum
+{
+	block = 1,
+	sky
+}Tile;
+
 #endif

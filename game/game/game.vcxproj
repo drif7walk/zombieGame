@@ -82,6 +82,7 @@
   <ItemGroup>
     <ClInclude Include="..\audio.hpp" />
     <ClInclude Include="..\engine.hpp" />
+    <ClInclude Include="..\game.hpp" />
     <ClInclude Include="..\mainMenu.hpp" />
     <ClInclude Include="..\settings.hpp" />
     <ClInclude Include="..\renderer.hpp" />
