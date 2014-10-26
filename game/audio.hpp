@@ -19,9 +19,9 @@ private:
 	Mix_Chunk* audio;	//TO-DO: izveidot vektoru ar audio failiem, un iespeju speleet uz vairakiem kanaliem
 
 public:
-	void play(const int VOL_PERCENT_TOT, const int VOL_PERCENT_L)
+	inline void play(const int VOL_PERCENT_TOT, const int VOL_PERCENT_L)// VOL_PERCENT_TOT/L var buut no 0-100
 	{
-		int curChannel = 0;
+		int curChannel = 0;//TO-DO jaizveelas briivs kanaals
 		const int VOL_TOT = (255 * VOL_PERCENT_TOT) / 100;
 		const int VOL_L = (VOL_PERCENT_L * VOL_TOT) / 100;
 		const int VOL_R = VOL_TOT - VOL_L;
@@ -30,7 +30,7 @@ public:
 
 		if (Mix_Playing(0) == 0)
 		{
-			Mix_PlayChannel(-1, audio, 0);
+			Mix_PlayChannel(curChannel, audio, 0);
 		}
 	}
 

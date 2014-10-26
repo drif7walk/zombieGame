@@ -22,7 +22,7 @@ private:
 		SDL_Rect source;
 	};
 
-	bool loadASCII()
+	inline bool loadASCII()
 	{
 		SDL_Surface* surface = nullptr;
 
@@ -47,7 +47,7 @@ private:
 		return 0;
 	}
 
-	void drawCharacter(const char* charCode, SDL_Rect* destination)
+	inline void drawCharacter(const char* charCode, SDL_Rect* destination)
 	{
 		SDL_Rect Src = ascii.source;
 
@@ -57,7 +57,7 @@ private:
 		SDL_RenderCopy(renderer, ascii.texture, &Src, destination);
 	}
 
-	void drawText(const char* string, SDL_Rect* destination)
+	inline void drawText(const char* string, SDL_Rect* destination)
 	{
 		char* ptr;
 		SDL_Rect original = *destination;
@@ -81,14 +81,14 @@ private:
 	}
 
 public:
-	void drawText(const char* string, SDL_Rect* destination, int scale)
+	inline void drawText(const char* string, SDL_Rect* destination, int scale)
 	{
 		destination->w = ascii.source.w * scale;
 		destination->h = ascii.source.h * scale;
 		drawText(string, destination);
 	}
 
-	bool intitialize()
+	inline bool intitialize()
 	{
 		window = SDL_CreateWindow("alpha.exe", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, SDL_WINDOW_SHOWN);
 		if (window == nullptr)
@@ -112,7 +112,7 @@ public:
 		return 0;
 	}
 
-	void drawFrame() // vajadzēs atseviškas katrai stadijai
+	inline void drawFrame() // vajadzēs atseviškas katrai stadijai
 	{
 		clear();
 		//render
@@ -130,6 +130,7 @@ public:
 	}
 
 private:
+
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 public:

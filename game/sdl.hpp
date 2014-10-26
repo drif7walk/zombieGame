@@ -15,7 +15,7 @@ namespace sdl
 		const int     AUDIO_CHANNELS = 2;
 		const int     AUDIO_BUFFERS = 1024;
 
-		if (Mix_OpenAudio(AUDIO_FREQ, AUDIO_FORMAT, AUDIO_CHANNELS, AUDIO_BUFFERS) == -1) 
+		if (Mix_OpenAudio(AUDIO_FREQ, AUDIO_FORMAT, AUDIO_CHANNELS, AUDIO_BUFFERS) != 0) 
 		{
 			return 1;
 		}

@@ -7,76 +7,56 @@
 #include <string.h>
 
 #include "utility.hpp"
+#include "settings.hpp"
 #include "renderer.hpp"
 #include "sdl.hpp"
 #include "audio.hpp"
-#include "settings.hpp"
+#include "engine.hpp"
 #include "mainMenu.hpp"
 //#include "userInput.hpp"
 
+//DuPsys dereference everything
+
 int main(int argc, char** argv)
 {
-	GameState state = mainMenuState;
-
-	SDL_Event e;
-
-	Settings* settings = new Settings();
-
-	if (sdl::initialize() != 0)
+	Engine* engine = new Engine();
+	if (engine->failedToInit == true)
 	{
-		SDL_Quit();
-		delete settings;
+		delete engine;
+		_CrtDumpMemoryLeaks();//parbauda vai ir kaads memory leak
 		return 1;
 	}
 
-	Audio* audio = new Audio();
-	
-	Renderer* renderer = new Renderer();
-	
-	if (renderer->intitialize() != 0)//ievieto contstructoraa
+	while(*engine->state != quitState)
 	{
-		SDL_Quit();
-		delete settings;
-		delete renderer;
-		delete audio;
-		return 1;
-	}
-	
-	while(state != quitState)
-	{
-		if (state == mainMenuState)
+		if (*engine->state == mainMenuState)
 		{
-			MainMenu* mainMenu = new MainMenu(renderer, &e, &state, settings, audio);	//vajadzetu izveidot engine class
-			while (state == mainMenuState)												//shis jau paliek smiekliigi
+			MainMenu* mainMenu = new MainMenu(engine);
+			while (*engine->state == mainMenuState)	
 			{
 				mainMenu->updateMainMenu();
 			}
-			delete mainMenu;
+			delete mainMenu;//main menu vairs nebus nepiecieshams 
 		}
 
-		if (state == settingsState)
+		if (*engine->state == settingsState)
 		{
 
 		}
 
-		if (state == highscoreState)
+		if (*engine->state == highscoreState)
 		{
 
 		}
 
-		if (state == gameplayState)
+		if (*engine->state == gameplayState)
 		{
 
 		}
 
 	}
 
-	delete renderer;
-	delete settings;
-	delete audio;
-
-	SDL_Quit();
-
+	delete engine;
 	_CrtDumpMemoryLeaks();
 	return 0;
 }
