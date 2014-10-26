@@ -7,7 +7,7 @@
 #include <string.h>
 #include <vector>
 
-using namespace std;
+using namespace std;//bad practice should not use this, only usage right now is for <vector>
 
 #include "utility.hpp"
 #include "settings.hpp"
@@ -23,15 +23,15 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-	Engine* engine = new Engine();
-	if (engine->failedToInit == true)
+	Engine* engine = new Engine();//creates a new game engine and initializes most of the components, except the actual game or the menus
+	if (engine->failedToInit == true)//upon any of components failing to initialize the program will quit
 	{
 		delete engine;
-		_CrtDumpMemoryLeaks();//parbauda vai ir kaads memory leak
+		_CrtDumpMemoryLeaks();//this is just for testing so i remember to deallocate dynamic memory that was created on the heap
 		return 1;
 	}
 
-	while(*engine->state != quitState)
+	while(*engine->state != quitState)//the main loop of the program
 	{
 		if (*engine->state == mainMenuState)
 		{
@@ -40,7 +40,7 @@ int main(int argc, char** argv)
 			{
 				mainMenu->updateMainMenu();
 			}
-			delete mainMenu;//main menu vairs nebus nepiecieshams
+			delete mainMenu;
 		}
 
 		if (*engine->state == settingsState)

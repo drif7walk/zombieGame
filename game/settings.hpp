@@ -43,7 +43,7 @@ public:
 	{
 		return screenY;
 	}
-
+	
 	inline void parseSettingsFile()
 	{
 
