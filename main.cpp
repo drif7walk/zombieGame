@@ -7,7 +7,7 @@
 
 using namespace std;
 
-void LoadSpritesFromList(SDL_Renderer*, map<string, Sprite*>);
+void LoadSpritesFromList(SDL_Renderer*, map<string, Sprite*>*);
 
 int main(int argc, char** argv)
 {
@@ -36,17 +36,11 @@ int main(int argc, char** argv)
 	double _fps = 1000 / 60.0f;
 
 	/* Load assets */
-	Sprite* guy = new Sprite("guy.bmp", renderer);
-	/* XXX */
-	guy->rows = 4;
-	guy->cols = 3;
-	guy->framewidth = guy->w / guy->cols;
-	guy->frameheight = guy->h / guy->rows;
 
 	map<string, Sprite*> sprites;
 	/* End load assets */
 
-	LoadSpritesFromList(renderer, sprites);
+	LoadSpritesFromList(renderer, &sprites);
 
 
 
@@ -68,23 +62,23 @@ int main(int argc, char** argv)
 		/* Update */
 		if (keybuf[SDL_SCANCODE_W])
 		{
-			guy->y += -3.142;
-			guy->AnimateStep(2);
+			//guy->y += -3.142;
+			//guy->AnimateStep(2);
 		}
 		if (keybuf[SDL_SCANCODE_A])
 		{
-			guy->x += -3.142;
-			guy->AnimateStep(3);
+			//guy->x += -3.142;
+			//guy->AnimateStep(3);
 		}
 		if (keybuf[SDL_SCANCODE_S])
 		{
-			guy->y += 3.142;
-			guy->AnimateStep(0);
+			//guy->y += 3.142;
+			//guy->AnimateStep(0);
 		}
 		if (keybuf[SDL_SCANCODE_D])
 		{
-			guy->x += 3.142;
-			guy->AnimateStep(1);
+			//guy->x += 3.142;
+			//guy->AnimateStep(1);
 		}
 
 		//renderer->Render(a, b, c);
@@ -92,6 +86,7 @@ int main(int argc, char** argv)
 		SDL_RenderClear(renderer);
 
 		/* XXX */
+		sprites["guy"]->AnimateStep(0);
 		sprites["guy"]->Render(renderer);
 
 		SDL_RenderPresent(renderer);
@@ -100,7 +95,9 @@ int main(int argc, char** argv)
 		
 	}
 
-	delete guy;
+	/* Delete every texture from map */
+
+	//delete guy;
 
 	SDL_DestroyWindow(window);
 	SDL_Quit();
@@ -108,7 +105,7 @@ int main(int argc, char** argv)
 	return 0;
 }
 
-void LoadSpritesFromList(SDL_Renderer* ren, map<string, Sprite*> sprmap)
+void LoadSpritesFromList(SDL_Renderer* ren, map<string, Sprite*>* sprmap)
 {
 	
 	/* open config then parse config */
@@ -122,7 +119,7 @@ void LoadSpritesFromList(SDL_Renderer* ren, map<string, Sprite*> sprmap)
 			/* C++ does not do switch on strings, use if/else if/else if */
 			if (s[0] == '#') continue; // comment
 
-			if (s.compare("@STARTSPRITE"))
+			if (s.compare("@STARTSPRITE") == 0)
 			{
 				Sprite* spr;
 
@@ -138,7 +135,10 @@ void LoadSpritesFromList(SDL_Renderer* ren, map<string, Sprite*> sprmap)
 				getline(conffile, inln);
 				spr->cols = atoi(inln.c_str());
 
-				sprmap.insert( pair<string, Sprite*>(spr->name, spr) );
+				spr->framewidth = spr->w / spr->cols;
+				spr->frameheight = spr->h / spr->rows;
+
+				sprmap->insert( pair<string, Sprite*>(spr->name, spr) );
 			}
 
 			/* etc.  */

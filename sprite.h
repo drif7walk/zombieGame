@@ -42,7 +42,6 @@ public:
 
 		SDL_RenderCopy(ren, this->texture, &src, &r);
 
-		
 	}
 
 	Sprite(string filename, SDL_Renderer* ren)
@@ -62,8 +61,6 @@ public:
 		SDL_QueryTexture(this->texture, NULL, NULL, &w, &h);
 		this->w = (double)w;
 		this->h = (double)h;
-
-		
 	}
 
 	~Sprite()
