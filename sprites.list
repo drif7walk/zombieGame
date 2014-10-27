@@ -1,0 +1,17 @@
+#
+# Sprite attribute parsing order.
+#
+# @STARTSPRITE
+# filename
+# identifier
+# rows
+# columns
+# @ENDSPRITE
+# No comments must exist between @-@. MANDATORY REQUIREMENT.
+
+@STARTSPRITE
+guy.bmp
+guy
+4
+3
+@ENDSPRITE
