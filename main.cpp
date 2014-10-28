@@ -1,7 +1,12 @@
 #ifdef OS_WINDOWS
 #include <SDL2/SDL.h>
 #else
+#define CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+
 #include <SDL.h>
+#include <SDL_ttf.h>
 #endif
 
 #include <fstream>
@@ -29,6 +34,12 @@ int main(int argc, char** argv)
 	{
 		return 1;
 	}
+	
+	if (TTF_Init() == -1)
+	{
+		SDL_Quit();
+		return 1;
+	}
 
 	/* Izveidot logu. */
 	SDL_Window* window = SDL_CreateWindow("hl3.exe", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, SDL_WINDOW_SHOWN);
@@ -36,15 +47,23 @@ int main(int argc, char** argv)
 	/* C++11 */
 	if (window == nullptr)
 	{
+		TTF_Quit();
 		SDL_Quit();
 	}
 
 	/* Rendereris */
-	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
 	double _fps = 1000 / 120.0f;
 
 	/* Load assets */
+	TTF_Font* font = TTF_OpenFont("SansationRegular.ttf", 24);
+	if (font == nullptr)
+	{
+		SDL_DestroyRenderer(renderer);
+		TTF_Quit();
+		SDL_Quit();
+	}
 
 	map<string, Sprite*> sprites;
 	/* End load assets */
@@ -53,7 +72,7 @@ int main(int argc, char** argv)
 
 
 	double startTime;
-	double deltaTime;
+	double deltaTime = 1;
 
 	while(!quit)
 	{
@@ -81,9 +100,10 @@ int main(int argc, char** argv)
 		*/
 		/* Draw all sprites */
 		map<string, Sprite*>::iterator p;
-		for(p = sprites.begin(); p != sprites.end(); p++) {
+		for(p = sprites.begin(); p != sprites.end(); p++)
+		{
 			p->second->Update(deltaTime / 100.0f);
-    			p->second->Render(renderer);
+    		p->second->Render(renderer);
   		}
 
 		SDL_RenderPresent(renderer);
@@ -95,13 +115,23 @@ int main(int argc, char** argv)
 
 	/* Delete every texture from map */
 
+
+
 	//delete guy;
 
-	SDL_DestroyWindow(window);
+	TTF_CloseFont(font);
+	SDL_DestroyWindow(window); 
+	TTF_Quit();
 	SDL_Quit();
+
+#ifndef OS_WINDOWS
+	_CrtDumpMemoryLeaks();
+#endif
+
 
 	return 0;
 }
+
 
 void LoadSpritesFromList(SDL_Renderer* ren, map<string, Sprite*>* sprmap)
 {

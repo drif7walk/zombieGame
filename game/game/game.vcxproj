@@ -39,12 +39,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Users\user\Desktop\SDL Open GL libraries\SDL2-2.0.3\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\user\Desktop\SDL Open GL libraries\SDL2-2.0.3\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\user\Desktop\SDL Open GL libraries\SDL2_ttf-2.0.12\include;C:\Users\user\Desktop\SDL Open GL libraries\SDL2-2.0.3\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\user\Desktop\SDL Open GL libraries\SDL2_ttf-2.0.12\lib\x86;C:\Users\user\Desktop\SDL Open GL libraries\SDL2-2.0.3\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>C:\Users\user\Desktop\SDL Open GL libraries\SDL2-2.0.3\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\user\Desktop\SDL Open GL libraries\SDL2-2.0.3\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\user\Desktop\SDL Open GL libraries\SDL2_ttf-2.0.12\include;C:\Users\user\Desktop\SDL Open GL libraries\SDL2-2.0.3\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\user\Desktop\SDL Open GL libraries\SDL2_ttf-2.0.12\lib\x86;C:\Users\user\Desktop\SDL Open GL libraries\SDL2-2.0.3\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -54,7 +54,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
     </Link>
   </ItemDefinitionGroup>
@@ -70,7 +70,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
     </Link>
   </ItemDefinitionGroup>
@@ -78,6 +78,7 @@
     <ClInclude Include="..\..\cursor.hpp" />
     <ClInclude Include="..\..\player.hpp" />
     <ClInclude Include="..\..\sprite.hpp" />
+    <ClInclude Include="..\..\ttf.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\main.cpp" />
