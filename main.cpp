@@ -2,10 +2,13 @@
 #include <fstream>
 #include <string>
 #include <map>
+#include <vector>
 #include <stdlib.h>
-#include "sprite.h"
-#include "player.h"
+
+#include "sprite.hpp"
+#include "player.hpp"
 #include "cursor.hpp"
+#include "bullet.hpp"
 
 using namespace std;
 
@@ -40,13 +43,14 @@ int main(int argc, char** argv)
 	/* Load assets */
 
 	map<string, Sprite*> sprites;
+	vector<Sprite*> entities;
 	/* End load assets */
 
 	LoadSpritesFromList(renderer, &sprites);
 
 
 	double startTime;
-	double deltaTime;
+	double deltaTime = 1;
 
 	while(!quit)
 	{
@@ -62,9 +66,6 @@ int main(int argc, char** argv)
 			}
 		}
 
-		/* WARNING: DEEP SORCERY */ 
-		
-	
 		SDL_RenderClear(renderer);
 
 		/* XXX */
@@ -87,6 +88,10 @@ int main(int argc, char** argv)
 	}
 
 	/* Delete every texture from map */
+	map<string, Sprite*>::iterator p;
+	for(p = sprites.begin(); p != sprites.end(); p++) {
+    		delete p->second;
+  	}
 
 	//delete guy;
 
@@ -161,6 +166,28 @@ void LoadSpritesFromList(SDL_Renderer* ren, map<string, Sprite*>* sprmap)
 				string inln;
 				getline(conffile, inln);	
 				spr = new Cursor(inln, ren);
+				
+				getline(conffile, spr->name);
+
+				getline(conffile, inln);
+				spr->rows = 1;
+
+				getline(conffile, inln);
+				spr->cols = 1;
+
+				spr->framewidth = spr->w / spr->cols;
+				spr->frameheight = spr->h / spr->rows;
+
+				sprmap->insert( pair<string, Sprite*>(spr->name, spr) );
+			}
+
+			if (s.compare("@STARTBULLET") == 0)
+			{
+				Bullet* spr;
+
+				string inln;
+				getline(conffile, inln);	
+				spr = new Bullet(inln, ren);
 				
 				getline(conffile, spr->name);
 
