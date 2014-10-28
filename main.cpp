@@ -3,20 +3,12 @@
 #include <SDL2/SDL.h>
 
 #else
-<<<<<<< HEAD
-=======
-
->>>>>>> commandlinetest
 #define CRTDBG_MAP_ALLOC
 #include <stdlib.h>
 #include <crtdbg.h>
 
 #include <SDL.h>
-<<<<<<< HEAD
 #include <SDL_ttf.h>
-=======
-
->>>>>>> commandlinetest
 #endif
 
 #include <fstream>
@@ -28,14 +20,17 @@
 #include "sprite.hpp"
 #include "player.hpp"
 #include "cursor.hpp"
-#include "ttf.hpp"
+//#include "ttf.hpp"
 
 using namespace std;
 
 void LoadSpritesFromList(SDL_Renderer*, map<string, Sprite*>*);
 
+
+
 int main(int argc, char** argv)
 {
+	//_CrtSetBreakAlloc();
 	SDL_Event e;
 	bool quit = false;
 	
@@ -68,27 +63,16 @@ int main(int argc, char** argv)
 	double _fps = 1000 / 120.0f;
 
 	/* Load assets */
-	
-	if (font == nullptr)
-	{
-		SDL_DestroyRenderer(renderer);
-		TTF_Quit();
-		SDL_Quit();
-	}
 
-	map<string, Sprite*> sprites;
+
+	map<string, Sprite*>* sprites = new map<string, Sprite*>;
 	/* End load assets */
 
-	LoadSpritesFromList(renderer, &sprites);
+	LoadSpritesFromList(renderer, sprites);
 
 
-<<<<<<< HEAD
 	double startTime;
 	double deltaTime = 1;
-=======
-	double startTime = 0;
-	double deltaTime = 0;
->>>>>>> commandlinetest
 
 	while(!quit)
 	{
@@ -116,7 +100,7 @@ int main(int argc, char** argv)
 		*/
 		/* Draw all sprites */
 		map<string, Sprite*>::iterator p;
-		for(p = sprites.begin(); p != sprites.end(); p++)
+		for(p = sprites->begin(); p != sprites->end(); p++)
 		{
 			p->second->Update(deltaTime / 100.0f);
     		p->second->Render(renderer);
@@ -130,42 +114,33 @@ int main(int argc, char** argv)
 	}
 
 	/* Delete every texture from map */
-<<<<<<< HEAD
 
 
 
 	//delete guy;
 
-	TTF_CloseFont(font);
 	SDL_DestroyWindow(window); 
 	TTF_Quit();
 	SDL_Quit();
 
-=======
 	map<string, Sprite*>::iterator p;
-	for (p = sprites.begin(); p != sprites.end(); p++)
+	for (p = sprites->begin(); p != sprites->end(); p++)
 	{
 		delete p->second;
 	}
 	//delete guy;
 
-	sprites.clear();
-	
+	sprites->clear();
+	delete sprites;
 
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
-	SDL_Quit();
+	SDL_Quit(); 
 
-
->>>>>>> commandlinetest
 #ifndef OS_WINDOWS
 	_CrtDumpMemoryLeaks();
 #endif
 
-<<<<<<< HEAD
-
-=======
->>>>>>> commandlinetest
 	return 0;
 }
 

@@ -18,6 +18,11 @@ public:
 		this->x = x;
 		this->y = y;
 	}
+	
+	~Cursor()
+	{
+
+	}
 
     Cursor(string filename, SDL_Renderer* ren)
         : Sprite(filename, ren)

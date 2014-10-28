@@ -78,7 +78,6 @@
     <ClInclude Include="..\..\cursor.hpp" />
     <ClInclude Include="..\..\player.hpp" />
     <ClInclude Include="..\..\sprite.hpp" />
-    <ClInclude Include="..\..\ttf.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\main.cpp" />
