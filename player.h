@@ -9,33 +9,35 @@ class Player: public Sprite {
 
 private:
 
+	double velocity = 12;
+
 public:
 
-	void Update() override 
+	void Update(double deltaTime) override 
 	{
-		Sprite::Update();
+		Sprite::Update(deltaTime);
 
 		const Uint8* keybuf = SDL_GetKeyboardState(NULL);
 
 		if (keybuf[SDL_SCANCODE_W])
 		{
-			this->y += -3.142;
-			this->AnimateStep(2);
+			this->y += -velocity * deltaTime;
+			this->AnimateStep(2, deltaTime);
 		}
 		if (keybuf[SDL_SCANCODE_A])
 		{
-			this->x += -3.142;
-			this->AnimateStep(3);
+			this->x += -velocity * deltaTime;
+			this->AnimateStep(3, deltaTime);
 		}
 		if (keybuf[SDL_SCANCODE_S])
 		{
-			this->y += 3.142;
-			this->AnimateStep(0);
+			this->y += velocity * deltaTime;
+			this->AnimateStep(0, deltaTime);
 		}
 		if (keybuf[SDL_SCANCODE_D])
 		{
-			this->x += 3.142;
-			this->AnimateStep(1);
+			this->x += velocity * deltaTime;
+			this->AnimateStep(1, deltaTime);
 		}
 
 	}

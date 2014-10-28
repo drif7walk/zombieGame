@@ -4,6 +4,8 @@
 #include <map>
 #include <stdlib.h>
 #include "sprite.h"
+#include "player.h"
+#include "cursor.hpp"
 
 using namespace std;
 
@@ -22,7 +24,7 @@ int main(int argc, char** argv)
 	}
 
 	/* Izveidot logu. */
-	SDL_Window* window = SDL_CreateWindow("hl2.exe", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, SDL_WINDOW_SHOWN);
+	SDL_Window* window = SDL_CreateWindow("hl3.exe", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, SDL_WINDOW_SHOWN);
 
 	/* C++11 */
 	if (window == nullptr)
@@ -33,7 +35,7 @@ int main(int argc, char** argv)
 	/* Rendereris */
 	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
-	double _fps = 1000 / 60.0f;
+	double _fps = 1000 / 120.0f;
 
 	/* Load assets */
 
@@ -43,11 +45,12 @@ int main(int argc, char** argv)
 	LoadSpritesFromList(renderer, &sprites);
 
 
+	double startTime;
+	double deltaTime;
 
 	while(!quit)
 	{
-		const Uint8* keybuf = SDL_GetKeyboardState(NULL);
-
+		startTime = SDL_GetTicks();
 		while(SDL_PollEvent(&e))
 		{
 			switch(e.type)
@@ -59,39 +62,27 @@ int main(int argc, char** argv)
 			}
 		}
 
-		/* Update */
-		if (keybuf[SDL_SCANCODE_W])
-		{
-			//guy->y += -3.142;
-			//guy->AnimateStep(2);
-		}
-		if (keybuf[SDL_SCANCODE_A])
-		{
-			//guy->x += -3.142;
-			//guy->AnimateStep(3);
-		}
-		if (keybuf[SDL_SCANCODE_S])
-		{
-			//guy->y += 3.142;
-			//guy->AnimateStep(0);
-		}
-		if (keybuf[SDL_SCANCODE_D])
-		{
-			//guy->x += 3.142;
-			//guy->AnimateStep(1);
-		}
-
-		//renderer->Render(a, b, c);
+		/* WARNING: DEEP SORCERY */ 
+		
 	
 		SDL_RenderClear(renderer);
 
 		/* XXX */
+		/*
 		sprites["guy"]->AnimateStep(0);
 		sprites["guy"]->Render(renderer);
+		*/
+		/* Draw all sprites */
+		map<string, Sprite*>::iterator p;
+		for(p = sprites.begin(); p != sprites.end(); p++) {
+			p->second->Update(deltaTime / 100.0f);
+    			p->second->Render(renderer);
+  		}
 
 		SDL_RenderPresent(renderer);
 
 		SDL_Delay(_fps);
+		deltaTime = SDL_GetTicks() - startTime;
 		
 	}
 
@@ -134,6 +125,50 @@ void LoadSpritesFromList(SDL_Renderer* ren, map<string, Sprite*>* sprmap)
 
 				getline(conffile, inln);
 				spr->cols = atoi(inln.c_str());
+
+				spr->framewidth = spr->w / spr->cols;
+				spr->frameheight = spr->h / spr->rows;
+
+				sprmap->insert( pair<string, Sprite*>(spr->name, spr) );
+			}
+
+			if (s.compare("@STARTPLAYER") == 0)
+			{
+				Player* spr;
+
+				string inln;
+				getline(conffile, inln);	
+				spr = new Player(inln, ren);
+				
+				getline(conffile, spr->name);
+
+				getline(conffile, inln);
+				spr->rows = atoi(inln.c_str());
+
+				getline(conffile, inln);
+				spr->cols = atoi(inln.c_str());
+
+				spr->framewidth = spr->w / spr->cols;
+				spr->frameheight = spr->h / spr->rows;
+
+				sprmap->insert( pair<string, Sprite*>(spr->name, spr) );
+			}
+
+			if (s.compare("@STARTCURSOR") == 0)
+			{
+				Cursor* spr;
+
+				string inln;
+				getline(conffile, inln);	
+				spr = new Cursor(inln, ren);
+				
+				getline(conffile, spr->name);
+
+				getline(conffile, inln);
+				spr->rows = 1;
+
+				getline(conffile, inln);
+				spr->cols = 1;
 
 				spr->framewidth = spr->w / spr->cols;
 				spr->frameheight = spr->h / spr->rows;

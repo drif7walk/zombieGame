@@ -20,17 +20,17 @@ public:
 	string name;
 
 	/* move to private */
-	int rows;
-	int cols;
+	int rows = 1;
+	int cols = 1;
 	int scale = 2;
 	int framewidth;
 	int frameheight;
 	double framecount = 0;
 	SDL_Rect src;
 
-	void AnimateStep(int direction)
+	void AnimateStep(int direction, double deltaTime)
 	{
-		framecount += (double)0.1;
+		framecount += (double)0.6*deltaTime;
 		int row = (int)framecount % cols;
 		this->src = { row*framewidth, direction*frameheight, this->framewidth, this->frameheight };
 	}
@@ -42,6 +42,11 @@ public:
 
 		SDL_RenderCopy(ren, this->texture, &src, &r);
 
+	}
+
+	virtual void Update(double deltaTime)
+	{
+		this->AnimateStep(0, deltaTime);
 	}
 
 	Sprite(string filename, SDL_Renderer* ren)
@@ -61,6 +66,9 @@ public:
 		SDL_QueryTexture(this->texture, NULL, NULL, &w, &h);
 		this->w = (double)w;
 		this->h = (double)h;
+
+		this->framewidth = this->w;
+		this->frameheight = this->h;
 	}
 
 	~Sprite()

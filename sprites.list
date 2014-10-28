@@ -8,10 +8,27 @@
 # columns
 # @ENDSPRITE
 # No comments must exist between @-@. MANDATORY REQUIREMENT.
+#
+# @STARTPLAYER
+# guy.bmp
+# guy
+# 4
+# 3
+# @ENDSPRITE
+#
+# @STARTCURSOR
+# cursor.bmp
+# cursor
+# @ENDCURSOR
 
-@STARTSPRITE
+@STARTCURSOR
+cursor.bmp
+cursor
+@ENDCURSOR
+
+@STARTPLAYER
 guy.bmp
 guy
 4
 3
-@ENDSPRITE
+@ENDPLAYER
