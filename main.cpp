@@ -18,6 +18,7 @@
 #include "sprite.hpp"
 #include "player.hpp"
 #include "cursor.hpp"
+#include "ttf.hpp"
 
 using namespace std;
 
@@ -57,7 +58,7 @@ int main(int argc, char** argv)
 	double _fps = 1000 / 120.0f;
 
 	/* Load assets */
-	TTF_Font* font = TTF_OpenFont("SansationRegular.ttf", 24);
+	
 	if (font == nullptr)
 	{
 		SDL_DestroyRenderer(renderer);
