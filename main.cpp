@@ -1,10 +1,17 @@
+#ifdef OS_WINDOWS
 #include <SDL2/SDL.h>
+#else
+#include <SDL.h>
+#endif
+
 #include <fstream>
 #include <string>
 #include <map>
 #include <stdlib.h>
-#include "sprite.h"
-#include "player.h"
+
+
+#include "sprite.hpp"
+#include "player.hpp"
 #include "cursor.hpp"
 
 using namespace std;
