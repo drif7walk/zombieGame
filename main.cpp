@@ -1,12 +1,22 @@
 #ifdef OS_WINDOWS
+
 #include <SDL2/SDL.h>
+
 #else
+<<<<<<< HEAD
+=======
+
+>>>>>>> commandlinetest
 #define CRTDBG_MAP_ALLOC
 #include <stdlib.h>
 #include <crtdbg.h>
 
 #include <SDL.h>
+<<<<<<< HEAD
 #include <SDL_ttf.h>
+=======
+
+>>>>>>> commandlinetest
 #endif
 
 #include <fstream>
@@ -72,8 +82,13 @@ int main(int argc, char** argv)
 	LoadSpritesFromList(renderer, &sprites);
 
 
+<<<<<<< HEAD
 	double startTime;
 	double deltaTime = 1;
+=======
+	double startTime = 0;
+	double deltaTime = 0;
+>>>>>>> commandlinetest
 
 	while(!quit)
 	{
@@ -115,6 +130,7 @@ int main(int argc, char** argv)
 	}
 
 	/* Delete every texture from map */
+<<<<<<< HEAD
 
 
 
@@ -125,11 +141,31 @@ int main(int argc, char** argv)
 	TTF_Quit();
 	SDL_Quit();
 
+=======
+	map<string, Sprite*>::iterator p;
+	for (p = sprites.begin(); p != sprites.end(); p++)
+	{
+		delete p->second;
+	}
+	//delete guy;
+
+	sprites.clear();
+	
+
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
+	SDL_Quit();
+
+
+>>>>>>> commandlinetest
 #ifndef OS_WINDOWS
 	_CrtDumpMemoryLeaks();
 #endif
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> commandlinetest
 	return 0;
 }
 
