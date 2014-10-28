@@ -1,4 +1,9 @@
+#ifdef OS_WINDOWS
 #include <SDL2/SDL.h>
+#else
+#include <SDL.h>
+#endif
+
 #include <fstream>
 #include <string>
 #include <map>
@@ -9,7 +14,6 @@
 #include "player.hpp"
 #include "cursor.hpp"
 #include "bullet.hpp"
-
 using namespace std;
 
 void LoadSpritesFromList(SDL_Renderer*, map<string, Sprite*>*);

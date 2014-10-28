@@ -1,8 +1,6 @@
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
 
-#include <SDL2/SDL.h>
-#include <string>
 using namespace std;
 
 class Player: public Sprite {
