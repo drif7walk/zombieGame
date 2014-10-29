@@ -79,12 +79,6 @@ int main(int argc, char** argv)
 
 		SDL_RenderClear(renderer);
 
-		/* XXX */
-		/*
-		sprites["guy"]->AnimateStep(0);
-		sprites["guy"]->Render(renderer);
-		*/
-		/* Draw all sprites */
 
 		map<string, Sprite*>::iterator p;
 		for(p = sprites.begin(); p != sprites.end(); p++) {
@@ -110,9 +104,6 @@ int main(int argc, char** argv)
   	}
 	sprites.clear();
 
-	/* Kill all the fonts */
-	//TTF_CloseFont(font);	
-
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_Quit();
@@ -127,7 +118,6 @@ SDL_Texture* RenderText (SDL_Renderer* ren, string text)
 	SDL_Surface* surf = TTF_RenderText_Solid(font, (const char*)text.c_str(), { 255, 255, 255, 255 });
 	SDL_Texture* mytex = SDL_CreateTextureFromSurface( ren, surf);	
 
-	TTF_CloseFont(font);
 	SDL_FreeSurface(surf);
 
 	return mytex;
