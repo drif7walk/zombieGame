@@ -17,22 +17,24 @@
 #include <vector>
 #include <stdlib.h>
 
+using namespace std;
+
+#include "fonts.hpp"
+
+using namespace fonts;
 
 #include "sprite.hpp"
 #include "player.hpp"
 #include "cursor.hpp"
 #include "bullet.hpp"
-//#include "ttf.hpp"
 
-using namespace std;
 
 void LoadSpritesFromList(SDL_Renderer*, map<string, Sprite*>*);
 
 
-
 int main(int argc, char** argv)
 {
-	//_CrtSetBreakAlloc();
+	//_CrtSetBreakAlloc(145);
 	SDL_Event e;
 	bool quit = false;
 	
@@ -43,12 +45,7 @@ int main(int argc, char** argv)
 		return 1;
 	}
 	
-	if (TTF_Init() == -1)
-	{
-		SDL_Quit();
-		return 1;
-	}
-
+	
 	/* Izveidot logu. */
 	SDL_Window* window = SDL_CreateWindow("hl3.exe", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, SDL_WINDOW_SHOWN);
 
@@ -60,22 +57,31 @@ int main(int argc, char** argv)
 	}
 
 	/* Rendereris */
-	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);// | SDL_RENDERER_PRESENTVSYNC);
 
-	double _fps = 1000 / 120.0f;
+	double _fps = 1000 / 60.0f;
+
+	/* Font */
+	if (initializeTTF(renderer) == -1)
+	{
+		//quit
+	}
 
 	/* Load assets */
 
 
 	map<string, Sprite*>* sprites = new map<string, Sprite*>;
-	vector<Sprite*> entities;
+	vector<Sprite*>* entities = new vector<Sprite*>;
 	/* End load assets */
 
 	LoadSpritesFromList(renderer, sprites);
 
-
-	double startTime;
-	double deltaTime = 1;
+	double startTime = 0;
+	double deltaTime = 0;
+	
+	Uint32 waittime = 0;
+	Uint32 framestarttime = 0;
+	Sint32 delaytime = 0;
 
 	while(!quit)
 	{
@@ -93,7 +99,6 @@ int main(int argc, char** argv)
 
 		/* WARNING: DEEP SORCERY */ 
 		
-	
 		SDL_RenderClear(renderer);
 
 		/* XXX */
@@ -111,7 +116,13 @@ int main(int argc, char** argv)
 
 		SDL_RenderPresent(renderer);
 
-		SDL_Delay(_fps);
+		/* FrameDelay */
+		delaytime = waittime - (SDL_GetTicks() - framestarttime);//this is semi redundant because of vsync
+		if (delaytime > 0)
+		//	SDL_Delay((Uint32)delaytime);
+		framestarttime = SDL_GetTicks();
+
+
 		deltaTime = SDL_GetTicks() - startTime;
 		
 	}
@@ -129,9 +140,13 @@ int main(int argc, char** argv)
 	sprites->clear();
 	delete sprites;
 
+	entities->clear();
+	delete entities;
+
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_Quit(); 
+	deinitializeTTF();
 
 #ifndef OS_WINDOWS
 	_CrtDumpMemoryLeaks();

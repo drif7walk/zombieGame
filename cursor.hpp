@@ -1,8 +1,6 @@
 #ifndef CURSOR_HPP
 #define CURSOR_HPP
 
-#include <SDL2/SDL.h>
-#include <string>
 using namespace std;
 
 class Cursor: public Sprite {
