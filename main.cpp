@@ -1,8 +1,5 @@
-#ifdef OS_WINDOWS
 #include <SDL2/SDL.h>
-#else
-#include <SDL.h>
-#endif
+#include <SDL/SDL_ttf.h>
 
 #include <fstream>
 #include <string>
@@ -14,9 +11,11 @@
 #include "player.hpp"
 #include "cursor.hpp"
 #include "bullet.hpp"
+#include "zombie.hpp"
 using namespace std;
 
 void LoadSpritesFromList(SDL_Renderer*, map<string, Sprite*>*);
+SDL_Texture* RenderText (SDL_Renderer* ren, string text);
 
 int main(int argc, char** argv)
 {
@@ -43,6 +42,14 @@ int main(int argc, char** argv)
 	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
 	double _fps = 1000 / 120.0f;
+
+	/* Fonts happen here */
+	if( TTF_Init() == -1 ) { 
+		printf( "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError() );
+		SDL_Quit();	
+	}
+	
+	/* End fonts */
 
 	/* Load assets */
 
@@ -78,11 +85,15 @@ int main(int argc, char** argv)
 		sprites["guy"]->Render(renderer);
 		*/
 		/* Draw all sprites */
+
 		map<string, Sprite*>::iterator p;
 		for(p = sprites.begin(); p != sprites.end(); p++) {
 			p->second->Update(deltaTime / 100.0f);
     			p->second->Render(renderer);
   		}
+
+		SDL_RenderCopy(renderer, RenderText(renderer, "hello world"), NULL, NULL);
+
 
 		SDL_RenderPresent(renderer);
 
@@ -94,15 +105,33 @@ int main(int argc, char** argv)
 	/* Delete every texture from map */
 	map<string, Sprite*>::iterator p;
 	for(p = sprites.begin(); p != sprites.end(); p++) {
+
     		delete p->second;
   	}
+	sprites.clear();
 
-	//delete guy;
+	/* Kill all the fonts */
+	//TTF_CloseFont(font);	
 
+	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_Quit();
 
 	return 0;
+}
+
+SDL_Texture* RenderText (SDL_Renderer* ren, string text)
+{
+	/* segfault stahp y u do dis */
+	TTF_Font* font = TTF_OpenFont("font.ttf", 24);
+	SDL_Surface* surf = TTF_RenderText_Solid(font, (const char*)text.c_str(), { 255, 255, 255, 255 });
+	SDL_Texture* mytex = SDL_CreateTextureFromSurface( ren, surf);	
+
+	TTF_CloseFont(font);
+	SDL_FreeSurface(surf);
+
+	return mytex;
+
 }
 
 void LoadSpritesFromList(SDL_Renderer* ren, map<string, Sprite*>* sprmap)
@@ -119,7 +148,7 @@ void LoadSpritesFromList(SDL_Renderer* ren, map<string, Sprite*>* sprmap)
 			/* C++ does not do switch on strings, use if/else if/else if */
 			if (s[0] == '#') continue; // comment
 
-			if (s.compare("@STARTSPRITE") == 0)
+			if (s.compare("@SPRITE") == 0)
 			{
 				Sprite* spr;
 
@@ -141,7 +170,7 @@ void LoadSpritesFromList(SDL_Renderer* ren, map<string, Sprite*>* sprmap)
 				sprmap->insert( pair<string, Sprite*>(spr->name, spr) );
 			}
 
-			if (s.compare("@STARTPLAYER") == 0)
+			if (s.compare("@PLAYER") == 0)
 			{
 				Player* spr;
 
@@ -163,7 +192,7 @@ void LoadSpritesFromList(SDL_Renderer* ren, map<string, Sprite*>* sprmap)
 				sprmap->insert( pair<string, Sprite*>(spr->name, spr) );
 			}
 
-			if (s.compare("@STARTCURSOR") == 0)
+			if (s.compare("@CURSOR") == 0)
 			{
 				Cursor* spr;
 
@@ -185,7 +214,7 @@ void LoadSpritesFromList(SDL_Renderer* ren, map<string, Sprite*>* sprmap)
 				sprmap->insert( pair<string, Sprite*>(spr->name, spr) );
 			}
 
-			if (s.compare("@STARTBULLET") == 0)
+			if (s.compare("@PROJECTILE") == 0)
 			{
 				Bullet* spr;
 
@@ -207,6 +236,28 @@ void LoadSpritesFromList(SDL_Renderer* ren, map<string, Sprite*>* sprmap)
 				sprmap->insert( pair<string, Sprite*>(spr->name, spr) );
 			}
 
+			if (s.compare("@ZOMBIE") == 0)
+			{
+				Zombie* spr;
+
+				string inln;
+				getline(conffile, inln);	
+				spr = new Zombie(inln, ren);
+				
+				getline(conffile, spr->name);
+
+				getline(conffile, inln);
+				spr->rows = atoi(inln.c_str());;
+
+				getline(conffile, inln);
+				spr->cols = atoi(inln.c_str());;
+
+				spr->framewidth = spr->w / spr->cols;
+				spr->frameheight = spr->h / spr->rows;
+
+				sprmap->insert( pair<string, Sprite*>(spr->name, spr) );
+			}
+
 			/* etc.  */
 
 
@@ -214,6 +265,7 @@ void LoadSpritesFromList(SDL_Renderer* ren, map<string, Sprite*>* sprmap)
 		}
 
 		conffile.close();
+		
 	}
 	else // File does not exist
 	{
