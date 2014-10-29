@@ -2,19 +2,13 @@
 #define TTF_HPP
 
 
-/* to display any text you can use any of the overloaded drawText functions
+/* to display any text you can use the followint function
+ * you can call it like this drawText(yourString, { 0xff, 0x00, 0x00, 0xff }, { 100, 100 }, 2};
  * int drawText(string text, SDL_Color textColor, SDL_Point location, int fontStyle, int scale)
- * int drawText(char* text, SDL_Color textColor, SDL_Point location, int fontStyle, int scale)
- * int drawText(char* text, int x, int y, int fontStyle, int scale)
- * int drawText(char* text, int r, int g, int b, int x, int y, int fontStyle, int scale)
- * int drawText(char* text, SDL_Point location, int fontStyle, int scale)
  * on failure -1 is returned and on success 0
- * 
  * 
  * to use more than one style at a time you need to use a bitwise or operator "bold | italic"
  * would produce a text that is both bold and italic
- * 
- * 
  */
 namespace fonts
 {
@@ -125,55 +119,6 @@ namespace fonts
 			return 0;
 		}
 		return -1;
-	}
-	
-	int drawText(char* text, SDL_Color textColor, SDL_Point location, int fontStyle, int scale)
-	{
-		string text_;
-		text_.assign(text);
-		if (drawText(text_, textColor, location, fontStyle, scale) == -1)
-		{
-			return -1;
-		}
-		return 0;
-	}
-
-	int drawText(char* text, SDL_Point location, int fontStyle, int scale)
-	{
-		string text_;
-		text_.assign(text);
-		SDL_Color color = { 0xff, 0xff, 0xff, 0xff };
-		if (drawText(text_, color, location, fontStyle, scale) == -1)
-		{
-			return -1;
-		}
-		return 0;
-	}
-
-	int drawText(char* text, int x, int y, int fontStyle, int scale)
-	{
-		string text_;
-		text_.assign(text);
-		SDL_Color color = { 0xff, 0xff, 0xff, 0xff };
-		SDL_Point location = { x, y };
-		if (drawText(text_, color, location, fontStyle, scale) == -1)
-		{
-			return -1;
-		}
-		return 0;
-	}
-
-	int drawText(char* text, int r, int g, int b, int x, int y, int fontStyle, int scale)
-	{
-		string text_;
-		text_.assign(text);
-		SDL_Color color = { r, g, b, 0xff };
-		SDL_Point location = { x, y };
-		if (drawText(text_, color, location, fontStyle, scale) == -1)
-		{
-			return -1;
-		}
-		return 0;
 	}
 
 }

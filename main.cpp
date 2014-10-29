@@ -101,6 +101,7 @@ int main(int argc, char** argv)
 		
 		SDL_RenderClear(renderer);
 
+
 		/* XXX */
 		/*
 		sprites["guy"]->AnimateStep(0);
@@ -119,7 +120,7 @@ int main(int argc, char** argv)
 		/* FrameDelay */
 		delaytime = waittime - (SDL_GetTicks() - framestarttime);//this is semi redundant because of vsync
 		if (delaytime > 0)
-		//	SDL_Delay((Uint32)delaytime);
+			SDL_Delay((Uint32)delaytime);
 		framestarttime = SDL_GetTicks();
 
 
