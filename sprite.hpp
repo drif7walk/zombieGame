@@ -47,7 +47,7 @@ public:
 
 	}
 
-	virtual void Update(vector<Sprite*> entlist, double deltaTime)
+	virtual void Update(vector<Sprite*>* entlist, double deltaTime)
 	{
 		this->FreezeStep(direction);
 	}

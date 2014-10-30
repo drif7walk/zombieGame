@@ -11,12 +11,12 @@ private:
 
 public:
 
-	void Update(vector<Sprite*> entlist, double deltaTime) override 
+	void Update(vector<Sprite*>* entlist, double deltaTime) override 
 	{
 		Sprite::Update(entlist, deltaTime);
 
 		/* raggamuffin */
-		for (vector<Sprite*>::iterator it = entlist.begin(); it != entlist.end(); it++)
+		for (vector<Sprite*>::iterator it = entlist->begin(); it != entlist->end(); it++)
 		{
 			if (strcmp((*it)->name.c_str(), "player") == 0)
 			{

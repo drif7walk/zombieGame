@@ -11,7 +11,7 @@ private:
 
 public:
 
-	void Update(vector<Sprite*> entlist, double deltaTime) override 
+	void Update(vector<Sprite*>* entlist, double deltaTime) override 
 	{
 		Sprite::Update(entlist, deltaTime);
 
@@ -54,6 +54,12 @@ public:
 	}
 
 	~Player()
+	{
+
+	}
+
+	Player(Sprite* templatesprite)
+		: Sprite(templatesprite)
 	{
 
 	}

@@ -23,30 +23,35 @@ namespace sound
 
 	int unloadSounds()
 	{
-
+		map<string, Mix_Chunk*>::iterator p;
+		for (p = audioMap->begin(); p != audioMap->end(); p++)
+		{
+			Mix_FreeChunk(p->second);
+		}
+		audioMap->clear();
+		delete audioMap;
 		return 0;
 	}
 
 
-	void play(const int VOL_PERCENT_TOT, const int VOL_PERCENT_L, string audioName)
+	void play(const int volumePercentage, const int balanceLeft, string audioName)
 	{
-		const int VOL_TOT = (255 * VOL_PERCENT_TOT) / 100;
-		const int VOL_L = (VOL_PERCENT_L * VOL_TOT) / 100;
-		const int VOL_R = VOL_TOT - VOL_L;
+		const int totalVolume = (255 * volumePercentage) / 100;
+		const int volumeLeft = (balanceLeft * totalVolume) / 100;
+		const int volumeRight = totalVolume - volumeLeft;
 
-		Mix_SetPanning(curChannel, VOL_L, VOL_R);
+		Mix_SetPanning(curChannel, volumeLeft, volumeRight);
 		
-
 		Mix_PlayChannelTimed(curChannel, audioMap->operator[](audioName), -1, -1);//third parameter being -1 means "infinite" loop
 
 		curChannel++;
 
-		if (curChannel >= 16)//16 being the nubmer of allocated channels
+		if (curChannel >= 16)//16 being the number of allocated channels
 		{
 			curChannel = 0;
 		}
-
 	}
+
 
 }
 #endif 

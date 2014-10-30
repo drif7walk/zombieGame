@@ -47,7 +47,7 @@ void LoadSpritesFromList(SDL_Renderer*, map<string, Sprite*>*);
 
 int main(int argc, char** argv)
 {
-	_CrtSetBreakAlloc(377);
+	_CrtSetBreakAlloc(151);
 	SDL_Event e;
 	bool quit = false;
 	
@@ -102,13 +102,13 @@ int main(int argc, char** argv)
 
 	/* Load assets */
 
-	map<string, Sprite*> sprites;
-	vector<Sprite*> entities;
+	map<string, Sprite*>* sprites = new map <string, Sprite*> ;
+	vector<Sprite*>* entities = new vector<Sprite*>;
 	/* End load assets */
 
-	LoadSpritesFromList(renderer, &sprites);
+	LoadSpritesFromList(renderer, sprites);
 
-	SDL_Log("numsprlist %d", sprites.size());
+	SDL_Log("numsprlist %d", sprites->size());
 
 
 	double startTime;
@@ -122,16 +122,16 @@ int main(int argc, char** argv)
 
 	/* Spawn entities */
 
-	entities.push_back( sprites["player"] );
+	entities->push_back(new Player(sprites->operator[]("player")));
 
 	srand(time(NULL));
 
 	/* make dis work */
 	for (int i = 0; i < 50; i++)
 	{
-		entities.push_back(new Zombie(sprites["zombie"]));
-		entities.back()->x = rand() % SCRW;
-		entities.back()->y = rand() % SCRH;
+		entities->push_back(new Zombie(sprites->operator[]("zombie")));
+		entities->back()->x = rand() % SCRW;
+		entities->back()->y = rand() % SCRH;
 	}
 
 
@@ -163,7 +163,7 @@ int main(int argc, char** argv)
 			}
 		}
 
-		sort(entities.begin(), entities.end(),
+		sort(entities->begin(), entities->end(),
 			[](const Sprite* a, const Sprite* b) -> bool
 		{
 			return a->y < b->y;
@@ -180,7 +180,8 @@ int main(int argc, char** argv)
   		}
 		*/
 		/* Draw entities */
-		for (vector<Sprite*>::iterator it = entities.begin(); it != entities.end(); it++)
+
+		for (vector<Sprite*>::iterator it = entities->begin(); it != entities->end(); it++)
 		{
 			(*it)->Update(entities, deltaTime / 100.0f);
 			(*it)->Render(renderer);
@@ -209,15 +210,30 @@ int main(int argc, char** argv)
 		deltaTime = SDL_GetTicks() - startTime;
 	}
 
+	vector<Sprite*>::iterator a;
+	for (a = entities->begin(); a != entities->end();  a++)
+	{
+		delete (*a);
+	}
+	for (int i = 0; i < entities->size(); i++)
+	{
+		entities->pop_back();
+	}
+	delete entities;
+
 	/* Delete every texture from map */
 	map<string, Sprite*>::iterator p;
-	for(p = sprites.begin(); p != sprites.end(); p++)
+	for (p = sprites->begin(); p != sprites->end(); p++)
 	{
-    		delete p->second;
+		delete p->second;
   	}
-	sprites.clear();
+	sprites->clear();
+	delete sprites;
 
+	unloadSounds();
 
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
 	SDL_Quit();
 
 #ifndef OS_WINDOWS
