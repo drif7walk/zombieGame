@@ -11,23 +11,28 @@ private:
 
 public:
 
-	void Update(double deltaTime) override 
+	void Update(vector<Sprite*> entlist, double deltaTime) override 
 	{
-		Sprite::Update(deltaTime);
+		Sprite::Update(entlist, deltaTime);
 
+		/* raggamuffin */
+		for (vector<Sprite*>::iterator it = entlist.begin(); it != entlist.end(); it++)
+		{
+			if (strcmp((*it)->name.c_str(), "player") == 0)
+			{
 
+			}
+		}
 	}
 
-    Zombie(SDL_Texture* tex)
-        : Sprite(tex)
+    Zombie(Sprite* templatesprite)
+        : Sprite(templatesprite)
     {
-        ;;
     }
 
     Zombie(string filename, SDL_Renderer* ren)
         : Sprite(filename, ren)
     {
-        ;;
     }
 
 };

@@ -11,9 +11,9 @@ private:
 
 public:
 
-	void Update(double deltaTime) override 
+	void Update(vector<Sprite*> entlist, double deltaTime) override 
 	{
-		Sprite::Update(deltaTime);
+		Sprite::Update(entlist, deltaTime);
 
 		const Uint8* keybuf = SDL_GetKeyboardState(NULL);
 
