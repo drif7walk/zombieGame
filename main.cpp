@@ -9,6 +9,7 @@
 
 #include <SDL.h>
 #include <SDL_ttf.h>
+#include <SDL_mixer.h>
 #endif
 
 #include <fstream>
@@ -20,8 +21,10 @@
 using namespace std;
 
 #include "fonts.hpp"
+#include "sound.hpp"
 
 using namespace fonts;
+using namespace sound;
 
 #include "sprite.hpp"
 #include "player.hpp"
@@ -34,7 +37,7 @@ void LoadSpritesFromList(SDL_Renderer*, map<string, Sprite*>*);
 
 int main(int argc, char** argv)
 {
-	//_CrtSetBreakAlloc(145);
+	_CrtSetBreakAlloc(138);
 	SDL_Event e;
 	bool quit = false;
 	
@@ -44,7 +47,23 @@ int main(int argc, char** argv)
 	{
 		return 1;
 	}
-	
+
+	/* iestāda skaņu */
+	{
+		const int     AUDIO_FREQ = 44100;
+		const Uint16  AUDIO_FORMAT = MIX_DEFAULT_FORMAT;
+		const int     AUDIO_CHANNELS = 2;
+		const int     AUDIO_BUFFERS = 1024;
+
+		if (Mix_OpenAudio(AUDIO_FREQ, AUDIO_FORMAT, AUDIO_CHANNELS, AUDIO_BUFFERS) != 0)
+		{
+			SDL_Quit();
+		}
+
+		Mix_AllocateChannels(16);
+	}
+
+	Mix_AllocateChannels(16);
 	
 	/* Izveidot logu. */
 	SDL_Window* window = SDL_CreateWindow("hl3.exe", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, SDL_WINDOW_SHOWN);
@@ -96,17 +115,12 @@ int main(int argc, char** argv)
 				default: continue;	
 			}
 		}
-
-		/* WARNING: DEEP SORCERY */ 
-		
 		SDL_RenderClear(renderer);
-
-
+		/* WARNING: DEEP SORCERY */ 
+		//sprites->operator[]("guy")->AnimateStep(0);
+		//(*sprites)["guy"]->Render(renderer);
 		/* XXX */
-		/*
-		sprites["guy"]->AnimateStep(0);
-		sprites["guy"]->Render(renderer);
-		*/
+
 		/* Draw all sprites */
 		map<string, Sprite*>::iterator p;
 		for(p = sprites->begin(); p != sprites->end(); p++)
@@ -114,6 +128,8 @@ int main(int argc, char** argv)
 			p->second->Update(deltaTime / 100.0f);
     		p->second->Render(renderer);
   		}
+
+		drawText("top lel", { 0xff, 0xff, 0xff, 0xff }, { 300, 200 }, normal, 4);
 
 		SDL_RenderPresent(renderer);
 

@@ -39,8 +39,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Users\user\Desktop\SDL Open GL libraries\SDL2_ttf-2.0.12\include;C:\Users\user\Desktop\SDL Open GL libraries\SDL2-2.0.3\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\user\Desktop\SDL Open GL libraries\SDL2_ttf-2.0.12\lib\x86;C:\Users\user\Desktop\SDL Open GL libraries\SDL2-2.0.3\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\user\Desktop\SDL Open GL libraries\SDL2_mixer-2.0.0\include;C:\Users\user\Desktop\SDL Open GL libraries\SDL2_ttf-2.0.12\include;C:\Users\user\Desktop\SDL Open GL libraries\SDL2-2.0.3\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\user\Desktop\SDL Open GL libraries\SDL2_mixer-2.0.0\lib\x86;C:\Users\user\Desktop\SDL Open GL libraries\SDL2_ttf-2.0.12\lib\x86;C:\Users\user\Desktop\SDL Open GL libraries\SDL2-2.0.3\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>C:\Users\user\Desktop\SDL Open GL libraries\SDL2_ttf-2.0.12\include;C:\Users\user\Desktop\SDL Open GL libraries\SDL2-2.0.3\include;$(IncludePath)</IncludePath>
@@ -54,7 +54,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_ttf.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
     </Link>
   </ItemDefinitionGroup>
@@ -78,6 +78,7 @@
     <ClInclude Include="..\..\bullet.hpp" />
     <ClInclude Include="..\..\cursor.hpp" />
     <ClInclude Include="..\..\player.hpp" />
+    <ClInclude Include="..\..\sound.hpp" />
     <ClInclude Include="..\..\sprite.hpp" />
     <ClInclude Include="..\..\fonts.hpp" />
   </ItemGroup>

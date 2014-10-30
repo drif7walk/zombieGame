@@ -67,58 +67,28 @@ namespace fonts
 		{
 			delete _source_;
 			delete _destination_;
+			TTF_CloseFont(_font_);
 			SDL_DestroyTexture(_texture_);
 		}
 		fontsAreInitialized = false;
 		return 0;
 	}
 	
-	int drawText(string text, SDL_Color textColor, SDL_Point location, int fontStyle, int scale)
+	void drawText(string text, SDL_Color textColor, SDL_Point location, int fontStyle, int scale)
 	{
-		if (fontsAreInitialized == true)
-		{
-			SDL_DestroyTexture(_texture_);
+		TTF_SetFontStyle(_font_, fontStyle);
 
-			if (scale <= 0)
-			{
-				scale = 1;
-			}
-
-			if (fontStyle < 0)
-			{
-				fontStyle = 0;
-			}
-
-			TTF_SetFontStyle(_font_, fontStyle);
-
-			SDL_Surface* textSurface = nullptr;
-			textSurface = TTF_RenderText_Solid(_font_, text.data(), textColor);
-			if (textSurface == nullptr)
-			{
-				return -1;
-			}
-			else
-			{
-				_texture_ = SDL_CreateTextureFromSurface(_renderer_, textSurface);
-				if (_texture_ == nullptr)
-				{
-					return -1;
-				}
-				else
-				{
-					_source_->w = textSurface->w;
-					_source_->h = textSurface->h;
-					_destination_->h = textSurface->h * scale;
-					_destination_->w = textSurface->w * scale;
-					_destination_->x = location.x;
-					_destination_->y = location.y;
-				}
-				SDL_FreeSurface(textSurface);
-				SDL_RenderCopy(_renderer_, _texture_, _source_, _destination_);
-			}
-			return 0;
-		}
-		return -1;
+		SDL_Surface* textSurface = nullptr;
+		textSurface = TTF_RenderText_Solid(_font_, text.data(), textColor);
+		
+		_texture_ = SDL_CreateTextureFromSurface(_renderer_, textSurface);
+	
+		_source_->w = textSurface->w;
+		_source_->h = textSurface->h;
+		*_destination_ = { textSurface->h * scale, textSurface->w * scale, location.x, location.y };
+		
+		SDL_FreeSurface(textSurface);
+		SDL_RenderCopy(_renderer_, _texture_, _source_, _destination_);
 	}
 
 }
