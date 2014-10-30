@@ -79,7 +79,8 @@ int main(int argc, char** argv)
 
 	/* Spawn entities */
 
-	entities.push_back( sprites["guy"] );
+	entities.push_back( sprites["player"] );
+	entities.push_back( sprites["zombie"] );
 
 
 	while(!quit)
@@ -109,7 +110,6 @@ int main(int argc, char** argv)
 		/* Draw entities */
 		for (vector<Sprite*>::iterator it = entities.begin(); it != entities.end(); it++)
 		{
-			/* XXX: Segfault */
 			(*it)->Update(deltaTime / 100.0f);
 			(*it)->Render(renderer);
 		}
@@ -280,7 +280,7 @@ void LoadSpritesFromList(SDL_Renderer* ren, map<string, Sprite*>* sprmap)
 
 			if (s.compare("@ZOMBIE") == 0)
 			{
-				SDL_Log("Loading zombiels...");
+				SDL_Log("Loading zombie...");
 				Zombie* spr;
 
 				string inln;

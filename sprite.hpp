@@ -17,13 +17,13 @@ public:
 
 	string name;
 
-	/* move to private */
 	int rows = 1;
 	int cols = 1;
 	int scale = 2;
 	int framewidth;
 	int frameheight;
 	double framecount = 0;
+	unsigned char direction = 0;
 	SDL_Rect src;
 
 	void AnimateStep(int direction, double deltaTime)
@@ -32,6 +32,11 @@ public:
 		int row = (int)framecount % cols;
 		this->src = { row*framewidth, direction*frameheight, this->framewidth, this->frameheight };
 	}
+
+	void FreezeStep(int direction)
+	{
+		this->src = { 0, direction*frameheight, this->framewidth, this->frameheight };
+	}	
 
 	void Render(SDL_Renderer* ren)
 	{
@@ -44,7 +49,6 @@ public:
 
 	virtual void Update(double deltaTime)
 	{
-		this->AnimateStep(0, deltaTime);
 	}
 
 	Sprite(string filename, SDL_Renderer* ren)

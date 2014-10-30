@@ -35,7 +35,7 @@ cursor
 
 @PLAYER
 guy.bmp
-guy
+player
 4
 3
 @
@@ -48,7 +48,7 @@ bullet
 @
 
 @ZOMBIE
-zombie.bmp
+knifezombie.bmp
 zombie
 4
 3
