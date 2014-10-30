@@ -78,8 +78,8 @@ int main(int argc, char** argv)
 
 
 	/* Spawn entities */
-	entities.push_back(sprites["player"]);
-	
+
+	entities.push_back( sprites["player"] );
 
 
 	while(!quit)
@@ -110,7 +110,7 @@ int main(int argc, char** argv)
 		for (vector<Sprite*>::iterator it = entities.begin(); it != entities.end(); it++)
 		{
 			/* XXX: Segfault */
-			(*it)->Update(deltaTime);
+			(*it)->Update(deltaTime / 100.0f);
 			(*it)->Render(renderer);
 		}
 		/* End draw entities */
@@ -315,4 +315,4 @@ void LoadSpritesFromList(SDL_Renderer* ren, map<string, Sprite*>* sprmap)
 		/* PANIC */
 	}
 
-}
+} 
