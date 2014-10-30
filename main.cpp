@@ -1,8 +1,9 @@
 #include <SDL2/SDL.h>
-#include <SDL/SDL_ttf.h>
+#include <SDL2/SDL_ttf.h>
 
 #include <fstream>
 #include <string>
+#include <sstream>
 #include <map>
 #include <vector>
 #include <stdlib.h>
@@ -15,7 +16,10 @@
 using namespace std;
 
 void LoadSpritesFromList(SDL_Renderer*, map<string, Sprite*>*);
-SDL_Texture* RenderText (SDL_Renderer* ren, string text);
+void RenderText (SDL_Renderer* ren, string text, int x, int y);
+
+/* Frames per seconds */
+
 
 int main(int argc, char** argv)
 {
@@ -41,11 +45,14 @@ int main(int argc, char** argv)
 	/* Rendereris */
 	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
+	
+	SDL_Log("hello world");
+
 	double _fps = 1000 / 120.0f;
 
 	/* Fonts happen here */
 	if( TTF_Init() == -1 ) { 
-		printf( "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError() );
+		SDL_Log("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
 		SDL_Quit();	
 	}
 	
@@ -62,6 +69,14 @@ int main(int argc, char** argv)
 
 	double startTime;
 	double deltaTime = 1;
+
+	/* Last-Second FPS */
+	float alpha = 0.2f;
+	Uint32 getticks, frametimedelta, frametimelast;
+	float frametime, framespersecond = 0;
+
+	
+
 
 	while(!quit)
 	{
@@ -86,13 +101,23 @@ int main(int argc, char** argv)
     			p->second->Render(renderer);
   		}
 
-		SDL_RenderCopy(renderer, RenderText(renderer, "hello world"), NULL, NULL);
+		stringstream s;
+		s << "FPS: " << framespersecond;
 
+		RenderText(renderer, s.str(), 10, 10);
 
 		SDL_RenderPresent(renderer);
 
 		SDL_Delay(_fps);
 		deltaTime = SDL_GetTicks() - startTime;
+
+		/* Frames per second */
+		getticks = SDL_GetTicks();
+		frametimedelta = getticks - frametimelast;
+		frametimelast = getticks;
+
+		frametime = alpha * frametimedelta + (1.0 - alpha) * frametime;
+		framespersecond = (int)(1000.0 / frametime);
 		
 	}
 
@@ -111,17 +136,26 @@ int main(int argc, char** argv)
 	return 0;
 }
 
-SDL_Texture* RenderText (SDL_Renderer* ren, string text)
+void RenderText (SDL_Renderer* ren, string text, int x, int y)
 {
 	/* segfault stahp y u do dis */
-	TTF_Font* font = TTF_OpenFont("font.ttf", 24);
-	SDL_Surface* surf = TTF_RenderText_Solid(font, (const char*)text.c_str(), { 255, 255, 255, 255 });
+	TTF_Font* font = NULL;
+	font = TTF_OpenFont("font.ttf", 12);
+	if (font == NULL)
+		SDL_Log("Font is null: %s", SDL_GetError());
+
+	SDL_Color col = { 255, 255, 255, 255 };
+	SDL_Surface* surf = TTF_RenderText_Solid(font, (const char*)text.c_str(), col);
 	SDL_Texture* mytex = SDL_CreateTextureFromSurface( ren, surf);	
 
 	SDL_FreeSurface(surf);
+	TTF_CloseFont(font);
 
-	return mytex;
+	int w, h;
+	SDL_QueryTexture(mytex, NULL, NULL, &w, &h);
 
+	SDL_Rect r = { x, y, w, h };
+	SDL_RenderCopy(ren, mytex, NULL, &r);
 }
 
 void LoadSpritesFromList(SDL_Renderer* ren, map<string, Sprite*>* sprmap)
