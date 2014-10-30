@@ -47,14 +47,24 @@ public:
 
 	}
 
-	virtual void Update(double deltaTime)
+	virtual void Update(vector<Sprite*> entlist, double deltaTime)
 	{
 		this->FreezeStep(direction);
 	}
 
-	Sprite(SDL_Texture* tex)
+	Sprite(Sprite* templatesprite)
 	{
-		this->texture = tex;
+		this->texture = templatesprite->texture;
+		/* if null then */
+
+		this->w = templatesprite->w;
+		this->h = templatesprite->h;
+
+		this->framewidth = templatesprite->framewidth;
+		this->frameheight = templatesprite->frameheight;
+
+		this->rows = templatesprite->rows;
+		this->cols = templatesprite->cols;
 	}
 
 	Sprite(string filename, SDL_Renderer* ren)

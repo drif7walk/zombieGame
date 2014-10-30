@@ -9,9 +9,9 @@ private:
 
 public:
 
-	void Update(double deltaTime) override 
+	void Update(vector<Sprite*> entlist, double deltaTime) override 
 	{
-		Sprite::Update(deltaTime);
+		Sprite::Update(entlist, deltaTime);
 
 		int x, y;
 		SDL_GetMouseState(&x, &y);

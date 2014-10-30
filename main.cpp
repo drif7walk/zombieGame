@@ -88,12 +88,14 @@ int main(int argc, char** argv)
 	srand(time(NULL));
 
 	/* make dis work */
-	entities.push_back(new Zombie(sprites["zombie"]->texture));
-	entities.back()->x = 120;
-	entities.back()->y = 120;
-	entities.push_back(new Zombie(sprites["zombie"]->texture));
-	entities.back()->x = 0;
-	entities.back()->y = 0;
+	for (int i = 0; i < 50; i++)
+	{
+		entities.push_back(new Zombie(sprites["zombie"]));
+		entities.back()->x = rand() % SCRW;
+		entities.back()->y = rand() % SCRH;
+	}
+
+
 
 /*
 	for (int i = 0; i < 50; i++)
@@ -133,7 +135,7 @@ int main(int argc, char** argv)
 		/* Draw entities */
 		for (vector<Sprite*>::iterator it = entities.begin(); it != entities.end(); it++)
 		{
-			(*it)->Update(deltaTime / 100.0f);
+			(*it)->Update(entities, deltaTime / 100.0f);
 			(*it)->Render(renderer);
 		}
 		/* End draw entities */
