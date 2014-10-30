@@ -1,5 +1,6 @@
+#ifdef OS_WINDOWS
 #include <SDL2/SDL.h>
-<<<<<<< HEAD
+#include <SDL2/SDL_ttf.h>
 
 #else
 #define CRTDBG_MAP_ALLOC
@@ -10,10 +11,6 @@
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
 #endif
-=======
-#include <SDL2/SDL_ttf.h>
->>>>>>> febc6cbfeab8a3b3f5ad6b1b9e8be94b02160d1d
-
 #include <fstream>
 #include <string>
 #include <sstream>
@@ -21,7 +18,6 @@
 #include <vector>
 #include <stdlib.h>
 
-<<<<<<< HEAD
 using namespace std;
 
 #include "fonts.hpp"
@@ -30,8 +26,6 @@ using namespace std;
 using namespace fonts;
 using namespace sound;
 
-=======
->>>>>>> febc6cbfeab8a3b3f5ad6b1b9e8be94b02160d1d
 #include "sprite.hpp"
 #include "player.hpp"
 #include "cursor.hpp"
@@ -47,10 +41,7 @@ void RenderText (SDL_Renderer* ren, string text, int x, int y);
 
 int main(int argc, char** argv)
 {
-<<<<<<< HEAD
-	_CrtSetBreakAlloc(138);
-=======
->>>>>>> febc6cbfeab8a3b3f5ad6b1b9e8be94b02160d1d
+	//_CrtSetBreakAlloc(138);
 	SDL_Event e;
 	bool quit = false;
 	
@@ -61,7 +52,6 @@ int main(int argc, char** argv)
 		return 1;
 	}
 
-<<<<<<< HEAD
 	/* iestāda skaņu */
 	{
 		const int     AUDIO_FREQ = 44100;
@@ -79,8 +69,6 @@ int main(int argc, char** argv)
 
 	Mix_AllocateChannels(16);
 	
-=======
->>>>>>> febc6cbfeab8a3b3f5ad6b1b9e8be94b02160d1d
 	/* Izveidot logu. */
 	SDL_Window* window = SDL_CreateWindow("hl3.exe", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, SDL_WINDOW_SHOWN);
 
@@ -121,8 +109,8 @@ int main(int argc, char** argv)
 
 	/* Last-Second FPS */
 	float alpha = 0.2f;
-	Uint32 getticks, frametimedelta, frametimelast;
-	float frametime, framespersecond = 0;
+	Uint32 getticks, frametimedelta, frametimelast = 0;
+	float frametime = 0, framespersecond = 0;
 
 
 	/* Spawn entities */
@@ -143,15 +131,7 @@ int main(int argc, char** argv)
 				default: continue;	
 			}
 		}
-<<<<<<< HEAD
-		SDL_RenderClear(renderer);
-		/* WARNING: DEEP SORCERY */ 
-		//sprites->operator[]("guy")->AnimateStep(0);
-		//(*sprites)["guy"]->Render(renderer);
-		/* XXX */
 
-		/* Draw all sprites */
-=======
 
 		SDL_RenderClear(renderer);
 
