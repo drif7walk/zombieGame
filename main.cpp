@@ -1,6 +1,7 @@
 #ifdef OS_WINDOWS
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h
 
 #else
 #define CRTDBG_MAP_ALLOC
@@ -17,6 +18,8 @@
 #include <map>
 #include <vector>
 #include <stdlib.h>
+#include <time.h>
+#include <algorithm>
 
 using namespace std;
 
@@ -157,6 +160,11 @@ int main(int argc, char** argv)
 			}
 		}
 
+		sort(entities.begin(), entities.end(),
+			[](const Sprite* a, const Sprite* b) -> bool
+		{
+			return a->y < b->y;
+		});
 
 		SDL_RenderClear(renderer);
 
