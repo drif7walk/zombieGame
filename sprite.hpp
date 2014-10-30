@@ -52,6 +52,11 @@ public:
 		this->FreezeStep(direction);
 	}
 
+	Sprite(SDL_Texture* tex)
+	{
+		this->texture = tex;
+	}
+
 	Sprite(string filename, SDL_Renderer* ren)
 	{
 		this->texture = NULL;

@@ -13,6 +13,10 @@
 #include "cursor.hpp"
 #include "bullet.hpp"
 #include "zombie.hpp"
+
+#define SCRW 800
+#define SCRH 600
+
 using namespace std;
 
 void LoadSpritesFromList(SDL_Renderer*, map<string, Sprite*>*);
@@ -34,7 +38,7 @@ int main(int argc, char** argv)
 	}
 
 	/* Izveidot logu. */
-	SDL_Window* window = SDL_CreateWindow("hl3.exe", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, SDL_WINDOW_SHOWN);
+	SDL_Window* window = SDL_CreateWindow("hl3.exe", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCRW, SCRH, SDL_WINDOW_SHOWN);
 
 	/* C++11 */
 	if (window == nullptr)
@@ -80,9 +84,28 @@ int main(int argc, char** argv)
 	/* Spawn entities */
 
 	entities.push_back( sprites["player"] );
-	entities.push_back( sprites["zombie"] );
 
+	srand(time(NULL));
 
+	/* make dis work */
+	entities.push_back(new Zombie(sprites["zombie"]->texture));
+	entities.back()->x = 120;
+	entities.back()->y = 120;
+	entities.push_back(new Zombie(sprites["zombie"]->texture));
+	entities.back()->x = 0;
+	entities.back()->y = 0;
+
+/*
+	for (int i = 0; i < 50; i++)
+	{
+		entities.push_back( sprites["zombie"] );
+		int x = rand() % SCRW;
+		int y = rand() % SCRH;
+		entities.back()->x = i;
+		entities.back()->y = y;
+		SDL_Log("Zombie created at x%d y %d", x, y); 
+	}
+*/
 	while(!quit)
 	{
 		startTime = SDL_GetTicks();

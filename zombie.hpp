@@ -18,6 +18,12 @@ public:
 
 	}
 
+    Zombie(SDL_Texture* tex)
+        : Sprite(tex)
+    {
+        ;;
+    }
+
     Zombie(string filename, SDL_Renderer* ren)
         : Sprite(filename, ren)
     {
