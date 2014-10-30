@@ -49,6 +49,7 @@ public:
 
 	virtual void Update(double deltaTime)
 	{
+		this->FreezeStep(direction);
 	}
 
 	Sprite(string filename, SDL_Renderer* ren)
