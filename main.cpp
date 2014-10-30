@@ -47,7 +47,7 @@ void LoadSpritesFromList(SDL_Renderer*, map<string, Sprite*>*);
 
 int main(int argc, char** argv)
 {
-	//_CrtSetBreakAlloc(138);
+	_CrtSetBreakAlloc(377);
 	SDL_Event e;
 	bool quit = false;
 	
@@ -71,9 +71,10 @@ int main(int argc, char** argv)
 		}
 
 		Mix_AllocateChannels(16);
+
+		loadSounds();
 	}
 
-	Mix_AllocateChannels(16);
 	
 	/* Izveidot logu. */
 	SDL_Window* window = SDL_CreateWindow("hl3.exe", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCRW, SCRH, SDL_WINDOW_SHOWN);
@@ -134,6 +135,8 @@ int main(int argc, char** argv)
 	}
 
 
+	/* music */
+	play(100, 50, audioFileID);//loops ad nauseum
 
 /*
 	for (int i = 0; i < 50; i++)
@@ -208,15 +211,18 @@ int main(int argc, char** argv)
 
 	/* Delete every texture from map */
 	map<string, Sprite*>::iterator p;
-	for(p = sprites.begin(); p != sprites.end(); p++) {
-
+	for(p = sprites.begin(); p != sprites.end(); p++)
+	{
     		delete p->second;
   	}
 	sprites.clear();
 
-	SDL_DestroyRenderer(renderer);
-	SDL_DestroyWindow(window);
+
 	SDL_Quit();
+
+#ifndef OS_WINDOWS
+	_CrtDumpMemoryLeaks();
+#endif
 
 	return 0;
 }
