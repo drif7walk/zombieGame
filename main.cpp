@@ -1,17 +1,16 @@
 #ifdef OS_WINDOWS
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
-#include <SDL2/SDL_mixer.h
-
+	#include <SDL2/SDL.h>
+	#include <SDL2/SDL_ttf.h>
+	#include <SDL2/SDL_mixer.h
 #else
-#define CRTDBG_MAP_ALLOC
-#include <stdlib.h>
-#include <crtdbg.h>
-
-#include <SDL.h>
-#include <SDL_ttf.h>
-#include <SDL_mixer.h>
+	#define CRTDBG_MAP_ALLOC
+	#include <stdlib.h>
+	#include <crtdbg.h>
+	#include <SDL.h>
+	#include <SDL_ttf.h>
+	#include <SDL_mixer.h>
 #endif
+
 #include <fstream>
 #include <string>
 #include <sstream>
@@ -47,7 +46,7 @@ void LoadSpritesFromList(SDL_Renderer*, map<string, Sprite*>*);
 
 int main(int argc, char** argv)
 {
-	_CrtSetBreakAlloc(151);
+	//_CrtSetBreakAlloc(151);
 	SDL_Event e;
 	bool quit = false;
 	
