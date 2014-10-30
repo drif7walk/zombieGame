@@ -79,7 +79,7 @@ int main(int argc, char** argv)
 
 	/* Spawn entities */
 
-	entities.push_back( sprites["player"] );
+	entities.push_back( sprites["guy"] );
 
 
 	while(!quit)
