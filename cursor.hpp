@@ -1,8 +1,6 @@
 #ifndef CURSOR_HPP
 #define CURSOR_HPP
 
-#include <SDL2/SDL.h>
-#include <string>
 using namespace std;
 
 class Cursor: public Sprite {
@@ -19,6 +17,11 @@ public:
 		SDL_GetMouseState(&x, &y);
 		this->x = x;
 		this->y = y;
+	}
+	
+	~Cursor()
+	{
+
 	}
 
     Cursor(string filename, SDL_Renderer* ren)

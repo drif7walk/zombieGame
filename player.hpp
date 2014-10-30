@@ -40,6 +40,11 @@ public:
 
 	}
 
+	~Player()
+	{
+
+	}
+
     Player(string filename, SDL_Renderer* ren)
         : Sprite(filename, ren)
     {
