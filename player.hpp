@@ -17,27 +17,40 @@ public:
 
 		const Uint8* keybuf = SDL_GetKeyboardState(NULL);
 
+		bool keydown = false;
+
 		if (keybuf[SDL_SCANCODE_W])
 		{
 			this->y += -velocity * deltaTime;
-			this->AnimateStep(2, deltaTime);
+			this->direction = 2;
+			keydown = true;
 		}
 		if (keybuf[SDL_SCANCODE_A])
 		{
 			this->x += -velocity * deltaTime;
-			this->AnimateStep(3, deltaTime);
+			this->direction = 3;
+	
+			keydown = true;
 		}
 		if (keybuf[SDL_SCANCODE_S])
 		{
 			this->y += velocity * deltaTime;
-			this->AnimateStep(0, deltaTime);
+			this->direction = 0;
+
+			keydown = true;
 		}
 		if (keybuf[SDL_SCANCODE_D])
 		{
 			this->x += velocity * deltaTime;
-			this->AnimateStep(1, deltaTime);
-		}
+			this->direction = 1;
 
+			keydown = true;
+		}
+		
+		if (!keydown)
+			this->FreezeStep(direction);
+		else
+			this->AnimateStep(direction, deltaTime);
 	}
 
 	~Player()
