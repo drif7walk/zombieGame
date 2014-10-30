@@ -9,7 +9,7 @@ namespace sound
 
 	int loadSounds()
 	{
-
+		audioMap = new map <string, Mix_Chunk>;
 		return 0;
 	}
 

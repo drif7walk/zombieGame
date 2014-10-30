@@ -12,13 +12,11 @@
  */
 namespace fonts
 {
-#define fontPath "SansationRegular.ttf"
+#define fontPath "font.ttf"
 
 	TTF_Font* _font_ = nullptr;
 	SDL_Texture* _texture_ = nullptr;
 	SDL_Renderer* _renderer_ = nullptr;
-	SDL_Rect* _source_ = nullptr;
-	SDL_Rect* _destination_ = nullptr;
 	bool fontsAreInitialized = false;
 
 	enum
@@ -34,10 +32,6 @@ namespace fonts
 	{
 		if (fontsAreInitialized == false)
 		{
-			_source_ = new SDL_Rect;
-			_destination_ = new SDL_Rect;
-			_source_->x = 0;
-			_source_->y = 0;
 			if (renderer_ != nullptr)
 			{
 				_renderer_ = renderer_;
@@ -50,7 +44,7 @@ namespace fonts
 			{
 				return -1;
 			}
-			_font_ = TTF_OpenFont(fontPath, 24);
+			_font_ = TTF_OpenFont(fontPath, 12);
 			if (_font_ == nullptr)
 			{
 				return -1;
@@ -65,8 +59,6 @@ namespace fonts
 	{
 		if (fontsAreInitialized == true)
 		{
-			delete _source_;
-			delete _destination_;
 			TTF_CloseFont(_font_);
 			SDL_DestroyTexture(_texture_);
 		}
@@ -79,16 +71,18 @@ namespace fonts
 		TTF_SetFontStyle(_font_, fontStyle);
 
 		SDL_Surface* textSurface = nullptr;
-		textSurface = TTF_RenderText_Solid(_font_, text.data(), textColor);
+		textSurface = TTF_RenderText_Solid(_font_, text.c_str(), textColor);
 		
 		_texture_ = SDL_CreateTextureFromSurface(_renderer_, textSurface);
 	
-		_source_->w = textSurface->w;
-		_source_->h = textSurface->h;
-		*_destination_ = { textSurface->h * scale, textSurface->w * scale, location.x, location.y };
+		int w, h;
+		SDL_QueryTexture(_texture_, NULL, NULL, &w, &h);
+
+		SDL_Rect r = { location.x, location.y, w * scale, h * scale };
+
 		
 		SDL_FreeSurface(textSurface);
-		SDL_RenderCopy(_renderer_, _texture_, _source_, _destination_);
+		SDL_RenderCopy(_renderer_, _texture_, NULL, &r);
 	}
 
 }
