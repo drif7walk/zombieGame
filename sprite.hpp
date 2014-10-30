@@ -67,6 +67,7 @@ public:
 
 		this->framewidth = this->w;
 		this->frameheight = this->h;
+		
 	}
 
 	~Sprite()

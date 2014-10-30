@@ -45,9 +45,6 @@ int main(int argc, char** argv)
 	/* Rendereris */
 	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
-	
-	SDL_Log("hello world");
-
 	double _fps = 1000 / 120.0f;
 
 	/* Fonts happen here */
@@ -58,6 +55,8 @@ int main(int argc, char** argv)
 	
 	/* End fonts */
 
+	SDL_Log("SDL Started.");
+
 	/* Load assets */
 
 	map<string, Sprite*> sprites;
@@ -65,6 +64,8 @@ int main(int argc, char** argv)
 	/* End load assets */
 
 	LoadSpritesFromList(renderer, &sprites);
+
+	SDL_Log("numsprlist %d", sprites.size());
 
 
 	double startTime;
@@ -75,6 +76,9 @@ int main(int argc, char** argv)
 	Uint32 getticks, frametimedelta, frametimelast;
 	float frametime, framespersecond = 0;
 
+
+	/* Spawn entities */
+	entities.push_back(sprites["player"]);
 	
 
 
@@ -95,11 +99,21 @@ int main(int argc, char** argv)
 		SDL_RenderClear(renderer);
 
 
+		/* Draw entities 
 		map<string, Sprite*>::iterator p;
 		for(p = sprites.begin(); p != sprites.end(); p++) {
 			p->second->Update(deltaTime / 100.0f);
     			p->second->Render(renderer);
   		}
+		*/
+		/* Draw entities */
+		for (vector<Sprite*>::iterator it = entities.begin(); it != entities.end(); it++)
+		{
+			/* XXX: Segfault */
+			(*it)->Update(deltaTime);
+			(*it)->Render(renderer);
+		}
+		/* End draw entities */
 
 		stringstream s;
 		s << "FPS: " << framespersecond;
@@ -108,8 +122,6 @@ int main(int argc, char** argv)
 
 		SDL_RenderPresent(renderer);
 
-		SDL_Delay(_fps);
-		deltaTime = SDL_GetTicks() - startTime;
 
 		/* Frames per second */
 		getticks = SDL_GetTicks();
@@ -119,6 +131,8 @@ int main(int argc, char** argv)
 		frametime = alpha * frametimedelta + (1.0 - alpha) * frametime;
 		framespersecond = (int)(1000.0 / frametime);
 		
+		SDL_Delay(_fps);
+		deltaTime = SDL_GetTicks() - startTime;
 	}
 
 	/* Delete every texture from map */
@@ -138,7 +152,6 @@ int main(int argc, char** argv)
 
 void RenderText (SDL_Renderer* ren, string text, int x, int y)
 {
-	/* segfault stahp y u do dis */
 	TTF_Font* font = NULL;
 	font = TTF_OpenFont("font.ttf", 12);
 	if (font == NULL)
@@ -167,6 +180,7 @@ void LoadSpritesFromList(SDL_Renderer* ren, map<string, Sprite*>* sprmap)
 
 	if (conffile.is_open()) // File exists
 	{
+		SDL_Log("sprites.list opened...");
 		while (getline(conffile, s))
 		{
 			/* C++ does not do switch on strings, use if/else if/else if */
@@ -174,6 +188,7 @@ void LoadSpritesFromList(SDL_Renderer* ren, map<string, Sprite*>* sprmap)
 
 			if (s.compare("@SPRITE") == 0)
 			{
+				SDL_Log("Loading sprite...");
 				Sprite* spr;
 
 				string inln;
@@ -196,6 +211,7 @@ void LoadSpritesFromList(SDL_Renderer* ren, map<string, Sprite*>* sprmap)
 
 			if (s.compare("@PLAYER") == 0)
 			{
+				SDL_Log("Loading player...");
 				Player* spr;
 
 				string inln;
@@ -218,6 +234,7 @@ void LoadSpritesFromList(SDL_Renderer* ren, map<string, Sprite*>* sprmap)
 
 			if (s.compare("@CURSOR") == 0)
 			{
+				SDL_Log("Loading cursor...");
 				Cursor* spr;
 
 				string inln;
@@ -240,6 +257,7 @@ void LoadSpritesFromList(SDL_Renderer* ren, map<string, Sprite*>* sprmap)
 
 			if (s.compare("@PROJECTILE") == 0)
 			{
+				SDL_Log("Loading projectile...");
 				Bullet* spr;
 
 				string inln;
@@ -262,6 +280,7 @@ void LoadSpritesFromList(SDL_Renderer* ren, map<string, Sprite*>* sprmap)
 
 			if (s.compare("@ZOMBIE") == 0)
 			{
+				SDL_Log("Loading zombiels...");
 				Zombie* spr;
 
 				string inln;

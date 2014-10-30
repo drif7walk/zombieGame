@@ -20,30 +20,36 @@
 # cursor.bmp
 # cursor
 # @ENDCURSOR
+#
+# @ZOMBIE
+# zombie.bmp
+# zombie
+# 4
+# 3
+# @
 
-@STARTCURSOR
+@CURSOR
 cursor.bmp
 cursor
-@ENDCURSOR
+@
 
-@STARTPLAYER
+@PLAYER
 guy.bmp
 guy
 4
 3
-@ENDPLAYER
+@
 
-@STARTPLAYER
-guy.bmp
-guy
-4
-3
-@ENDPLAYER
-
-@STARTPROJECTILE
+@PROJECTILE
 bullet.bmp
 bullet
 4
 1
-@ENDSPRITE
+@
 
+@ZOMBIE
+zombie.bmp
+zombie
+4
+3
+@
