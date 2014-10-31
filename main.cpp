@@ -167,6 +167,8 @@ int main(int argc, char** argv)
     		delete p->second;
   	}
 	sprites.clear();
+	
+	entities.clear();
 
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
