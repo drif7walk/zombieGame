@@ -7,7 +7,7 @@ class Player: public Sprite {
 
 private:
 
-	double velocity = 12;
+	double velocity = 23;
 
 public:
 

@@ -229,10 +229,16 @@ int main(int argc, char** argv)
 	{
 		delete p->second;
   	}
+<<<<<<< HEAD
 	sprites->clear();
 	delete sprites;
 
 	unloadSounds();
+=======
+	sprites.clear();
+	
+	entities.clear();
+>>>>>>> 7972c681bc64ef2b442a91396f545c9e42cfa023
 
 	TTF_Quit();
 	SDL_DestroyRenderer(renderer);
