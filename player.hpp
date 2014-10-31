@@ -46,6 +46,35 @@ public:
 
 			keydown = true;
 		}
+
+		for (vector<Sprite*>::iterator it = entlist->begin(); it != entlist->end(); it++)
+		{
+			if (strcmp((*it)->name.c_str(), "cursor") == 0)
+			{
+				bool y_x = this->y - (*it)->y + this->frameheight / 2 < this->x - (*it)->x + framewidth / 2;
+				bool yx = this->y - (*it)->y + this->frameheight / 2 > -1 * (this->x - (*it)->x + framewidth / 2);
+				if (y_x && yx)
+				{
+					this->direction = 3;
+					return;
+				}
+				if (!y_x && yx)
+				{
+					this->direction = 2;
+					return;
+				}
+				if (y_x && !yx)
+				{
+					this->direction = 0;
+					return;
+				}
+				else
+				{
+					this->direction = 1;
+					return;
+				}
+			}
+		}
 		
 		if (!keydown)
 			this->FreezeStep(direction);

@@ -90,10 +90,11 @@ int main(int argc, char** argv)
 	double _fps = 1000 / 120.0f;
 
 	/* Fonts happen here */
-		if( initializeTTF(renderer) == -1 ) { 
-			SDL_Log("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
-			SDL_Quit();	
-		}
+	TTF_Init();
+		//if( initializeTTF(renderer) == -1 ) { 
+		//	SDL_Log("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
+		//	SDL_Quit();	
+		//}
 	
 	/* End fonts */
 
@@ -122,6 +123,8 @@ int main(int argc, char** argv)
 	/* Spawn entities */
 
 	entities->push_back(new Player(sprites->operator[]("player")));
+
+	entities->push_back(new Cursor(sprites->operator[]("cursor")));
 
 	srand(time(NULL));
 
@@ -190,10 +193,10 @@ int main(int argc, char** argv)
 		stringstream s;
 		s << "FPS: " << framespersecond << "\0";
 
-		drawText(s.str(), { 0xff, 0xff, 0xff, 0xff }, { 10, 10 }, normal, 1);
+		drawText(renderer, s.str(), { 0xff, 0xff, 0xff, 0xff }, { 10, 10 }, normal, 1);
 
-		drawText("top lel", { 0xff, 0xff, 0xff, 0xff }, { 300, 200 }, normal, 4);
-
+		drawText(renderer, "top lel", { 0xff, 0xff, 0xff, 0xff }, { 300, 200 }, normal, 4);
+		
 		SDL_RenderPresent(renderer);
 
 
@@ -231,6 +234,7 @@ int main(int argc, char** argv)
 
 	unloadSounds();
 
+	TTF_Quit();
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_Quit();

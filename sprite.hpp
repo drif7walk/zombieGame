@@ -65,6 +65,8 @@ public:
 
 		this->rows = templatesprite->rows;
 		this->cols = templatesprite->cols;
+
+		this->name = templatesprite->name;
 	}
 
 	Sprite(string filename, SDL_Renderer* ren)

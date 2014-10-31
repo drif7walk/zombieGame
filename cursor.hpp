@@ -24,6 +24,12 @@ public:
 
 	}
 
+	Cursor(Sprite* templatesprite)
+		: Sprite(templatesprite)
+	{
+
+	}
+
     Cursor(string filename, SDL_Renderer* ren)
         : Sprite(filename, ren)
     {

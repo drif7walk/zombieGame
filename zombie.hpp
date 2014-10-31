@@ -20,7 +20,42 @@ public:
 		{
 			if (strcmp((*it)->name.c_str(), "player") == 0)
 			{
+				bool y_x = this->y - (*it)->y - frameheight / 2 < this->x - (*it)->x + framewidth / 2;
+				bool yx = this->y - (*it)->y - frameheight / 2 > -1 * (this->x - (*it)->x + framewidth / 2);
+				if (y_x && yx)
+				{
+					this->direction = 3;
+					return;
+				}
+				if (!y_x && yx)
+				{
+					this->direction = 2;
+					return;
+				}
+				if (y_x && !yx)
+				{
+					this->direction = 0;
+					return;
+				}
+				else
+				{
+					this->direction = 1;
+					return;
+				}
+				
 
+				//else
+				//{
+				//	this->direction = 3;
+				//}
+				//if (this->y - (*it)->y < 0)
+				//{
+				//	this->direction = 0;
+				//}
+				//else
+				//{
+				//	this->direction = 2;
+				//}
 			}
 		}
 	}

@@ -14,9 +14,7 @@ namespace fonts
 {
 #define fontPath "font.ttf"
 
-	TTF_Font* _font_ = nullptr;
-	SDL_Texture* _texture_ = nullptr;
-	SDL_Renderer* _renderer_ = nullptr;
+
 	bool fontsAreInitialized = false;
 
 	enum
@@ -28,61 +26,64 @@ namespace fonts
 		strikethrough = TTF_STYLE_STRIKETHROUGH
 	};
 
-	int initializeTTF(SDL_Renderer* renderer_)
-	{
-		if (fontsAreInitialized == false)
-		{
-			if (renderer_ != nullptr)
-			{
-				_renderer_ = renderer_;
-			}
-			else
-			{
-				return -1;
-			}
-			if (TTF_Init() == -1)
-			{
-				return -1;
-			}
-			_font_ = TTF_OpenFont(fontPath, 12);
-			if (_font_ == nullptr)
-			{
-				return -1;
-			}
-		}
-		fontsAreInitialized = true;
-		return 0;
-		
-	}
+	//int initializeTTF(SDL_Renderer* renderer_)
+	//{
+	//	if (fontsAreInitialized == false)
+	//	{
+	//		if (renderer_ != nullptr)
+	//		{
+	//			_renderer_ = renderer_;
+	//		}
+	//		else
+	//		{
+	//			return -1;
+	//		}
+	//		if (TTF_Init() == -1)
+	//		{
+	//			return -1;
+	//		}
+	//		_font_ = TTF_OpenFont(fontPath, 12);
+	//		if (_font_ == nullptr)
+	//		{
+	//			return -1;
+	//		}
+	//	}
+	//	fontsAreInitialized = true;
+	//	return 0;
+	//	
+	//}
 
-	int deinitializeTTF()
-	{
-		if (fontsAreInitialized == true)
-		{
-			TTF_CloseFont(_font_);
-			SDL_DestroyTexture(_texture_);
-		}
-		fontsAreInitialized = false;
-		return 0;
-	}
+	//int deinitializeTTF()
+	//{
+	//	if (fontsAreInitialized == true)
+	//	{
+	//		TTF_CloseFont(_font_);
+	//		SDL_DestroyTexture(_texture_);
+	//		SDL_FreeSurface(&textSurface);
+	//	}
+	//	fontsAreInitialized = false;
+	//	return 0;
+	//}
 	
-	void drawText(string text, SDL_Color textColor, SDL_Point location, int fontStyle, int scale)
+	void drawText(SDL_Renderer* renderer,string text, SDL_Color textColor, SDL_Point location, int fontStyle, int scale)
 	{
-		TTF_SetFontStyle(_font_, fontStyle);
-
-		SDL_Surface* textSurface = nullptr;
-		textSurface = TTF_RenderText_Solid(_font_, text.c_str(), textColor);
+		TTF_Font* font = NULL;
+		font = TTF_OpenFont("font.ttf", 12);
 		
-		_texture_ = SDL_CreateTextureFromSurface(_renderer_, textSurface);
-	
+		TTF_SetFontStyle(font, fontStyle);
+
+		SDL_Surface* surf = TTF_RenderText_Solid(font, (const char*)text.c_str(), textColor);
+		SDL_Texture* mytex = SDL_CreateTextureFromSurface(renderer, surf);
+
+		SDL_FreeSurface(surf);
+		TTF_CloseFont(font);
+		
+
 		int w, h;
-		SDL_QueryTexture(_texture_, NULL, NULL, &w, &h);
+		SDL_QueryTexture(mytex, NULL, NULL, &w, &h);
 
 		SDL_Rect r = { location.x, location.y, w * scale, h * scale };
-
-		
-		SDL_FreeSurface(textSurface);
-		SDL_RenderCopy(_renderer_, _texture_, NULL, &r);
+		SDL_RenderCopy(renderer, mytex, NULL, &r);
 	}
 
 }
