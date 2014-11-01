@@ -10,6 +10,25 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\bullet.cpp" />
+    <ClCompile Include="..\..\cursor.cpp" />
+    <ClCompile Include="..\..\main.cpp" />
+    <ClCompile Include="..\..\player.cpp" />
+    <ClCompile Include="..\..\sourcery.cpp" />
+    <ClCompile Include="..\..\sprite.cpp" />
+    <ClCompile Include="..\..\spriteHandler.cpp" />
+    <ClCompile Include="..\..\zombie.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\bullet.h" />
+    <ClInclude Include="..\..\cursor.h" />
+    <ClInclude Include="..\..\player.h" />
+    <ClInclude Include="..\..\sourcery.h" />
+    <ClInclude Include="..\..\sprite.h" />
+    <ClInclude Include="..\..\spriteHandler.h" />
+    <ClInclude Include="..\..\zombie.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1459038C-CC11-426C-8C8E-DEAA1931E5F5}</ProjectGuid>
     <RootNamespace>game</RootNamespace>
@@ -74,28 +93,6 @@
       <SubSystem>Windows</SubSystem>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\bullet.hpp" />
-    <ClInclude Include="..\..\cursor.hpp" />
-    <ClInclude Include="..\..\player.hpp" />
-    <ClInclude Include="..\..\sound.hpp" />
-    <ClInclude Include="..\..\sprite.hpp" />
-    <ClInclude Include="..\..\fonts.hpp" />
-    <ClInclude Include="..\..\zombie.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\main.cpp">
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
-      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Default</InlineFunctionExpansion>
-      <IntrinsicFunctions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</IntrinsicFunctions>
-      <FavorSizeOrSpeed Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Neither</FavorSizeOrSpeed>
-      <OmitFramePointers Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</OmitFramePointers>
-      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">AnySuitable</InlineFunctionExpansion>
-      <FavorSizeOrSpeed Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Speed</FavorSizeOrSpeed>
-      <OmitFramePointers Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</OmitFramePointers>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Full</Optimization>
-    </ClCompile>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
