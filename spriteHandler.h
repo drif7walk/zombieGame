@@ -30,6 +30,7 @@ public:
 	std::vector<Sprite*>* entities;
 
 	Sprite* player;
+	Sprite* cursor;
 
 	void Initialize();
 

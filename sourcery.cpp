@@ -4,48 +4,107 @@ int Sourcery::Update(double frameTime)
 {
 	SDL_RenderClear(renderer);
 
-	
+
 	const Uint8* keybuf = SDL_GetKeyboardState(NULL);
+	Uint32 mouse = SDL_GetMouseState(NULL, NULL);
 
 	bool keydown = false;
 
+	//Vector playerVec((*it)->locationVec);
+	//directionVec = playerVec - locationVec;
+	//directionVec.normalize();
+	//directionVec = directionVec * 0.025f;//0.5f magic number do not touch
+	//accelerationVec = directionVec;
+	//
+	//velocityVec = velocityVec + accelerationVec;
+	//velocityVec.limit(maxVelocity);
+	//locationVec = locationVec + velocityVec * deltaTime;
+
+	spriteHandler->player->directionVec = Vector(0, 0);
 	if (keybuf[SDL_SCANCODE_W])
 	{
-		spriteHandler->player->locationVec.y += -spriteHandler->player->velocity * frameTime;
-		spriteHandler->player->direction = 2;
+		spriteHandler->player->directionVec = spriteHandler->player->directionVec + Vector(0, -1);
 		keydown = true;
 	}
 	if (keybuf[SDL_SCANCODE_A])
 	{
-		spriteHandler->player->locationVec.x += -spriteHandler->player->velocity * frameTime;
-		spriteHandler->player->direction = 3;
+		spriteHandler->player->directionVec = spriteHandler->player->directionVec + Vector(-1, 0);
 		keydown = true;
 	}
 	if (keybuf[SDL_SCANCODE_S])
 	{
-		spriteHandler->player->locationVec.y += spriteHandler->player->velocity * frameTime;
-		spriteHandler->player->direction = 0;
+		spriteHandler->player->directionVec = spriteHandler->player->directionVec + Vector(0, 1);
 		keydown = true;
 	}
 	if (keybuf[SDL_SCANCODE_D])
 	{
-		spriteHandler->player->locationVec.x += spriteHandler->player->velocity * frameTime;
-		spriteHandler->player->direction = 1;
+		spriteHandler->player->directionVec = spriteHandler->player->directionVec + Vector(1, 0);
 		keydown = true;
 	}
+	spriteHandler->player->directionVec.normalize(); 
+	spriteHandler->player->accelerationVec = spriteHandler->player->directionVec * 4.0f;
+	spriteHandler->player->velocityVec = spriteHandler->player->velocityVec + spriteHandler->player->accelerationVec;
+	spriteHandler->player->velocityVec.limit(spriteHandler->player->maxVelocity);
+	spriteHandler->player->locationVec = spriteHandler->player->locationVec + spriteHandler->player->velocityVec * frameTime;
 
-	if (keybuf[SDL_SCANCODE_RETURN])
+	//if (keybuf[SDL_SCANCODE_W])
+	//{
+	//	spriteHandler->player->directionVec = spriteHandler->cursor->locationVec - spriteHandler->player->locationVec;
+	//	spriteHandler->player->directionVec.normalize();
+	//	spriteHandler->player->directionVec = spriteHandler->player->directionVec * 4.0f;
+	//	spriteHandler->player->accelerationVec = spriteHandler->player->directionVec;
+	//
+	//	spriteHandler->player->velocityVec = spriteHandler->player->velocityVec + spriteHandler->player->accelerationVec;
+	//	spriteHandler->player->velocityVec.limit(spriteHandler->player->maxVelocity);
+	//	spriteHandler->player->locationVec = spriteHandler->player->locationVec + spriteHandler->player->velocityVec * frameTime;
+	//
+	//
+	//	keydown = true;
+	//}
+	//if (keybuf[SDL_SCANCODE_A])
+	//{
+	//	spriteHandler->player->locationVec.x += -spriteHandler->player->velocity * frameTime;
+	//	spriteHandler->player->direction = 3;
+	//	keydown = true;
+	//}
+	//if (keybuf[SDL_SCANCODE_S])
+	//{
+	//	spriteHandler->player->directionVec = spriteHandler->cursor->locationVec - spriteHandler->player->locationVec;
+	//	spriteHandler->player->directionVec.normalize();
+	//	spriteHandler->player->directionVec = spriteHandler->player->directionVec * -4.0f;
+	//	spriteHandler->player->accelerationVec = spriteHandler->player->directionVec;
+	//
+	//	spriteHandler->player->velocityVec = spriteHandler->player->velocityVec + spriteHandler->player->accelerationVec;
+	//	spriteHandler->player->velocityVec.limit(spriteHandler->player->maxVelocity);
+	//	spriteHandler->player->locationVec = spriteHandler->player->locationVec + spriteHandler->player->velocityVec * frameTime;
+	//
+	//
+	//	keydown = true;
+	//}
+	//if (keybuf[SDL_SCANCODE_D])
+	//{
+	//	spriteHandler->player->locationVec.x += spriteHandler->player->velocity * frameTime;
+	//	spriteHandler->player->direction = 1;
+	//	keydown = true;
+	//}
+
+	if (keybuf[SDL_SCANCODE_RETURN] || mouse & SDL_BUTTON(SDL_BUTTON_LEFT))
 	{
-		spriteHandler->entities->push_back(new Bullet(
-		  spriteHandler->sprites->operator[]("bullet"),
-		{ spriteHandler->player->locationVec.x, spriteHandler->player->locationVec.y },
-		  spriteHandler->player->direction));
+			spriteHandler->entities->push_back(new Bullet(
+/*     warning     */	spriteHandler->sprites->operator[]("bullet"),
+/*placeholder magic*/	spriteHandler->player->locationVec + Vector(0, spriteHandler->player->framewidth * spriteHandler->player->scale + 5),
+/*                 */	spriteHandler->cursor->locationVec - spriteHandler->player->locationVec));
 	}
 
 	if (!keydown)
+	{
 		spriteHandler->player->FreezeStep(spriteHandler->player->direction);
+		spriteHandler->player->velocityVec = Vector();
+	}
 	else
+	{
 		spriteHandler->player->AnimateStep(spriteHandler->player->direction, frameTime);
+	}
 
 
 	spriteHandler->Update(frameTime);
@@ -121,8 +180,9 @@ Sourcery::Sourcery()
 }
 Sourcery::~Sourcery()
 {
-	delete spriteHandler;
 	/* Delete every texture from map */
+	delete spriteHandler;
+
 	//std::vector<Sprite*>::iterator a;
 	//for (a = entities->begin(); a != entities->end(); a++)
 	//{
@@ -130,7 +190,7 @@ Sourcery::~Sourcery()
 	//}
 	//entities->clear();
 	//delete entities;
-
+	//
 	//std::map<std::string, Sprite*>::iterator p;
 	//for(p = sprites->begin(); p != sprites->end(); p++) {
 	//  	delete p->second;

@@ -43,7 +43,8 @@ public:
 
 	void AnimateStep(int direction, double deltaTime);
 	void FreezeStep(int direction);
-	void Render(SDL_Renderer* ren);
+
+	virtual void Render(SDL_Renderer* ren);
 
 	virtual void Update(std::vector<Sprite*>* entlist, double deltaTime);
 

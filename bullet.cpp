@@ -2,33 +2,33 @@
 
 void Bullet::Update(std::vector<Sprite*>* entlist, double deltaTime)
 {
-Sprite::Update(entlist, deltaTime);
-	this->FreezeStep(direction);
+	Sprite::Update(entlist, deltaTime);
+	locationVec = locationVec + velocityVec * deltaTime;
 
-	if (direction == 0)
-	{
-		locationVec.y += velocity * deltaTime;
-	}
-		else if (direction == 1)
-		{
-			locationVec.x += velocity * deltaTime;
-		}	
-			else if (direction == 2)
-			{
-				locationVec.y += -velocity * deltaTime;
-			}	
-				else if (direction == 3)
-				{
-					locationVec.x += -velocity * deltaTime;
-				}
 }
 
-Bullet::Bullet(Sprite* templatesprite, SDL_Point location, int direction): Sprite(templatesprite)  
+
+void Bullet::Render(SDL_Renderer* ren)
+{
+	SDL_Rect r = { (int)this->locationVec.x, (int)this->locationVec.y, (int)this->w, (int)this->h };
+	SDL_RenderCopyEx(ren, this->texture, &src, &r, angle, NULL, SDL_FLIP_NONE);
+}
+
+Bullet::Bullet(Sprite* templatesprite, Vector location, Vector direction): Sprite(templatesprite)  
 {
 	this->locationVec.x = location.x;
 	this->locationVec.y = location.y;
-	this->direction = direction;
-	velocity = 30;
+	this->directionVec = direction;
+	directionVec.normalize();
+	Vector U(0, 1);
+	angle = acos(U.x * directionVec.x + U.y * directionVec.y) * 180 / M_PI;
+
+	maxVelocity = 30;
+	directionVec = directionVec * 30.0f;//0.5f magic number do not touch
+	accelerationVec = directionVec;
+
+	velocityVec = velocityVec + accelerationVec;
+	velocityVec.limit(maxVelocity);
 }
 
 Bullet::Bullet(std::string filename, SDL_Renderer* ren): Sprite(filename, ren)

@@ -18,7 +18,6 @@ Sprite::Update(entlist, deltaTime);
 			accelerationVec = directionVec;
 
 			velocityVec = velocityVec + accelerationVec;
-			velocityVec = velocityVec;
 			velocityVec.limit(maxVelocity);
 			locationVec = locationVec + velocityVec * deltaTime;
 

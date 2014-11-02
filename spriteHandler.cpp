@@ -45,9 +45,9 @@ void SpriteHandler::Initialize()
 		entities->back()->locationVec.y = rand() % SCRH;
 	}
 
-
+	cursor = new Cursor((*sprites)["cursor"]);
 	/* Cursor */
-	entities->push_back(new Cursor((*sprites)["cursor"]));
+	entities->push_back(cursor);
 }
 
 void SpriteHandler::Update(double frameTime)
@@ -167,7 +167,7 @@ void SpriteHandler::LoadSpritesFromList(SDL_Renderer* ren, std::map<std::string,
 
 				getline(conffile, spr->name);
 				getline(conffile, inln);
-				spr->rows = 4;
+				spr->rows = 1;
 
 				getline(conffile, inln);
 				spr->cols = 1;

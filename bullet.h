@@ -5,11 +5,12 @@
 class Bullet: public Sprite {
 
 private:
-
+	float angle;
 public:
 	void Update(std::vector<Sprite*>* entlist, double deltaTime) override;
-	Bullet(Sprite* templatesprite, SDL_Point location, int direction);
+	Bullet(Sprite* templatesprite, Vector location, Vector direction);
 	Bullet(std::string filename, SDL_Renderer* ren);
+	void Render(SDL_Renderer* ren) override;
 };
 
 #endif
