@@ -6,8 +6,8 @@ Sprite::Update(entlist, deltaTime);
 
 	int x, y;
 	SDL_GetMouseState(&x, &y);
-	this->x = x;
-	this->y = y;
+	this->locationVec.x = x;
+	this->locationVec.y = y;
 
 }
 

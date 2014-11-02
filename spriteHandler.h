@@ -29,6 +29,8 @@ public:
 	std::map<std::string, Sprite*>* sprites;
 	std::vector<Sprite*>* entities;
 
+	Sprite* player;
+
 	void Initialize();
 
 	void Update(double frameTime);

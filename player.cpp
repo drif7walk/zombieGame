@@ -2,7 +2,7 @@
 
 void Player::Update(std::vector<Sprite*>* entlist, double deltaTime)
 {
-//Sprite::Update(entlist, deltaTime);
+    Sprite::Update(entlist, deltaTime);
 
 	//const Uint8* keybuf = SDL_GetKeyboardState(NULL);
 

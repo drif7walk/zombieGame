@@ -1,8 +1,33 @@
+#ifndef OS_WINDOWS
+#define CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+#endif
+
 #include "sourcery.h"
+
+#include "vector.h"
 
 int main(int argc, char** argv)
 {
+	/* testbed */
+	//Vector locationVec;
+	//Vector accelerationVec;
+	//Vector directionVec;
+	//Vector velocityVec;
 
+	//Vector playerVec((*it)->x, (*it)->y);
+	//directionVec = playerVec - locationVec;
+	//directionVec.normalize();
+	//directionVec = directionVec * 60.0f;//0.5f magic number do not touch
+	//accelerationVec = directionVec;
+
+	//velocityVec = velocityVec + accelerationVec;
+	//velocityVec = velocityVec * deltaTime;
+	//velocityVec.limit(maxVelocity);
+	//locationVec = locationVec + velocityVec;
+
+	/* end testbed */
 	SDL_Event e;
 	bool quit = false;
 
@@ -47,6 +72,10 @@ int main(int argc, char** argv)
 	}
 
 	delete sourcery;
+
+#ifndef OS_WINDOWS
+	_CrtDumpMemoryLeaks();
+#endif
 
 	return 0;
 }

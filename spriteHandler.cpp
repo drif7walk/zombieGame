@@ -33,14 +33,16 @@ void SpriteHandler::Initialize()
 	srand(time(NULL));
 
 	/* Create a player object */
-	entities->push_back(new Player((*sprites)["player"]));
+	player = new Player((*sprites)["player"]);
+
+	entities->push_back(player);
 
 	for (int i = 0; i < 50; i++)
 	{
 		/* Modifying spawned entities happens as back() */
 		entities->push_back(new Zombie((*sprites)["zombie"]));
-		entities->back()->x = rand() % SCRW;
-		entities->back()->y = rand() % SCRH;
+		entities->back()->locationVec.x = rand() % SCRW;
+		entities->back()->locationVec.y = rand() % SCRH;
 	}
 
 
@@ -50,66 +52,25 @@ void SpriteHandler::Initialize()
 
 void SpriteHandler::Update(double frameTime)
 {
-	sort(entities->begin(), entities->end(), [](const Sprite* a, const Sprite* b) -> bool { return a->y < b->y; /* also plane ordering */ });
+	sort(entities->begin(), entities->end(), [](const Sprite* a, const Sprite* b) -> bool { return a->locationVec.y < b->locationVec.y; /* also plane ordering */ });
+	SDL_Rect screen = { 0, 0, SCRW, SCRH };
 
-	bool createBullet = false;
-	SDL_Point bulletLocation;
-	int bulletDirection;
 	/* Draw entities */
-	for (std::vector<Sprite*>::iterator it = entities->begin(); it != entities->end(); it++)
+	std::vector<Sprite*>::iterator it = entities->begin();
+	while (it != entities->end())
 	{
-		if (strcmp((*it)->name.c_str(), "player") == 0)
+		SDL_Rect entity = { (*it)->locationVec.x, (*it)->locationVec.y, (*it)->w, (*it)->h, };
+		if (!SDL_HasIntersection(&screen, &entity))//check if outside bounds
 		{
-			const Uint8* keybuf = SDL_GetKeyboardState(NULL);
-
-			bool keydown = false;
-
-			if (keybuf[SDL_SCANCODE_W])
-			{
-				(*it)->y += -(*it)->velocity * frameTime;
-				(*it)->direction = 2;
-				keydown = true;
-			}
-			if (keybuf[SDL_SCANCODE_A])
-			{
-				(*it)->x += -(*it)->velocity * frameTime;
-				(*it)->direction = 3;
-				keydown = true;
-			}
-			if (keybuf[SDL_SCANCODE_S])
-			{
-				(*it)->y += (*it)->velocity * frameTime;
-				(*it)->direction = 0;
-				keydown = true;
-			}
-			if (keybuf[SDL_SCANCODE_D])
-			{
-				(*it)->x += (*it)->velocity * frameTime;
-				(*it)->direction = 1;
-				keydown = true;
-			}
-
-			if (keybuf[SDL_SCANCODE_RETURN])
-			{
-				createBullet = true;
-				bulletLocation = { (*it)->x, (*it)->y };
-				bulletDirection = (*it)->direction;
-			}
-
-			if (!keydown)
-				(*it)->FreezeStep((*it)->direction);
-			else
-				(*it)->AnimateStep((*it)->direction, frameTime);
-			(*it)->Render(renderer);
+			delete (*it);
+			it = entities->erase(it);
 			continue;
 		}
 		(*it)->Update(entities, frameTime);
-		(*it)->Render(renderer);
+		(*it)->Render(renderer); 
+		it++;
 	}
-	if (createBullet == true)
-	{
-		entities->push_back(new Bullet((*sprites)["bullet"], bulletLocation, bulletDirection));
-	}
+
 }
 
 void SpriteHandler::LoadSpritesFromList(SDL_Renderer* ren, std::map<std::string, Sprite*>* sprmap)

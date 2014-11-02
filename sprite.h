@@ -12,17 +12,23 @@
 #include <string>
 #include <vector>
 
+#include "vector.h"
+
 class Sprite {
 
 private:
 
 public:
 	SDL_Texture* texture;
-	double x = 0;
-	double y = 0;
+	Vector locationVec;
 	double w = 1;
 	double h = 1;
 	double velocity;
+
+	Vector velocityVec;
+	Vector accelerationVec;
+	Vector directionVec;
+	float maxVelocity;
 
 	std::string name;
 

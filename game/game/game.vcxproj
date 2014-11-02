@@ -18,6 +18,7 @@
     <ClCompile Include="..\..\sourcery.cpp" />
     <ClCompile Include="..\..\sprite.cpp" />
     <ClCompile Include="..\..\spriteHandler.cpp" />
+    <ClCompile Include="..\..\vector.cpp" />
     <ClCompile Include="..\..\zombie.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -27,6 +28,7 @@
     <ClInclude Include="..\..\sourcery.h" />
     <ClInclude Include="..\..\sprite.h" />
     <ClInclude Include="..\..\spriteHandler.h" />
+    <ClInclude Include="..\..\vector.h" />
     <ClInclude Include="..\..\zombie.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

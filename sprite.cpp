@@ -14,7 +14,7 @@ void Sprite::FreezeStep(int direction)
 
 void Sprite::Render(SDL_Renderer* ren)
 {
-	SDL_Rect r = { (int)this->x, (int)this->y, (int)this->w, (int)this->h };
+	SDL_Rect r = { (int)this->locationVec.x, (int)this->locationVec.y, (int)this->w, (int)this->h };
 	SDL_RenderCopy(ren, this->texture, &src, &r);
 }
 

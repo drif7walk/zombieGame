@@ -4,6 +4,49 @@ int Sourcery::Update(double frameTime)
 {
 	SDL_RenderClear(renderer);
 
+	
+	const Uint8* keybuf = SDL_GetKeyboardState(NULL);
+
+	bool keydown = false;
+
+	if (keybuf[SDL_SCANCODE_W])
+	{
+		spriteHandler->player->locationVec.y += -spriteHandler->player->velocity * frameTime;
+		spriteHandler->player->direction = 2;
+		keydown = true;
+	}
+	if (keybuf[SDL_SCANCODE_A])
+	{
+		spriteHandler->player->locationVec.x += -spriteHandler->player->velocity * frameTime;
+		spriteHandler->player->direction = 3;
+		keydown = true;
+	}
+	if (keybuf[SDL_SCANCODE_S])
+	{
+		spriteHandler->player->locationVec.y += spriteHandler->player->velocity * frameTime;
+		spriteHandler->player->direction = 0;
+		keydown = true;
+	}
+	if (keybuf[SDL_SCANCODE_D])
+	{
+		spriteHandler->player->locationVec.x += spriteHandler->player->velocity * frameTime;
+		spriteHandler->player->direction = 1;
+		keydown = true;
+	}
+
+	if (keybuf[SDL_SCANCODE_RETURN])
+	{
+		spriteHandler->entities->push_back(new Bullet(spriteHandler->sprites->operator[]("bullet"),
+		{ spriteHandler->player->locationVec.x, spriteHandler->player->locationVec.y },
+													  spriteHandler->player->direction));
+	}
+
+	if (!keydown)
+		spriteHandler->player->FreezeStep(spriteHandler->player->direction);
+	else
+		spriteHandler->player->AnimateStep(spriteHandler->player->direction, frameTime);
+
+
 	spriteHandler->Update(frameTime);
  
 	/* ask irc to make this not eat memory */
@@ -78,6 +121,7 @@ Sourcery::Sourcery()
 }
 Sourcery::~Sourcery()
 {
+	delete spriteHandler;
 	/* Delete every texture from map */
 	//std::vector<Sprite*>::iterator a;
 	//for (a = entities->begin(); a != entities->end(); a++)
