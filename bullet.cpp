@@ -19,19 +19,19 @@ Bullet::Bullet(Sprite* templatesprite, Vector location, Vector direction): Sprit
 	this->locationVec.x = location.x;
 	this->locationVec.y = location.y;
 	this->directionVec = direction;
-	directionVec.normalize();
-	Vector U(0, 1);
-	angle = acos(U.x * directionVec.x + U.y * directionVec.y) * 180 / M_PI;
 
-	maxVelocity = 30;
+	angle = directionVec.angle();
+
+	directionVec.normalize();
+	maxVelocity = 40;
 	directionVec = directionVec * 30.0f;//0.5f magic number do not touch
 	accelerationVec = directionVec;
 
 	velocityVec = velocityVec + accelerationVec;
 	velocityVec.limit(maxVelocity);
+
 }
 
 Bullet::Bullet(std::string filename, SDL_Renderer* ren): Sprite(filename, ren)
 {
-	
 }

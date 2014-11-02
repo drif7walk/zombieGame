@@ -90,10 +90,10 @@ int Sourcery::Update(double frameTime)
 
 	if (keybuf[SDL_SCANCODE_RETURN] || mouse & SDL_BUTTON(SDL_BUTTON_LEFT))
 	{
-			spriteHandler->entities->push_back(new Bullet(
-/*     warning     */	spriteHandler->sprites->operator[]("bullet"),
-/*placeholder magic*/	spriteHandler->player->locationVec + Vector(0, spriteHandler->player->framewidth * spriteHandler->player->scale + 5),
-/*                 */	spriteHandler->cursor->locationVec - spriteHandler->player->locationVec));
+		spriteHandler->entities->push_back(new Bullet(
+			/*     warning     */	spriteHandler->sprites->operator[]("bullet"),
+			/*placeholder magic*/	spriteHandler->player->locationVec + Vector(0, spriteHandler->player->framewidth * spriteHandler->player->scale + 5),
+			/*                 */	spriteHandler->cursor->locationVec - spriteHandler->player->locationVec + Vector(0, -19.0f)));
 	}
 
 	if (!keydown)
@@ -118,7 +118,7 @@ int Sourcery::Update(double frameTime)
 	}
 
 	SDL_RenderPresent(renderer);
-
+	 
 	return 0;
 }
 

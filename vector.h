@@ -30,19 +30,31 @@ public:
 	{
 	}
 
-	Vector operator+(const Vector& rhs);
-	
-	Vector operator-(const Vector& rhs);
-	
-	Vector operator*(const float& rhs);
+	Vector& operator=(const Vector& rhs);
 
-	Vector operator/(const float& rhs);
+	Vector& operator+=(const Vector& rhs);
+
+	Vector& operator-=(const Vector& rhs);
+
+	Vector operator+(const Vector& rhs) const;
+
+	Vector operator-(const Vector& rhs) const;
+
+	Vector& operator*=(const float& rhs);
+
+	Vector& operator/=(const float& rhs);
+
+	Vector operator*(const float& rhs) const;
+
+	Vector operator/(const float& rhs) const;
 
 	float magnitude();
 
 	void normalize();
 
 	void limit(const float& n);
+
+	float angle();
 };
 
 #endif
