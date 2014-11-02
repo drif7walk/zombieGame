@@ -36,9 +36,10 @@ int Sourcery::Update(double frameTime)
 
 	if (keybuf[SDL_SCANCODE_RETURN])
 	{
-		spriteHandler->entities->push_back(new Bullet(spriteHandler->sprites->operator[]("bullet"),
+		spriteHandler->entities->push_back(new Bullet(
+		  spriteHandler->sprites->operator[]("bullet"),
 		{ spriteHandler->player->locationVec.x, spriteHandler->player->locationVec.y },
-													  spriteHandler->player->direction));
+		  spriteHandler->player->direction));
 	}
 
 	if (!keydown)
@@ -84,7 +85,6 @@ int Sourcery::RenderText (SDL_Renderer* ren, std::string text, int x, int y)
 	SDL_FreeSurface(surf);
 	SDL_DestroyTexture(mytex);
 	mytex = nullptr;
-
 
 	return 0;
 }

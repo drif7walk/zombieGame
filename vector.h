@@ -9,7 +9,7 @@ public:
 	float x;
 	float y;
 
-	Vector(float x_, float y_) {
+	Vector(const float& x_, const float& y_) {
 		x = x_;
 		y = y_;
 	}
@@ -34,15 +34,15 @@ public:
 	
 	Vector operator-(const Vector& rhs);
 	
-	Vector operator*(float rhs);
+	Vector operator*(const float& rhs);
 
-	Vector operator/(float rhs);
+	Vector operator/(const float& rhs);
 
 	float magnitude();
 
 	void normalize();
 
-	void limit(float n);
+	void limit(const float& n);
 };
 
 #endif

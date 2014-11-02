@@ -14,7 +14,7 @@ Sprite::Update(entlist, deltaTime);
 			Vector playerVec((*it)->locationVec);
 			directionVec = playerVec - locationVec;
 			directionVec.normalize();
-			directionVec = directionVec * 0.5f;//0.5f magic number do not touch
+			directionVec = directionVec * 0.025f;//0.5f magic number do not touch
 			accelerationVec = directionVec;
 
 			velocityVec = velocityVec + accelerationVec;

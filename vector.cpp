@@ -16,7 +16,7 @@ Vector Vector::operator-(const Vector& rhs)
 	return vec;
 }
 
-Vector Vector::operator*(float rhs)
+Vector Vector::operator*(const float& rhs)
 {
 	Vector vec;
 	vec.x = this->x * rhs;
@@ -24,7 +24,7 @@ Vector Vector::operator*(float rhs)
 	return vec;
 }
 
-Vector Vector::operator/(float rhs)
+Vector Vector::operator/(const float& rhs)
 {
 	Vector vec;
 	vec.x = this->x / rhs;
@@ -44,7 +44,7 @@ void Vector::normalize() {
 	}
 }
 
-void Vector::limit(float n)
+void Vector::limit(const float& n)
 {
 	if (magnitude() > n)
 	{
