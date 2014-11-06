@@ -7,7 +7,7 @@ class Zombie: public Sprite {
 
 private:
 	double velocity = 1.2;
-
+	bool playerFound;
 public:
 	void Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime) override;
 

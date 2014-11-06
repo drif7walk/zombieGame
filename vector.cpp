@@ -101,3 +101,9 @@ float Vector::angle()
 	//return 360-angle;
 	return 360 - atan2(-y, x) * 57.2957795131f;//checkmate math
 }
+
+void Vector::random()
+{
+	x = rand() % 100 - 50;
+	y = rand() % 100 - 50;
+}

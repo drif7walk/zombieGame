@@ -19,14 +19,17 @@ void Bullet::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime)
 
 			if (intersect)
 			{
+				(*it)->healthPoints -= 2;
 				this->destroyed = true;
-				(*it)->destroyed = true;
-				break;
+				if ((*it)->healthPoints < 0)
+				{
+					(*it)->destroyed = true;
+				}
 				ui->AddKill();
+				break;
 			}
 		}
 	}
-
 }
 
 

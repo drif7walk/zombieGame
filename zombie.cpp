@@ -8,8 +8,7 @@ Sprite::Update(ui, entlist, deltaTime);
 	double stepy = 0;
 	for (std::vector<Sprite*>::iterator it = entlist->begin(); it != entlist->end(); it++)
 	{
-		
-		if (strcmp((*it)->name.c_str(), "player") == 0)
+		if (strcmp((*it)->name.c_str(), "player") == 0 && playerFound == true)
 		{
 			Vector playerVec((*it)->locationVec);
 			directionVec = playerVec - locationVec;
@@ -45,6 +44,25 @@ Sprite::Update(ui, entlist, deltaTime);
 				break;
 			}
 		}
+		if (strcmp((*it)->name.c_str(), "player") == 0)
+		{
+			if (sqrt(pow(this->locationVec.x - (*it)->locationVec.x, 2)
+				+ pow(this->locationVec.y - (*it)->locationVec.x, 2)) < 200)
+			{
+				playerFound = true;
+			}
+		}
+	}
+	if (playerFound == false)
+	{
+		directionVec.random();
+		directionVec.normalize();
+		directionVec = directionVec * 0.025f;//0.5f magic number do not touch
+		accelerationVec = directionVec;
+
+		velocityVec = velocityVec + accelerationVec;
+		velocityVec.limit(maxVelocity);
+		locationVec = locationVec + velocityVec * deltaTime;
 	}
 	this->AnimateStep(direction, deltaTime);
 	this->locationVec.x += stepx * deltaTime;
@@ -53,9 +71,13 @@ Sprite::Update(ui, entlist, deltaTime);
 
 Zombie::Zombie(Sprite* templatesprite) : Sprite(templatesprite)  {
 	maxVelocity = 1.2f;
+	healthPoints = 1;
+	playerFound = false;
 }
 
 Zombie::Zombie(std::string filename, SDL_Renderer* ren) : Sprite(filename, ren) {
 	maxVelocity = 1.2f;
+	healthPoints = 1;
+	playerFound = false;
 }
 

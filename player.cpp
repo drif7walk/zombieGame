@@ -4,8 +4,26 @@ void Player::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime)
 {
 	for (std::vector<Sprite*>::iterator it = entlist->begin(); it != entlist->end(); it++)
 	{
+		if (strcmp((*it)->name.c_str(), "zombie") == 0)
+		{
+			SDL_Rect r;
+			r = this->GetRect();
 
-		if (strcmp((*it)->name.c_str(), "cursor") == 0)
+			SDL_Rect r2;
+			r2 = (*it)->GetRect();
+
+			bool intersect = SDL_HasIntersection(&r, &r2);
+
+			if (intersect)
+			{
+				this->healthPoints -= 10;
+				if (this->healthPoints <= 0)
+				{
+					this->destroyed = true;
+				}
+			}
+		}
+		else if (strcmp((*it)->name.c_str(), "cursor") == 0)
 		{
 			bool y_2x = this->locationVec.y - (*it)->locationVec.y < (this->locationVec.x - (*it)->locationVec.x) * 2;
 			bool y__2x = this->locationVec.y - (*it)->locationVec.y < (this->locationVec.x - (*it)->locationVec.x) * 2 * -1;
@@ -60,11 +78,13 @@ void Player::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime)
 
 Player::Player(Sprite* templatesprite): Sprite(templatesprite) 
 {
-	maxVelocity = 23;
+	maxVelocity = 23.0f;
+	healthPoints = 100;
 }
 
 Player::Player(std::string filename, SDL_Renderer* ren): Sprite(filename, ren)
 {
-	
+	maxVelocity = 23.0f;
+	healthPoints = 1000;
 }
 

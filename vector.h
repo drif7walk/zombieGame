@@ -2,6 +2,7 @@
 #define VECTOR_H
 
 #include <math.h>
+#include <stdlib.h>
 
 class Vector {
 
@@ -55,6 +56,8 @@ public:
 	void limit(const float& n);
 
 	float angle();
+
+	void random();
 };
 
 #endif

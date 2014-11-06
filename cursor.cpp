@@ -8,7 +8,6 @@ Sprite::Update(ui, entlist, deltaTime);
 	SDL_GetMouseState(&x, &y);
 	this->locationVec.x = x;
 	this->locationVec.y = y;
-
 }
 
 Cursor::Cursor(Sprite* templatesprite): Sprite(templatesprite)  {}
