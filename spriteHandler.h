@@ -16,6 +16,7 @@
 #include "cursor.h"
 #include "bullet.h"
 #include "zombie.h"
+#include "UI.h"
 
 class SpriteHandler
 {
@@ -34,7 +35,7 @@ public:
 
 	void Initialize();
 
-	void Update(double frameTime);
+	void Update(UI* ui, double frameTime);
 
 	SpriteHandler(SDL_Renderer* renderer);
 	~SpriteHandler();

@@ -1,18 +1,14 @@
 #ifndef SPRITE_H
 #define SPRITE_H
 
-#ifdef OS_WINDOWS
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
-#else
 #include <SDL.h>
 #include <SDL_ttf.h>
-#endif
 
 #include <string>
 #include <vector>
 
 #include "vector.h"
+#include "UI.h"
 
 class Sprite {
 
@@ -44,9 +40,11 @@ public:
 	void AnimateStep(int direction, double deltaTime);
 	void FreezeStep(int direction);
 
+	SDL_Rect GetRect();
+
 	virtual void Render(SDL_Renderer* ren);
 
-	virtual void Update(std::vector<Sprite*>* entlist, double deltaTime);
+	virtual void Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime);
 
 	Sprite(Sprite* templatesprite) ;
 	Sprite(std::string filename, SDL_Renderer* ren);
@@ -54,4 +52,5 @@ public:
 };
 
 #endif
+
 

@@ -1,9 +1,32 @@
 #include "bullet.h"
 
-void Bullet::Update(std::vector<Sprite*>* entlist, double deltaTime)
+void Bullet::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime)
 {
-	Sprite::Update(entlist, deltaTime);
+	Sprite::Update(ui, entlist, deltaTime);
 	locationVec = locationVec + velocityVec * deltaTime;
+
+	//for (std::vector<Sprite*>::iterator it = entlist->begin(); it != entlist->end(); it++)
+	//{
+	//	
+	//	if (strcmp((*it)->name.c_str(), "zombie") == 0)
+	//	{
+	//		SDL_Rect r;
+	//		r = this->GetRect();
+
+	//		SDL_Rect r2;
+	//		r2 =(*it)->GetRect();
+
+	//		bool intersect = SDL_HasIntersection( &r, &r2 );
+
+	//		if (intersect)
+	//		{
+	//			delete(*it);
+	//			it = entlist->erase(it);
+	//			it++;
+	//			ui->AddKill();
+	//		}
+	//	}
+	//}
 
 }
 
@@ -35,3 +58,4 @@ Bullet::Bullet(Sprite* templatesprite, Vector location, Vector direction): Sprit
 Bullet::Bullet(std::string filename, SDL_Renderer* ren): Sprite(filename, ren)
 {
 }
+

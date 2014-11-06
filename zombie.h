@@ -9,7 +9,7 @@ private:
 	double velocity = 1.2;
 
 public:
-	void Update(std::vector<Sprite*>* entlist, double deltaTime) override;
+	void Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime) override;
 
 	Zombie(Sprite* templatesprite) ;
 	Zombie(std::string filename, SDL_Renderer* ren);
@@ -17,3 +17,4 @@ public:
 };
 
 #endif
+

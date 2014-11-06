@@ -1,8 +1,8 @@
 #include "cursor.h"
 
-void Cursor::Update(std::vector<Sprite*>* entlist, double deltaTime)
+void Cursor::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime)
 {
-Sprite::Update(entlist, deltaTime);
+Sprite::Update(ui, entlist, deltaTime);
 
 	int x, y;
 	SDL_GetMouseState(&x, &y);
@@ -16,3 +16,4 @@ Cursor::Cursor(std::string filename, SDL_Renderer* ren): Sprite(filename, ren)
 {
 	SDL_ShowCursor(false);
 }
+

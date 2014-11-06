@@ -50,7 +50,9 @@ void SpriteHandler::Initialize()
 	entities->push_back(cursor);
 }
 
-void SpriteHandler::Update(double frameTime)
+int zombieclock = 0;
+int zombietimeout = 12;
+void SpriteHandler::Update(UI* ui, double frameTime)
 {
 	sort(entities->begin(), entities->end(), [](const Sprite* a, const Sprite* b) -> bool { return a->locationVec.y < b->locationVec.y; /* also plane ordering */ });
 	SDL_Rect screen = { 0, 0, SCRW, SCRH };
@@ -66,11 +68,66 @@ void SpriteHandler::Update(double frameTime)
 			it = entities->erase(it);
 			continue;
 		}
-		(*it)->Update(entities, frameTime);
+		(*it)->Update(ui, entities, frameTime);
 		(*it)->Render(renderer); 
 		it++;
 	}
 
+	bool deleted = false;
+	it = entities->begin();
+	while (it != entities->end())
+	{
+
+		std::vector<Sprite*>::iterator it2 = entities->begin();
+		deleted = false;
+		if (it != it2)
+		{
+
+			if(strcmp((*it)->name.c_str(), "bullet") == 0)
+			while (it2 != entities->end())
+			{
+				if (strcmp((*it2)->name.c_str(), "zombie") == 0)
+				{
+					SDL_Rect r;
+					r = (*it)->GetRect();
+
+					SDL_Rect r2;
+					r2 = (*it2)->GetRect();
+
+					bool intersect = SDL_HasIntersection(&r, &r2);
+
+					if (intersect)
+					{
+						delete(*it2);
+						it2 = entities->erase(it2);
+						ui->AddKill();
+						deleted = true;
+						break;
+					}
+				}
+				it2++;
+			}
+		}
+		if (deleted == true)
+		{
+			it = entities->begin();
+		}
+		else
+		{
+			it++;
+		}
+	}
+
+	zombieclock++;
+	if (zombieclock > zombietimeout)
+	{
+		zombieclock = 0;
+
+
+		entities->push_back(new Zombie( sprites->operator[]("zombie") ));
+		entities->back()->locationVec.x = rand() % 700 + 50;
+		entities->back()->locationVec.y = rand() % 500 + 50;
+	}
 }
 
 void SpriteHandler::LoadSpritesFromList(SDL_Renderer* ren, std::map<std::string, Sprite*>* sprmap)

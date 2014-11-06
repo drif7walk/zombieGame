@@ -1,8 +1,6 @@
-#ifndef OS_WINDOWS
-#define CRTDBG_MAP_ALLOC
-#include <stdlib.h>
-#include <crtdbg.h>
-#endif
+
+#include <SDL.h>
+#include <SDL_ttf.h>
 
 #include "sourcery.h"
 
@@ -10,31 +8,7 @@
 
 int main(int argc, char** argv)
 {
-	/* testbed */
-	//float x1 = 0, x2 = 1;
-	//float y1 = -1, y2 = 0;
-	//
-	//float dot = x1*x2 + y1*y2;
-	//float det = x1*y2 - y1*x2;
-	//float angle = atan2(det, dot) * 180 / M_PI;
-	//
-	//Vector locationVec;
-	//Vector accelerationVec;
-	//Vector directionVec;
-	//Vector velocityVec;
-	//
-	//Vector playerVec((*it)->x, (*it)->y);
-	//directionVec = playerVec - locationVec;
-	//directionVec.normalize();
-	//directionVec = directionVec * 60.0f;//0.5f magic number do not touch
-	//accelerationVec = directionVec;
-	//
-	//velocityVec = velocityVec + accelerationVec;
-	//velocityVec = velocityVec * deltaTime;
-	//velocityVec.limit(maxVelocity);
-	//locationVec = locationVec + velocityVec;
-	//
-	/* end testbed */
+
 	SDL_Event e;
 	bool quit = false;
 
@@ -80,9 +54,6 @@ int main(int argc, char** argv)
 
 	delete sourcery;
 
-#ifndef OS_WINDOWS
-	_CrtDumpMemoryLeaks();
-#endif
-
 	return 0;
 }
+

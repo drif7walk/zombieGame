@@ -36,14 +36,14 @@ cursor
 @PLAYER
 guy.bmp
 player
-4
+8
 3
 @
 
 @PROJECTILE
 bullet.bmp
 bullet
-1
+4
 1
 @
 

@@ -1,8 +1,8 @@
 #include "zombie.h"
 
-void Zombie::Update(std::vector<Sprite*>* entlist, double deltaTime)
+void Zombie::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime)
 {
-Sprite::Update(entlist, deltaTime);
+Sprite::Update(ui, entlist, deltaTime);
 
 	double stepx = 0;
 	double stepy = 0;
@@ -58,3 +58,4 @@ Zombie::Zombie(Sprite* templatesprite) : Sprite(templatesprite)  {
 Zombie::Zombie(std::string filename, SDL_Renderer* ren) : Sprite(filename, ren) {
 	maxVelocity = 1.2f;
 }
+

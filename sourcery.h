@@ -1,13 +1,8 @@
 #ifndef SOURCERY_H
 #define SOURCERY_H
 
-#ifdef OS_WINDOWS
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
-#else
 #include <SDL.h>
 #include <SDL_ttf.h>
-#endif
 
 #include <fstream>
 #include <string>
@@ -18,6 +13,8 @@
 #include <time.h>
 
 #include "spriteHandler.h"
+#include "vector.h"
+#include "UI.h"
 
 
 class Sourcery {
@@ -28,15 +25,14 @@ public:
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 	SpriteHandler* spriteHandler;
+	UI* ui;
 
 	int Update(double frameTime);
-
-	int RenderText (SDL_Renderer* ren, std::string text, int x, int y);
-
 
 	Sourcery();
 	~Sourcery();
 };
 
 #endif
+
 

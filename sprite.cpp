@@ -1,5 +1,10 @@
 #include "sprite.h"
 
+SDL_Rect Sprite::GetRect()
+{
+	return { (int)this->locationVec.x, (int)this->locationVec.y, (int)(this->framewidth*this->scale), (int)(this->framewidth*this->scale) };
+}
+
 void Sprite::AnimateStep(int direction, double deltaTime)
 {
 	framecount += (double)0.6*deltaTime;
@@ -14,11 +19,11 @@ void Sprite::FreezeStep(int direction)
 
 void Sprite::Render(SDL_Renderer* ren)
 {
-	SDL_Rect r = { (int)this->locationVec.x, (int)this->locationVec.y, (int)this->w, (int)this->h };
+	SDL_Rect r = { (int)this->locationVec.x, (int)this->locationVec.y, (int)this->framewidth*this->scale, (int)this->frameheight*this->scale };
 	SDL_RenderCopy(ren, this->texture, &src, &r);
 }
 
-void Sprite::Update(std::vector<Sprite*>* entlist, double deltaTime)
+void Sprite::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime)
 {
 		this->FreezeStep(direction);
 }
@@ -55,7 +60,8 @@ Sprite::Sprite(std::string filename, SDL_Renderer* ren)
 	this->w = (double)w;
 	this->h = (double)h;
 
-	this->framewidth = this->w;
-	this->frameheight = this->h;
+	this->framewidth = this->rows;
+	this->frameheight = this->cols;
 		
 }
+
