@@ -30,6 +30,7 @@ void Sprite::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime)
 
 Sprite::Sprite(Sprite* templatesprite)
 {
+	this->destroyed = templatesprite->destroyed;
 	this->texture = templatesprite->texture;
 	this->name=templatesprite->name;
 	/* if null then */
@@ -45,6 +46,7 @@ Sprite::Sprite(Sprite* templatesprite)
 Sprite::Sprite(std::string filename, SDL_Renderer* ren)
 {
 	this->texture = NULL;
+	this->destroyed = false;
 	SDL_Surface* ls = SDL_LoadBMP(filename.c_str());
 	/* if null then [...] */
 

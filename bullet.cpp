@@ -5,28 +5,27 @@ void Bullet::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime)
 	Sprite::Update(ui, entlist, deltaTime);
 	locationVec = locationVec + velocityVec * deltaTime;
 
-	//for (std::vector<Sprite*>::iterator it = entlist->begin(); it != entlist->end(); it++)
-	//{
-	//	
-	//	if (strcmp((*it)->name.c_str(), "zombie") == 0)
-	//	{
-	//		SDL_Rect r;
-	//		r = this->GetRect();
+	for (std::vector<Sprite*>::iterator it = entlist->begin(); it != entlist->end(); it++)
+	{
+		if (strcmp((*it)->name.c_str(), "zombie") == 0)
+		{
+			SDL_Rect r;
+			r = this->GetRect();
 
-	//		SDL_Rect r2;
-	//		r2 =(*it)->GetRect();
+			SDL_Rect r2;
+			r2 =(*it)->GetRect();
 
-	//		bool intersect = SDL_HasIntersection( &r, &r2 );
+			bool intersect = SDL_HasIntersection( &r, &r2 );
 
-	//		if (intersect)
-	//		{
-	//			delete(*it);
-	//			it = entlist->erase(it);
-	//			it++;
-	//			ui->AddKill();
-	//		}
-	//	}
-	//}
+			if (intersect)
+			{
+				this->destroyed = true;
+				(*it)->destroyed = true;
+				break;
+				ui->AddKill();
+			}
+		}
+	}
 
 }
 

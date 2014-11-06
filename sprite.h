@@ -26,6 +26,10 @@ public:
 	Vector directionVec;
 	float maxVelocity;
 
+	bool destroyed;
+
+	int healthPoints;
+
 	std::string name;
 
 	int rows = 1;

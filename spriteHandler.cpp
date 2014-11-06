@@ -73,49 +73,17 @@ void SpriteHandler::Update(UI* ui, double frameTime)
 		it++;
 	}
 
-	bool deleted = false;
+
 	it = entities->begin();
 	while (it != entities->end())
 	{
-
-		std::vector<Sprite*>::iterator it2 = entities->begin();
-		deleted = false;
-		if (it != it2)
+		if ((*it)->destroyed == true)
 		{
-
-			if(strcmp((*it)->name.c_str(), "bullet") == 0)
-			while (it2 != entities->end())
-			{
-				if (strcmp((*it2)->name.c_str(), "zombie") == 0)
-				{
-					SDL_Rect r;
-					r = (*it)->GetRect();
-
-					SDL_Rect r2;
-					r2 = (*it2)->GetRect();
-
-					bool intersect = SDL_HasIntersection(&r, &r2);
-
-					if (intersect)
-					{
-						delete(*it2);
-						it2 = entities->erase(it2);
-						ui->AddKill();
-						deleted = true;
-						break;
-					}
-				}
-				it2++;
-			}
+			delete(*it);
+			it = entities->erase(it);
+			continue;
 		}
-		if (deleted == true)
-		{
-			it = entities->begin();
-		}
-		else
-		{
-			it++;
-		}
+		it++;
 	}
 
 	zombieclock++;
