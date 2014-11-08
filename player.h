@@ -6,6 +6,9 @@
 
 
 class Player : public Sprite {
+private:
+	const int maxHealth = 300;
+	int timeSinceLastHit = 0;
 
 public:
 	void Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime) override;

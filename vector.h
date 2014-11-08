@@ -1,6 +1,8 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
+#include <SDL.h>
+
 #include <math.h>
 #include <stdlib.h>
 
@@ -56,6 +58,8 @@ public:
 	void limit(const float& n);
 
 	float angle();
+
+	void rotate(const float& angle);
 
 	void random();
 };

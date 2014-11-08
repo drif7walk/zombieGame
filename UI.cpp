@@ -13,14 +13,21 @@ int UI::getkillcount()
 
 void UI::Render(SDL_Renderer* ren)
 {
-
 	std::stringstream ss (std::stringstream::in | std::stringstream::out);
 
 	ss << "KILLS: " << this->getkillcount();
 
 	RenderText(ren, ss.str(), 10, 10);
 
+	ss.str(std::string());
 
+	ss << "FIRE MODE: " << fireMode;
+	RenderText(ren, ss.str(), 10, 25);
+
+	ss.str(std::string());
+
+	ss << "HEALTH: " << playerHealth.str();
+	RenderText(ren, ss.str(), 10, 40);
 }
 
 int UI::RenderText (SDL_Renderer* ren, std::string text, int x, int y)

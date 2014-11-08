@@ -1,4 +1,3 @@
-
 #include <SDL.h>
 #include <SDL_ttf.h>
 
@@ -8,7 +7,6 @@
 
 int main(int argc, char** argv)
 {
-
 	SDL_Event e;
 	bool quit = false;
 
@@ -18,7 +16,6 @@ int main(int argc, char** argv)
 	Uint32 getticks, frametimedelta, frametimelast = 0;
 	float frametime = 0;
 	double _fps = 1000 / 120.0f;
-
 
 	Sourcery* sourcery = new Sourcery();
 

@@ -27,6 +27,7 @@ public:
 	SpriteHandler* spriteHandler;
 	UI* ui;
 
+
 	int Update(double frameTime);
 
 	Sourcery();

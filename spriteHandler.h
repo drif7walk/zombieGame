@@ -16,12 +16,16 @@
 #include "cursor.h"
 #include "bullet.h"
 #include "zombie.h"
+#include "tile.h"
 #include "UI.h"
 
 class SpriteHandler
 {
 private:
 	SDL_Renderer* renderer;
+
+	int bulletDelay = 0;
+	int switchDelay = 0;
 
 	void LoadSpritesFromList(SDL_Renderer* ren, std::map<std::string, Sprite*>* sprmap);
 

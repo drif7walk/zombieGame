@@ -88,6 +88,17 @@ void Vector::limit(const float& n)
 	}
 }
 
+void Vector::rotate(const float& angle)
+{
+	float _angle = angle * M_PI / 180;
+	float _cos = cos(_angle);
+	float _sin = sin(_angle);
+	float px = this->x * _cos - this->y * _sin;
+	float py = this->x * _sin + this->y * _cos;
+	this->x = px;
+	this->y = py;
+}
+
 float Vector::angle()
 {
 	//Vector U(1, 0);

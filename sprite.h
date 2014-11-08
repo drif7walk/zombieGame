@@ -1,6 +1,5 @@
 #ifndef SPRITE_H
 #define SPRITE_H
-
 #include <SDL.h>
 #include <SDL_ttf.h>
 
@@ -19,6 +18,7 @@ public:
 	Vector locationVec;
 	double w = 1;
 	double h = 1;
+	int plane; // 0 - bg, 1 - items, 2 - ui 
 	double velocity;
 
 	Vector velocityVec;
@@ -50,7 +50,7 @@ public:
 
 	virtual void Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime);
 
-	Sprite(Sprite* templatesprite) ;
+	Sprite(Sprite* templatesprite);
 	Sprite(std::string filename, SDL_Renderer* ren);
 
 };

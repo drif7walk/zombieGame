@@ -7,6 +7,7 @@ void Bullet::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime)
 
 	for (std::vector<Sprite*>::iterator it = entlist->begin(); it != entlist->end(); it++)
 	{
+
 		if (strcmp((*it)->name.c_str(), "zombie") == 0)
 		{
 			SDL_Rect r;
@@ -23,9 +24,14 @@ void Bullet::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime)
 				this->destroyed = true;
 				if ((*it)->healthPoints < 0)
 				{
+					if ((*it)->destroyed == false)
+					{
+						ui->AddKill();
+					}
 					(*it)->destroyed = true;
 				}
-				ui->AddKill();
+
+				
 				break;
 			}
 		}

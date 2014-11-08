@@ -6,6 +6,7 @@ Sprite::Update(ui, entlist, deltaTime);
 
 	double stepx = 0;
 	double stepy = 0;
+	bool playerIsAlive = false;
 	for (std::vector<Sprite*>::iterator it = entlist->begin(); it != entlist->end(); it++)
 	{
 		if (strcmp((*it)->name.c_str(), "player") == 0 && playerFound == true)
@@ -13,36 +14,13 @@ Sprite::Update(ui, entlist, deltaTime);
 			Vector playerVec((*it)->locationVec);
 			directionVec = playerVec - locationVec;
 			directionVec.normalize();
-			directionVec = directionVec * 0.025f;//0.5f magic number do not touch
+			directionVec = directionVec * 0.025f;
 			accelerationVec = directionVec;
 
 			velocityVec = velocityVec + accelerationVec;
 			velocityVec.limit(maxVelocity);
 			locationVec = locationVec + velocityVec * deltaTime;
-
-			bool y_x = this->locationVec.y - (*it)->locationVec.y - frameheight / 2 < this->locationVec.x - (*it)->locationVec.x + framewidth / 2;
-			bool yx = this->locationVec.y - (*it)->locationVec.y - frameheight / 2 > -1 * (this->locationVec.x - (*it)->locationVec.x + framewidth / 2);
-				/* change break to continue for multiple follow */
-			if (y_x && yx)
-			{
-				this->direction = 3;
-				break;
-			}
-			if (!y_x && yx)
-			{
-				this->direction = 2;
-				break;
-			}
-			if (y_x && !yx)
-			{
-				this->direction = 0;
-				break;
-			}
-			else
-			{
-				this->direction = 1;
-				break;
-			}
+			playerIsAlive = true;
 		}
 		if (strcmp((*it)->name.c_str(), "player") == 0)
 		{
@@ -51,22 +29,39 @@ Sprite::Update(ui, entlist, deltaTime);
 			{
 				playerFound = true;
 			}
+			playerIsAlive = true;
 		}
 	}
-	if (playerFound == false)
+	if (playerFound == false || playerIsAlive == false)
 	{
 		directionVec.random();
 		directionVec.normalize();
-		directionVec = directionVec * 0.025f;//0.5f magic number do not touch
+		directionVec = directionVec * 0.025f;
 		accelerationVec = directionVec;
 
 		velocityVec = velocityVec + accelerationVec;
 		velocityVec.limit(maxVelocity);
 		locationVec = locationVec + velocityVec * deltaTime;
 	}
+	bool y_x = this->velocityVec.y > this->velocityVec.x;//face the direction of movement
+	bool yx = this->velocityVec.y < -1 * (this->velocityVec.x);
+	if (y_x && yx)
+	{
+		this->direction = 3;
+	}
+		else if (!y_x && yx)
+		{
+			this->direction = 2;
+		}
+			else if (y_x && !yx)
+			{
+				this->direction = 0;
+			}
+				else
+				{
+					this->direction = 1;
+				}
 	this->AnimateStep(direction, deltaTime);
-	this->locationVec.x += stepx * deltaTime;
-	this->locationVec.y += stepy * deltaTime;
 }
 
 Zombie::Zombie(Sprite* templatesprite) : Sprite(templatesprite)  {

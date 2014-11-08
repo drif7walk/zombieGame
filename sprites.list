@@ -27,6 +27,12 @@
 # 4
 # 3
 # @
+# 
+# @TILE
+# tile.bmp
+# 1
+# 1
+# @
 
 @CURSOR
 cursor.bmp
@@ -52,4 +58,11 @@ knifezombie.bmp
 zombie
 4
 3
+@
+
+@TILE
+floor.bmp
+floor
+1
+1
 @
