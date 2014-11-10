@@ -12,7 +12,10 @@
 
 class Sprite {
 
-private:
+protected:
+	virtual void setDirection(Vector direction);// virtual because zombie is lacking textures and using the
+	//full aglo will make the zombies dissapear under certain conditions so zombie has an override to 
+	//setDirection(Vector direction)
 
 public:
 	SDL_Texture* texture;

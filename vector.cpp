@@ -110,7 +110,16 @@ float Vector::angle()
 	//	angle = angle + 360;
 	//}
 	//return 360-angle;
-	return 360 - atan2(-y, x) * 57.2957795131f;//checkmate math
+	float angle = atan2(-y, x) * 57.2957795131f;
+	if (angle < 0)
+	{
+		angle *= -1;
+	}
+	else
+	{
+		angle = 360 - angle;
+	}
+	return angle;
 }
 
 void Vector::random()

@@ -124,52 +124,8 @@ void Player::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
 			}
 
 
+			setDirection((*it)->locationVec - locationVec);
 
-			bool y_2x = this->locationVec.y - (*it)->locationVec.y < (this->locationVec.x - (*it)->locationVec.x) * 2;
-			bool y__2x = this->locationVec.y - (*it)->locationVec.y < (this->locationVec.x - (*it)->locationVec.x) * 2 * -1;
-			bool y_x2 = this->locationVec.y - (*it)->locationVec.y < (this->locationVec.x - (*it)->locationVec.x) / 2;
-			bool y__x2 = this->locationVec.y - (*it)->locationVec.y < (this->locationVec.x - (*it)->locationVec.x) / 2 * -1;
-
-			if (y__2x && y_2x)
-			{
-				this->direction = 0;
-				continue;
-			}
-			else if (!y_x2 && y__x2)
-			{
-				this->direction = 1;
-				continue;
-			}
-			else if (!y_2x && !y__2x)
-			{
-				this->direction = 2;
-				continue;
-			}
-			else if (y_x2 && !y__x2)
-			{
-				this->direction = 3;
-				continue;
-			}
-			else if (y__2x && !y__x2)
-			{
-				this->direction = 6;
-				continue;
-			}
-			else if (!y_2x && y_x2)
-			{
-				this->direction = 4;
-				continue;
-			}
-			else if (!y__2x && y__x2)
-			{
-				this->direction = 5;
-				continue;
-			}
-			else if (y_2x && !y_x2)
-			{
-				this->direction = 7;
-				continue;
-			}
 			continue;
 		}
 			else if (!(mouse & SDL_BUTTON(SDL_BUTTON_LEFT)))
@@ -179,43 +135,7 @@ void Player::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
 					this->direction = 0;
 					continue;
 				}
-				bool y_2x = this->velocityVec.y > (this->velocityVec.x) * 2;
-				bool y__2x = this->velocityVec.y > (this->velocityVec.x) * 2 * -1;
-				bool y_x2 = this->velocityVec.y > (this->velocityVec.x) / 2;
-				bool y__x2 = this->velocityVec.y > (this->velocityVec.x) / 2 * -1;
-
-				if (y__2x && y_2x)
-				{
-					this->direction = 0;
-				}
-				else if (!y_x2 && y__x2)
-				{
-					this->direction = 1;
-				}
-				else if (!y_2x && !y__2x)
-				{
-					this->direction = 2;
-				}
-				else if (y_x2 && !y__x2)
-				{
-					this->direction = 3;
-				}
-				else if (y__2x && !y__x2)
-				{
-					this->direction = 6;
-				}
-				else if (!y_2x && y_x2)
-				{
-					this->direction = 4;
-				}
-				else if (!y__2x && y__x2)
-				{
-					this->direction = 5;
-				}
-				else if (y_2x && !y_x2)
-				{
-					this->direction = 7;
-				}
+				setDirection(velocityVec);
 			}
 	}
 

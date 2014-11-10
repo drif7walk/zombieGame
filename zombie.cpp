@@ -42,24 +42,9 @@ void Zombie::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
 		velocityVec.limit(maxVelocity);
 		locationVec = locationVec + velocityVec * deltaTime;
 	}
-	bool y_x = this->velocityVec.y > this->velocityVec.x;//face the direction of movement
-	bool yx = this->velocityVec.y < -1 * (this->velocityVec.x);
-	if (y_x && yx)
-	{
-		this->direction = 3;
-	}
-		else if (!y_x && yx)
-		{
-			this->direction = 2;
-		}
-			else if (y_x && !yx)
-			{
-				this->direction = 0;
-			}
-				else
-				{
-					this->direction = 1;
-				}
+
+	setDirection(velocityVec);
+
 	this->AnimateStep(direction, deltaTime);
 }
 
@@ -75,3 +60,28 @@ Zombie::Zombie(std::string filename, SDL_Renderer* ren) : Sprite(filename, ren) 
 	playerFound = false;
 }
 
+void Zombie::setDirection(Vector direction)
+{
+	float angle = direction.angle();
+
+	if (angle >= 45 && angle < 135)
+	{
+		this->direction = 0;
+		return;
+	}
+	if (angle >= 135 && angle < 225)
+	{
+		this->direction = 3;
+		return;
+	}
+	if (angle >= 225 && angle < 315)
+	{
+		this->direction = 2;
+		return;
+	}
+	if ((angle >= 315 && angle <= 360) || (angle >= 0 && angle < 45))
+	{
+		this->direction = 1;
+		return;
+	}
+}

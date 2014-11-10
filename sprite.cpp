@@ -1,5 +1,69 @@
 #include "sprite.h"
 
+void Sprite::setDirection(Vector direction)
+{
+	float angle = direction.angle();
+
+	if (angle > 22.5f && angle <202.5f)
+	{
+		if (angle > 112.5f)
+		{
+			if (angle > 157.5f)
+			{
+				this->direction = 3;
+				return;
+			}
+			else
+			{
+				this->direction = 5;
+				return;
+			}
+		}
+		else
+		{
+			if (angle < 67.5f)
+			{
+				this->direction = 4;
+				return;
+			}
+			else
+			{
+				this->direction = 0;
+				return;
+			}
+		}
+	}
+	else
+	{
+		if (angle > 202.5f && angle < 292.5f)
+		{
+			if (angle > 247.5f)
+			{
+				this->direction = 2;
+				return;
+			}
+			else
+			{
+				this->direction = 6;
+				return;
+			}
+		}
+		else
+		{
+			if (angle > 292.5f && angle < 337.5f)
+			{
+				this->direction = 7;
+				return;
+			}
+			else
+			{
+				this->direction = 1;
+				return;
+			}
+		}
+	}
+}
+
 SDL_Rect Sprite::GetRect()
 {
 	return { (int)this->locationVec.x, (int)this->locationVec.y, (int)(this->framewidth*this->scale), (int)(this->framewidth*this->scale) };

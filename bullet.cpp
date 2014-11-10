@@ -40,7 +40,8 @@ void Bullet::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
 
 void Bullet::Render(SDL_Renderer* ren)
 {
-	SDL_Rect r = { (int)this->locationVec.x, (int)this->locationVec.y, (int)this->w, (int)this->h };
+	SDL_Rect r = { (int)this->locationVec.x, (int)this->locationVec.y,
+		(int)this->w * (int)this->scale, (int)this->h  * (int)this->scale};
 	SDL_RenderCopyEx(ren, this->texture, &src, &r, angle, NULL, SDL_FLIP_NONE);
 }
 
@@ -59,7 +60,6 @@ Bullet::Bullet(Sprite* templatesprite, Vector location, Vector direction): Sprit
 
 	velocityVec = velocityVec + accelerationVec;
 	velocityVec.limit(maxVelocity);
-
 }
 
 Bullet::Bullet(std::string filename, SDL_Renderer* ren): Sprite(filename, ren)

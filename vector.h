@@ -58,7 +58,15 @@ public:
 	void limit(const float& n);
 
 	float angle();
-
+	//returns an angle a particular vector is pointing towards, getting the correct angle requires
+	//a vector that begins at 0,
+	//0 - 360, 0 is (1, 0) and increases clockwise
+	//            270 degrees
+	//
+	//180 degrees  0     0 degrees
+	//
+	//             90 degrees
+	//same with rotate() it rotates clockwise 
 	void rotate(const float& angle);
 
 	void random();
