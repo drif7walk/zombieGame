@@ -8,7 +8,8 @@ class Bullet: public Sprite {
 private:
 	float angle;
 public:
-	void Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime) override;
+	void Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
+		std::vector<Sprite*>* spawnList, std::map<std::string, Sprite*>*sprites) override;
 	Bullet(Sprite* templatesprite, Vector location, Vector direction);
 	Bullet(std::string filename, SDL_Renderer* ren);
 	void Render(SDL_Renderer* ren) override;

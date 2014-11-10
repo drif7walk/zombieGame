@@ -1,8 +1,9 @@
 #include "bullet.h"
 
-void Bullet::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime)
+void Bullet::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
+		std::vector<Sprite*>* spawnList, std::map<std::string, Sprite*>*sprites)
 {
-	Sprite::Update(ui, entlist, deltaTime);
+	Sprite::Update(ui, entlist, deltaTime, spawnList, sprites);
 	locationVec = locationVec + velocityVec * deltaTime;
 
 	for (std::vector<Sprite*>::iterator it = entlist->begin(); it != entlist->end(); it++)
@@ -30,8 +31,6 @@ void Bullet::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime)
 					}
 					(*it)->destroyed = true;
 				}
-
-				
 				break;
 			}
 		}
@@ -55,7 +54,7 @@ Bullet::Bullet(Sprite* templatesprite, Vector location, Vector direction): Sprit
 
 	directionVec.normalize();
 	maxVelocity = 40;
-	directionVec = directionVec * 30.0f;//0.5f magic number do not touch
+	directionVec *= maxVelocity;
 	accelerationVec = directionVec;
 
 	velocityVec = velocityVec + accelerationVec;
@@ -65,5 +64,6 @@ Bullet::Bullet(Sprite* templatesprite, Vector location, Vector direction): Sprit
 
 Bullet::Bullet(std::string filename, SDL_Renderer* ren): Sprite(filename, ren)
 {
+
 }
 

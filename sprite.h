@@ -5,6 +5,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 #include "vector.h"
 #include "UI.h"
@@ -48,7 +49,8 @@ public:
 
 	virtual void Render(SDL_Renderer* ren);
 
-	virtual void Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime);
+	virtual void Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
+		std::vector<Sprite*>* spawnList, std::map<std::string, Sprite*>*sprites);
 
 	Sprite(Sprite* templatesprite);
 	Sprite(std::string filename, SDL_Renderer* ren);
@@ -56,5 +58,4 @@ public:
 };
 
 #endif
-
 

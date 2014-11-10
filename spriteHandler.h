@@ -24,18 +24,20 @@ class SpriteHandler
 private:
 	SDL_Renderer* renderer;
 
-	int bulletDelay = 0;
-	int switchDelay = 0;
+
+
+
 
 	void LoadSpritesFromList(SDL_Renderer* ren, std::map<std::string, Sprite*>* sprmap);
+	void spawn();
 
 public:
 
 	std::map<std::string, Sprite*>* sprites;
 	std::vector<Sprite*>* entities;
+	std::vector<Sprite*>* spawnList;
 
-	Sprite* player;
-	Sprite* cursor;
+
 
 	void Initialize();
 

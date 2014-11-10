@@ -1,3 +1,5 @@
+#include <vld.h>
+
 #include <SDL.h>
 #include <SDL_ttf.h>
 
@@ -38,6 +40,7 @@ int main(int argc, char** argv)
 		sourcery->Update(deltaTime / 100.0f);
 
 		/* Frames per second */
+		
 		getticks = SDL_GetTicks();
 		frametimedelta = getticks - frametimelast;
 		frametimelast = getticks;

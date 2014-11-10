@@ -3,6 +3,7 @@
 SpriteHandler::SpriteHandler(SDL_Renderer* renderer)
 {
 	this->renderer = renderer;
+	
 }
 
 SpriteHandler::~SpriteHandler()
@@ -21,10 +22,18 @@ SpriteHandler::~SpriteHandler()
 	}
 	sprites->erase(sprites->begin(), sprites->end());
 	delete sprites;
+
+	std::vector<Sprite*>::iterator c;
+	for (c = spawnList->begin(); c != spawnList->end(); c++) {
+		delete (*c);
+	}
+	spawnList->erase(spawnList->begin(), spawnList->end());
+	delete spawnList;
 }
 
 void SpriteHandler::Initialize()
 {
+	spawnList = new std::vector<Sprite*>;
 	sprites = new std::map<std::string, Sprite*>;
 	entities = new std::vector<Sprite*>;
 
@@ -33,9 +42,8 @@ void SpriteHandler::Initialize()
 	srand(time(NULL));
 
 	/* Create a player object */
-	player = new Player((*sprites)["player"]);
 
-	entities->push_back(player);
+	entities->push_back(new Player((*sprites)["player"]));
 
 	for (int i = 0; i < 50; i++)
 	{
@@ -45,10 +53,8 @@ void SpriteHandler::Initialize()
 		entities->back()->locationVec.y = rand() % SCRH;
 	}
 
-	cursor = new Cursor((*sprites)["cursor"]);
-
 	/* Cursor */
-	entities->push_back(cursor);
+	entities->push_back(new Cursor((*sprites)["cursor"]));
 
 	/* Create a tilemap */
 	for (int y = 0; y <= SCRH / 32; y++)
@@ -72,97 +78,8 @@ void SpriteHandler::Update(UI* ui, double frameTime)
 	sort(entities->begin(), entities->end(), [](const Sprite* a, const Sprite* b) -> bool { return a->locationVec.y < b->locationVec.y; });
 	sort(entities->begin(), entities->end(), [](const Sprite* a, const Sprite* b) -> bool { return a->plane < b->plane; });
 
-	const Uint8* keybuf = SDL_GetKeyboardState(NULL);
-	Uint32 mouse = SDL_GetMouseState(NULL, NULL);
-
-	bool keydown = false;
-
-	if (player->healthPoints > 0)
-	{
-		player->directionVec = Vector(0, 0);
-		if (keybuf[SDL_SCANCODE_W])
-		{
-			player->directionVec = player->directionVec + Vector(0, -1);
-			keydown = true;
-		}
-		if (keybuf[SDL_SCANCODE_A])
-		{
-			player->directionVec = player->directionVec + Vector(-1, 0);
-			keydown = true;
-		}
-		if (keybuf[SDL_SCANCODE_S])
-		{
-			player->directionVec = player->directionVec + Vector(0, 1);
-			keydown = true;
-		}
-		if (keybuf[SDL_SCANCODE_D])
-		{
-			player->directionVec = player->directionVec + Vector(1, 0);
-			keydown = true;
-		}
-		if (mouse & SDL_BUTTON(SDL_BUTTON_RIGHT) && switchDelay <=0)
-		{
-			switchDelay = 500;
-			if (strcmp(ui->fireMode.data(), "rapid fire") == 0)
-			{
-				ui->fireMode = "burst fire";
-			}
-			else
-			{
-				ui->fireMode = "rapid fire";
-			}
-		}
-		player->directionVec.normalize();
-		player->accelerationVec = player->directionVec * 4.0f;
-		player->velocityVec = player->velocityVec + player->accelerationVec;
-		player->velocityVec.limit(player->maxVelocity);
-		player->locationVec = player->locationVec + player->velocityVec * frameTime;
-
 		
-		if (mouse & SDL_BUTTON(SDL_BUTTON_LEFT) && bulletDelay <= 0)
-		{
-			if (strcmp(ui->fireMode.data(), "burst fire") == 0)
-			{ 
-				bulletDelay = 300;
-				Vector bulletDirection(cursor->locationVec - player->locationVec);
-				entities->push_back(new Bullet(
-					/*     warning     */	sprites->operator[]("bullet"),
-					/*placeholder magic*/	player->locationVec,
-					/*                 */	bulletDirection));
-				bulletDirection.rotate(rand() % 20 - 10);
-				entities->push_back(new Bullet(
-					/*     warning     */	sprites->operator[]("bullet"),
-					/*placeholder magic*/	player->locationVec,
-					/*                 */	bulletDirection));
-				bulletDirection = cursor->locationVec - player->locationVec;
-				bulletDirection.rotate(rand() % 20 - 10);
-				entities->push_back(new Bullet(
-					/*     warning     */	sprites->operator[]("bullet"),
-					/*placeholder magic*/	player->locationVec,
-					/*                 */	bulletDirection));
-			}
-			else
-			{
-				bulletDelay = 80;
-				Vector bulletDirection(cursor->locationVec
-					- player->locationVec);
-				entities->push_back(new Bullet(
-					/*     warning     */	sprites->operator[]("bullet"),
-					/*placeholder magic*/	player->locationVec,
-					/*                 */	bulletDirection));
-			}
-		}
 
-		if (!keydown)
-		{
-			player->FreezeStep(player->direction);
-			player->velocityVec = Vector(0, 0);
-		}
-		else
-		{
-			player->AnimateStep(player->direction, frameTime);
-		}
-	}
 
 	SDL_Rect screen = { 0, 0, SCRW, SCRH };
 
@@ -170,7 +87,7 @@ void SpriteHandler::Update(UI* ui, double frameTime)
 	std::vector<Sprite*>::iterator it = entities->begin();
 	while (it != entities->end())
 	{
-		(*it)->Update(ui, entities, frameTime);
+		(*it)->Update(ui, entities, frameTime, spawnList, sprites);
 		(*it)->Render(renderer); 
 		it++;
 	}
@@ -196,6 +113,8 @@ void SpriteHandler::Update(UI* ui, double frameTime)
 		it++;
 	}
 
+	spawn();//mainly bullets for now;
+
 	/*
 	XXX: zombie spawning
 	*/
@@ -209,14 +128,7 @@ void SpriteHandler::Update(UI* ui, double frameTime)
 		entities->back()->locationVec.y = rand() % 500 + 50;
 	}
 
-	if (bulletDelay > 0)
-	{
-		bulletDelay -= frameTime * 25;
-	}
-	if (switchDelay > 0)
-	{
-		switchDelay -= frameTime * 25;
-	}
+
 }
 
 void SpriteHandler::LoadSpritesFromList(SDL_Renderer* ren, std::map<std::string, Sprite*>* sprmap)
@@ -383,4 +295,15 @@ void SpriteHandler::LoadSpritesFromList(SDL_Renderer* ren, std::map<std::string,
 	{
 		/* PANIC */
 	}
+}
+
+void SpriteHandler::spawn()
+{
+	for (auto itt = spawnList->begin(); itt != spawnList->end(); itt++)
+	{
+		entities->push_back((*itt));
+	}
+
+	spawnList->clear();
+	
 }

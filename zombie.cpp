@@ -1,9 +1,8 @@
 #include "zombie.h"
 
-void Zombie::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime)
+void Zombie::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
+	std::vector<Sprite*>* spawnList, std::map<std::string, Sprite*>*sprites)
 {
-Sprite::Update(ui, entlist, deltaTime);
-
 	double stepx = 0;
 	double stepy = 0;
 	bool playerIsAlive = false;

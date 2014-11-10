@@ -9,7 +9,8 @@ private:
 	double velocity = 1.2;
 	bool playerFound;
 public:
-	void Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime) override;
+	void Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
+		std::vector<Sprite*>* spawnList, std::map<std::string, Sprite*>*sprites) override;
 
 	Zombie(Sprite* templatesprite) ;
 	Zombie(std::string filename, SDL_Renderer* ren);

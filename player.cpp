@@ -1,7 +1,57 @@
 #include "player.h"
+#include "bullet.h"
 
-void Player::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime)
+void Player::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
+		std::vector<Sprite*>* spawnList, std::map<std::string, Sprite*>*sprites)
+
 {
+	const Uint8* keybuf = SDL_GetKeyboardState(NULL);
+	Uint32 mouse = SDL_GetMouseState(NULL, NULL);
+
+	bool keydown = false;
+
+	if (this->healthPoints > 0)
+	{
+		this->directionVec = Vector(0, 0);
+		if (keybuf[SDL_SCANCODE_W])
+		{
+			this->directionVec = this->directionVec + Vector(0, -1);
+			keydown = true;
+		}
+		if (keybuf[SDL_SCANCODE_A])
+		{
+			this->directionVec = this->directionVec + Vector(-1, 0);
+			keydown = true;
+		}
+		if (keybuf[SDL_SCANCODE_S])
+		{
+			this->directionVec = this->directionVec + Vector(0, 1);
+			keydown = true;
+		}
+		if (keybuf[SDL_SCANCODE_D])
+		{
+			this->directionVec = this->directionVec + Vector(1, 0);
+			keydown = true;
+		}
+		if (mouse & SDL_BUTTON(SDL_BUTTON_RIGHT) && switchDelay <=0)
+		{
+			switchDelay = 500;
+			if (strcmp(ui->fireMode.data(), "rapid fire") == 0)
+			{
+				ui->fireMode = "burst fire";
+			}
+			else
+			{
+				ui->fireMode = "rapid fire";
+			}
+		}
+		this->directionVec.normalize();
+		this->accelerationVec = this->directionVec * 4.0f;
+		this->velocityVec = this->velocityVec + this->accelerationVec;
+		this->velocityVec.limit(this->maxVelocity);
+		this->locationVec = this->locationVec + this->velocityVec * deltaTime;
+
+
 	if (timeSinceLastHit >= 0)
 	{
 		timeSinceLastHit -= deltaTime * 25;
@@ -38,6 +88,43 @@ void Player::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime)
 		}
 		if (strcmp((*it)->name.c_str(), "cursor") == 0 && mouse & SDL_BUTTON(SDL_BUTTON_LEFT))
 		{
+			
+			if (mouse & SDL_BUTTON(SDL_BUTTON_LEFT) && bulletDelay <= 0)
+			{
+				if (strcmp(ui->fireMode.data(), "burst fire") == 0)
+				{ 
+					bulletDelay = 300;
+					Vector bulletDirection((*it)->locationVec - locationVec);
+					spawnList->push_back(new Bullet(
+						/*     warning     */	sprites->operator[]("bullet"),
+						/*placeholder magic*/	locationVec,
+						/*                 */	bulletDirection));
+					bulletDirection.rotate(rand() % 20 - 10);
+					spawnList->push_back(new Bullet(
+						/*     warning     */	sprites->operator[]("bullet"),
+						/*placeholder magic*/	locationVec,
+						/*                 */	bulletDirection));
+					bulletDirection = (*it)->locationVec - locationVec;
+					bulletDirection.rotate(rand() % 20 - 10);
+					spawnList->push_back(new Bullet(
+						/*     warning     */	sprites->operator[]("bullet"),
+						/*placeholder magic*/	locationVec,
+						/*                 */	bulletDirection));
+				}
+				else
+				{
+					bulletDelay = 80;
+					Vector bulletDirection((*it)->locationVec
+						- locationVec);
+					spawnList->push_back(new Bullet(
+						/*     warning     */	sprites->operator[]("bullet"),
+						/*placeholder magic*/	locationVec,
+						/*                 */	bulletDirection));
+				}
+			}
+
+
+
 			bool y_2x = this->locationVec.y - (*it)->locationVec.y < (this->locationVec.x - (*it)->locationVec.x) * 2;
 			bool y__2x = this->locationVec.y - (*it)->locationVec.y < (this->locationVec.x - (*it)->locationVec.x) * 2 * -1;
 			bool y_x2 = this->locationVec.y - (*it)->locationVec.y < (this->locationVec.x - (*it)->locationVec.x) / 2;
@@ -132,6 +219,25 @@ void Player::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime)
 			}
 	}
 
+	if (!keydown)
+	{
+		FreezeStep(direction);
+		velocityVec = Vector(0, 0);
+	}
+	else
+	{
+		AnimateStep(direction, deltaTime);
+	}
+	}
+
+	if (bulletDelay > 0)
+	{
+		bulletDelay -= deltaTime * 25;
+	}
+	if (switchDelay > 0)
+	{
+		switchDelay -= deltaTime * 25;
+	}
 }
 
 Player::Player(Sprite* templatesprite): Sprite(templatesprite) 

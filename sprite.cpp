@@ -23,7 +23,8 @@ void Sprite::Render(SDL_Renderer* ren)
 	SDL_RenderCopy(ren, this->texture, &src, &r);
 }
 
-void Sprite::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime)
+void Sprite::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
+		std::vector<Sprite*>* spawnList, std::map<std::string, Sprite*>*sprites)
 {
 		this->FreezeStep(direction);
 }
