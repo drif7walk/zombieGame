@@ -17,6 +17,7 @@
 #include "bullet.h"
 #include "zombie.h"
 #include "tile.h"
+#include "wall.h"
 #include "UI.h"
 
 class SpriteHandler

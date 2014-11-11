@@ -12,6 +12,7 @@ public:
 	void Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
 		std::vector<Sprite*>* spawnList, std::map<std::string, Sprite*>*sprites) override;
 	void setDirection(Vector direction) override;
+
 	Zombie(Sprite* templatesprite) ;
 	Zombie(std::string filename, SDL_Renderer* ren);
 

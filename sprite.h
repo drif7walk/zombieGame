@@ -31,6 +31,7 @@ public:
 	float maxVelocity;
 
 	bool destroyed;
+	bool impassable;
 
 	int healthPoints;
 
@@ -48,7 +49,7 @@ public:
 	void AnimateStep(int direction, double deltaTime);
 	void FreezeStep(int direction);
 
-	SDL_Rect GetRect();
+	virtual SDL_Rect GetRect();
 
 	virtual void Render(SDL_Renderer* ren);
 
@@ -57,7 +58,6 @@ public:
 
 	Sprite(Sprite* templatesprite);
 	Sprite(std::string filename, SDL_Renderer* ren);
-
 };
 
 #endif

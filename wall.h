@@ -1,11 +1,11 @@
-#ifndef Tile_H
-#define Tile_H
+#ifndef WALL_H
+#define WALL_H
 
 #include <SDL.h>
 #include "sprite.h"
 #include "UI.h"
 
-class Tile: public Sprite {
+class Wall: public Sprite {
 
 private:
 
@@ -14,8 +14,8 @@ public:
 		std::vector<Sprite*>* spawnList, std::map<std::string, Sprite*>*sprites) override;
 	void Render(SDL_Renderer* ren) override;
 	SDL_Rect GetRect() override;	
-	Tile(Sprite* templatesprite) ;
-	Tile(std::string filename, SDL_Renderer* ren);
+	Wall(Sprite* templatesprite) ;
+	Wall(std::string filename, SDL_Renderer* ren);
 };
 
 #endif

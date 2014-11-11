@@ -1,6 +1,7 @@
 #include "player.h"
 #include "bullet.h"
 
+
 void Player::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
 		std::vector<Sprite*>* spawnList, std::map<std::string, Sprite*>*sprites)
 
@@ -10,55 +11,75 @@ void Player::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
 
 	bool keydown = false;
 
-	if (this->healthPoints > 0)
+
+	this->directionVec = Vector(0, 0);
+	if (keybuf[SDL_SCANCODE_W])
 	{
-		this->directionVec = Vector(0, 0);
-		if (keybuf[SDL_SCANCODE_W])
+		this->directionVec = this->directionVec + Vector(0, -1);
+		keydown = true;
+	}
+	if (keybuf[SDL_SCANCODE_A])
+	{
+		this->directionVec = this->directionVec + Vector(-1, 0);
+		keydown = true;
+	}
+	if (keybuf[SDL_SCANCODE_S])
+	{
+		this->directionVec = this->directionVec + Vector(0, 1);
+		keydown = true;
+	}
+	if (keybuf[SDL_SCANCODE_D])
+	{
+		this->directionVec = this->directionVec + Vector(1, 0);
+		keydown = true;
+	}
+	if (mouse & SDL_BUTTON(SDL_BUTTON_RIGHT) && switchDelay <=0)
+	{
+		switchDelay = 500;
+		if (strcmp(ui->fireMode.data(), "rapid fire") == 0)
 		{
-			this->directionVec = this->directionVec + Vector(0, -1);
-			keydown = true;
+			ui->fireMode = "burst fire";
 		}
-		if (keybuf[SDL_SCANCODE_A])
+		else
 		{
-			this->directionVec = this->directionVec + Vector(-1, 0);
-			keydown = true;
+			ui->fireMode = "rapid fire";
 		}
-		if (keybuf[SDL_SCANCODE_S])
-		{
-			this->directionVec = this->directionVec + Vector(0, 1);
-			keydown = true;
-		}
-		if (keybuf[SDL_SCANCODE_D])
-		{
-			this->directionVec = this->directionVec + Vector(1, 0);
-			keydown = true;
-		}
-		if (mouse & SDL_BUTTON(SDL_BUTTON_RIGHT) && switchDelay <=0)
-		{
-			switchDelay = 500;
-			if (strcmp(ui->fireMode.data(), "rapid fire") == 0)
-			{
-				ui->fireMode = "burst fire";
-			}
-			else
-			{
-				ui->fireMode = "rapid fire";
-			}
-		}
-		this->directionVec.normalize();
-		this->accelerationVec = this->directionVec * 4.0f;
-		this->velocityVec = this->velocityVec + this->accelerationVec;
-		this->velocityVec.limit(this->maxVelocity);
-		this->locationVec = this->locationVec + this->velocityVec * deltaTime;
+	}
+	this->directionVec.normalize();
+	this->accelerationVec = this->directionVec * 4.0f;
+	this->velocityVec = this->velocityVec + this->accelerationVec;
+	this->velocityVec.limit(this->maxVelocity);
 
 
 	if (timeSinceLastHit >= 0)
 	{
 		timeSinceLastHit -= deltaTime * 25;
 	}
-	Uint32 mouse = SDL_GetMouseState(NULL, NULL); 
+
 	for (std::vector<Sprite*>::iterator it = entlist->begin(); it != entlist->end(); it++)
 	{
+		if (strcmp((*it)->name.c_str(), "wall") == 0)
+		{
+			SDL_Rect r;
+			r = this->GetRect();
+
+			SDL_Rect r2;
+			r2 = (*it)->GetRect();
+
+			int x1 = locationVec.x;
+			int y1 = locationVec.y;
+			int x2 = velocityVec.x + locationVec.x;
+			int y2 = velocityVec.y + locationVec.y;
+
+			bool intersect = SDL_IntersectRectAndLine(&r2, &x1, &y1, &x2, &y2);
+
+			if (intersect)
+			{
+				
+				velocityVec = Vector(0, 0);
+				continue;
+			}
+		}
 		if (strcmp((*it)->name.c_str(), "zombie") == 0 && timeSinceLastHit <= 0)
 		{
 			SDL_Rect r;
@@ -67,7 +88,7 @@ void Player::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
 			SDL_Rect r2;
 			r2 = (*it)->GetRect();
 
-			bool intersect = SDL_HasIntersection(&r, &r2);
+			bool intersect = SDL_HasIntersection(&r, &r2);// change to line based intersection
 
 			if (intersect)
 			{
@@ -139,6 +160,8 @@ void Player::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
 			}
 	}
 
+	this->locationVec = this->locationVec + this->velocityVec * deltaTime;
+
 	if (!keydown)
 	{
 		FreezeStep(direction);
@@ -147,7 +170,6 @@ void Player::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
 	else
 	{
 		AnimateStep(direction, deltaTime);
-	}
 	}
 
 	if (bulletDelay > 0)

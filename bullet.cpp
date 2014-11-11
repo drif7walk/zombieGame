@@ -4,10 +4,30 @@ void Bullet::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
 		std::vector<Sprite*>* spawnList, std::map<std::string, Sprite*>*sprites)
 {
 	Sprite::Update(ui, entlist, deltaTime, spawnList, sprites);
-	locationVec = locationVec + velocityVec * deltaTime;
 
 	for (std::vector<Sprite*>::iterator it = entlist->begin(); it != entlist->end(); it++)
 	{
+		if (strcmp((*it)->name.c_str(), "wall") == 0)
+		{
+			SDL_Rect r;
+			r = this->GetRect();
+
+			SDL_Rect r2;
+			r2 =(*it)->GetRect();
+
+			int x1 = locationVec.x;
+			int y1 = locationVec.y;
+			int x2 = velocityVec.x + locationVec.x;
+			int y2 = velocityVec.y + locationVec.y;
+
+			bool intersect = SDL_IntersectRectAndLine(&r2, &x1, &y1, &x2, &y2);
+			
+			if (intersect)
+			{				
+				this->destroyed = true;
+				break;
+			}
+		}
 
 		if (strcmp((*it)->name.c_str(), "zombie") == 0)
 		{
@@ -17,10 +37,15 @@ void Bullet::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
 			SDL_Rect r2;
 			r2 =(*it)->GetRect();
 
-			bool intersect = SDL_HasIntersection( &r, &r2 );
+			int x1 = locationVec.x;
+			int y1 = locationVec.y;
+			int x2 = velocityVec.x + locationVec.x;
+			int y2 = velocityVec.y + locationVec.y;
 
+			bool intersect = SDL_IntersectRectAndLine(&r2, &x1, &y1, &x2, &y2);
+			
 			if (intersect)
-			{
+			{				
 				(*it)->healthPoints -= 2;
 				this->destroyed = true;
 				if ((*it)->healthPoints < 0)
@@ -33,8 +58,12 @@ void Bullet::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
 				}
 				break;
 			}
+
 		}
 	}
+
+
+	locationVec = locationVec + velocityVec * deltaTime;
 }
 
 

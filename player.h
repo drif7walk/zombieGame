@@ -16,7 +16,6 @@ private:
 public:
 	void Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
 		std::vector<Sprite*>* spawnList, std::map<std::string, Sprite*>*sprites) override;
-	
 	Player(Sprite* templatesprite);
 	Player(std::string filename, SDL_Renderer* ren);
 
