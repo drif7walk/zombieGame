@@ -5,6 +5,8 @@
 
 #include "vector.h"
 
+//intellisense plz help me in this time of need
+
 int main(int argc, char** argv)
 {
 	SDL_Event e;

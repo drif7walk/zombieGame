@@ -12,7 +12,8 @@ class Cursor: public Sprite {
 private:
 
 public:
-	void Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime) override;
+	void Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
+		std::vector<Sprite*>* spawnList, std::map<std::string, Sprite*>*sprites) override;
 	
 	void Render(SDL_Renderer* ren);
 
