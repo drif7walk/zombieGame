@@ -97,7 +97,7 @@ void SpriteHandler::Update(UI* ui, double frameTime)
 	it = entities->begin();
 	while (it != entities->end())
 	{
-		SDL_Rect entity = { (int)(*it)->locationVec.x, (int)(*it)->locationVec.y, (int)(*it)->w, (int)(*it)->h, };
+		SDL_Rect entity = { (*it)->locationVec.x, (*it)->locationVec.y, (*it)->w, (*it)->h, };
 		if (!SDL_HasIntersection(&screen, &entity))//check if outside bounds
 		{
 			delete (*it);

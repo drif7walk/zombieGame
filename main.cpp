@@ -1,3 +1,5 @@
+#include <vld.h>
+
 #include <SDL.h>
 #include <SDL_ttf.h>
 
@@ -5,10 +7,20 @@
 
 #include "vector.h"
 
-//intellisense plz help me in this time of need
-
 int main(int argc, char** argv)
 {
+	Vector a(1, 0);
+	int b = 0;
+	for (int i = 0; i <= 720; i+= 36)
+	{
+		a.rotate(36);
+		b = a.angle();
+	}
+
+	a = Vector(0, -1);
+	b = a.angle();
+
+
 	SDL_Event e;
 	bool quit = false;
 
@@ -40,6 +52,7 @@ int main(int argc, char** argv)
 		sourcery->Update(deltaTime / 100.0f);
 
 		/* Frames per second */
+		
 		getticks = SDL_GetTicks();
 		frametimedelta = getticks - frametimelast;
 		frametimelast = getticks;

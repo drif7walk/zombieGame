@@ -4,10 +4,7 @@
 
 void Cursor::Render(SDL_Renderer* ren)
 {
-	SDL_Rect r = { (int)this->locationVec.x - (int)this->w / 2,
-		(int)this->locationVec.y - (int)this->h / 2,
-		(int)this->framewidth * (int)this->scale,
-		(int)this->frameheight * (int)this->scale };
+	SDL_Rect r = { (int)this->locationVec.x - this->w / 2, (int)this->locationVec.y - this->h / 2, (int)this->framewidth*this->scale, (int)this->frameheight*this->scale };
 	SDL_RenderCopy(ren, this->texture, &src, &r);
 }
 
@@ -17,8 +14,8 @@ void Cursor::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
 	Sprite::Update(ui, entlist, deltaTime, spawnList, sprites);
 	int x, y;
 	SDL_GetMouseState(&x, &y);
-	this->locationVec.x = (float)x;
-	this->locationVec.y = (float)y;
+	this->locationVec.x = x;
+	this->locationVec.y = y;
 }
 
 

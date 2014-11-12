@@ -1,7 +1,7 @@
 #ifndef TILE_H
 #define TILE_H
 
-
+#include <SDL.h>
 #include "sprite.h"
 #include "UI.h"
 

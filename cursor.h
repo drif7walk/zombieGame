@@ -1,8 +1,7 @@
 #ifndef CURSOR_H
 #define CURSOR_H
-
 #include <SDL.h>
-
+#include <SDL_ttf.h>
 #include "cursor.h"
 #include "sprite.h"
 #include "UI.h"
