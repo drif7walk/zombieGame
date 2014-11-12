@@ -66,10 +66,7 @@ void Sprite::setDirection(Vector direction)
 
 SDL_Rect Sprite::GetRect()
 {
-	return{ (int)this->locationVec.x - (int)this->framewidth * (int)this->scale / 2,
-		(int)this->locationVec.y - (int)this->frameheight * (int)this->scale,
-		(int)this->framewidth * this->scale,
-		(int)this->frameheight * this->scale };
+	return { (int)this->locationVec.x, (int)this->locationVec.y, (int)(this->framewidth*this->scale), (int)(this->framewidth*this->scale) };
 }
 
 void Sprite::AnimateStep(int direction, double deltaTime)
@@ -86,8 +83,7 @@ void Sprite::FreezeStep(int direction)
 
 void Sprite::Render(SDL_Renderer* ren)
 {
-//	SDL_Rect r = { (int)this->locationVec.x, (int)this->locationVec.y, (int)this->framewidth*this->scale, (int)this->frameheight*this->scale };
-	SDL_Rect r = GetRect();
+	SDL_Rect r = { (int)this->locationVec.x, (int)this->locationVec.y, (int)this->framewidth*this->scale, (int)this->frameheight*this->scale };
 	SDL_RenderCopy(ren, this->texture, &src, &r);
 }
 

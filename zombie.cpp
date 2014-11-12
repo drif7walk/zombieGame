@@ -6,46 +6,21 @@ void Zombie::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
 	double stepx = 0;
 	double stepy = 0;
 	bool playerIsAlive = false;
-
 	for (std::vector<Sprite*>::iterator it = entlist->begin(); it != entlist->end(); it++)
 	{
-		//if (strcmp((*it)->name.c_str(), "wall") == 0)
-		//{
-		//	SDL_Rect r;
-		//	r = this->GetRect();
-		//
-		//	SDL_Rect r2;
-		//	r2 = (*it)->GetRect();
-		//
-		//	int x1 = locationVec.x;
-		//	int y1 = locationVec.y;
-		//	int x2 = velocityVec.x + locationVec.x;
-		//	int y2 = velocityVec.y + locationVec.y;
-		//
-		//	bool intersect = SDL_IntersectRectAndLine(&r2, &x1, &y1, &x2, &y2);
-		//
-		//	if (intersect)
-		//	{
-		//		stuck = true;
-		//		velocityVec = Vector(0, 0);
-		//		locationVec = Vector((*it)->locationVec
-		//		continue;
-		//	}
-		//}
-	
 		if (strcmp((*it)->name.c_str(), "player") == 0 && playerFound == true)
 		{
 			Vector playerVec((*it)->locationVec);
 			directionVec = playerVec - locationVec;
 			directionVec.normalize();
-			directionVec = directionVec * 10.0f;
+			directionVec = directionVec * 0.025f;
 			accelerationVec = directionVec;
 
-
+			velocityVec = velocityVec + accelerationVec;
+			velocityVec.limit(maxVelocity);
+			locationVec = locationVec + velocityVec * deltaTime;
 			playerIsAlive = true;
-			continue;
 		}
-
 		if (strcmp((*it)->name.c_str(), "player") == 0)
 		{
 			if (sqrt(pow(this->locationVec.x - (*it)->locationVec.x, 2)
@@ -56,20 +31,17 @@ void Zombie::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
 			playerIsAlive = true;
 		}
 	}
-
 	if (playerFound == false || playerIsAlive == false)
 	{
 		directionVec.random();
 		directionVec.normalize();
-		directionVec = directionVec * 0.125f;
+		directionVec = directionVec * 0.025f;
 		accelerationVec = directionVec;
+
+		velocityVec = velocityVec + accelerationVec;
+		velocityVec.limit(maxVelocity);
+		locationVec = locationVec + velocityVec * deltaTime;
 	}
-
-	velocityVec = velocityVec + accelerationVec;
-	velocityVec.limit(maxVelocity);
-	locationVec = locationVec + velocityVec * deltaTime;
-
-
 
 	setDirection(velocityVec);
 

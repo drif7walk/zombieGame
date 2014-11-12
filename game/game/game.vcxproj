@@ -21,7 +21,6 @@
     <ClCompile Include="..\..\tile.cpp" />
     <ClCompile Include="..\..\UI.cpp" />
     <ClCompile Include="..\..\vector.cpp" />
-    <ClCompile Include="..\..\wall.cpp" />
     <ClCompile Include="..\..\zombie.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -34,7 +33,6 @@
     <ClInclude Include="..\..\tile.h" />
     <ClInclude Include="..\..\UI.h" />
     <ClInclude Include="..\..\vector.h" />
-    <ClInclude Include="..\..\wall.h" />
     <ClInclude Include="..\..\zombie.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

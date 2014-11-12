@@ -3,6 +3,7 @@
 SpriteHandler::SpriteHandler(SDL_Renderer* renderer)
 {
 	this->renderer = renderer;
+	
 }
 
 SpriteHandler::~SpriteHandler()
@@ -61,16 +62,9 @@ void SpriteHandler::Initialize()
 		for (int x = 0; x <= SCRW / 32; x++)
 		{
 		/* Modifying spawned entities happens as back() */	
-			if (x == 10 && (y > 2 && y < 7))
-			{
-				entities->push_back(new Wall((*sprites)["wall"]));
-			}
-			else
-			{
-				entities->push_back(new Tile((*sprites)["floor"]));
-			}
-			entities->back()->locationVec.x = entities->back()->w * x * entities->back()->scale;
-			entities->back()->locationVec.y = entities->back()->h * y * entities->back()->scale;
+		entities->push_back(new Tile((*sprites)["floor"]));
+		entities->back()->locationVec.x = entities->back()->w * x * entities->back()->scale;
+		entities->back()->locationVec.y = entities->back()->h * y * entities->back()->scale;
 		}
 	}
 	
@@ -174,14 +168,14 @@ void SpriteHandler::LoadSpritesFromList(SDL_Renderer* ren, std::map<std::string,
 				sprmap->insert(std::pair<std::string, Sprite*>(spr->name, spr));
 			}
 
-			if (s.compare("@WALL") == 0)
+			if (s.compare("@TILE") == 0)
 			{
-				SDL_Log("Loading wall...");
+				SDL_Log("Loading tile...");
 				Sprite* spr;
 
 				std::string inln;
 				getline(conffile, inln);
-				spr = new Wall(inln, ren);
+				spr = new Sprite(inln, ren);
 
 				getline(conffile, spr->name);
 
@@ -218,30 +212,6 @@ void SpriteHandler::LoadSpritesFromList(SDL_Renderer* ren, std::map<std::string,
 				spr->frameheight = spr->h / spr->rows;
 
 				sprmap->insert(std::pair<std::string, Sprite*>(spr->name, spr));
-			}
-
-			if (s.compare("@TILE") == 0)
-			{
-				SDL_Log("Loading Tile...");
-				Sprite* spr;
-
-				std::string inln;
-				getline(conffile, inln);
-				spr = new Tile(inln, ren);
-
-				getline(conffile, spr->name);
-
-				getline(conffile, inln);
-				spr->rows = atoi(inln.c_str());
-
-				getline(conffile, inln);
-				spr->cols = atoi(inln.c_str());
-
-				spr->framewidth = spr->w / spr->cols;
-				spr->frameheight = spr->h / spr->rows;
-
-				sprmap->insert(std::pair<std::string, Sprite*>(spr->name, spr));
-
 			}
 
 			if (s.compare("@CURSOR") == 0)

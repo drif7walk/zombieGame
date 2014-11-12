@@ -1,7 +1,8 @@
 #ifndef CURSOR_H
 #define CURSOR_H
+
 #include <SDL.h>
-#include <SDL_ttf.h>
+
 #include "cursor.h"
 #include "sprite.h"
 #include "UI.h"
@@ -11,8 +12,7 @@ class Cursor: public Sprite {
 private:
 
 public:
-	void Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
-		std::vector<Sprite*>* spawnList, std::map<std::string, Sprite*>*sprites) override;
+	void Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime) override;
 	
 	void Render(SDL_Renderer* ren);
 
