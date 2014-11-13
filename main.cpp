@@ -1,12 +1,11 @@
-
-
 #include <SDL.h>
 #include <SDL_ttf.h>
-
 
 #include "sourcery.h"
 
 #include "vector.h"
+
+//test
 
 int main(int argc, char** argv)
 {
