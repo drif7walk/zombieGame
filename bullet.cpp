@@ -54,12 +54,16 @@ Bullet::Bullet(Sprite* templatesprite, Vector location, Vector direction): Sprit
 	angle = directionVec.angle();
 
 	directionVec.normalize();
-	maxVelocity = 40;
+	maxVelocity = 59;
 	directionVec *= maxVelocity;
 	accelerationVec = directionVec;
 
 	velocityVec = velocityVec + accelerationVec;
 	velocityVec.limit(maxVelocity);
+
+	this->scale = 1;
+	this->persistent = false;
+	
 }
 
 Bullet::Bullet(std::string filename, SDL_Renderer* ren): Sprite(filename, ren)

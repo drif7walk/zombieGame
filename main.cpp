@@ -1,7 +1,8 @@
-#include <vld.h>
+
 
 #include <SDL.h>
 #include <SDL_ttf.h>
+
 
 #include "sourcery.h"
 
@@ -33,7 +34,7 @@ int main(int argc, char** argv)
 
 	Sourcery* sourcery = new Sourcery();
 
-	sourcery->spriteHandler->Initialize();
+	sourcery->spriteHandler->Initialize(sourcery->ui);
 
 	while(!quit)
 	{

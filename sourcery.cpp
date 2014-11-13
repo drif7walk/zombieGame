@@ -15,12 +15,14 @@ int Sourcery::Update(double frameTime)
 
 Sourcery::Sourcery()
 {
+	ui = new UI();
+
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0 )
 	{
 		SDL_Log("Failed to initialize.");
 	}
 
-	window = SDL_CreateWindow("hl3.exe", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCRW, SCRH, SDL_WINDOW_SHOWN);
+	window = SDL_CreateWindow("hl3.exe", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, ui->SCRW, ui->SCRH, SDL_WINDOW_SHOWN);
 
 	if (window == nullptr)
 	{
@@ -39,8 +41,7 @@ Sourcery::Sourcery()
 	//LoadSpritesFromList(renderer, sprites);
 
 	srand(time(NULL));
-
-	ui = new UI();		
+		
 
 }
 Sourcery::~Sourcery()

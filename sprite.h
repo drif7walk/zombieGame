@@ -1,7 +1,10 @@
 #ifndef SPRITE_H
 #define SPRITE_H
+
+
 #include <SDL.h>
 #include <SDL_ttf.h>
+
 
 #include <string>
 #include <vector>
@@ -33,6 +36,7 @@ public:
 	bool destroyed;
 
 	int healthPoints;
+	int maxHealth;
 
 	std::string name;
 
@@ -43,6 +47,7 @@ public:
 	int frameheight;
 	double framecount = 0;
 	unsigned char direction = 0;
+	bool persistent = true;
 	SDL_Rect src;
 
 	void AnimateStep(int direction, double deltaTime);
@@ -51,6 +56,7 @@ public:
 	SDL_Rect GetRect();
 
 	virtual void Render(SDL_Renderer* ren);
+	virtual void Render(SDL_Renderer* ren, Vector offset);
 
 	virtual void Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
 		std::vector<Sprite*>* spawnList, std::map<std::string, Sprite*>*sprites);

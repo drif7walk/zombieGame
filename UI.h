@@ -1,7 +1,12 @@
 #ifndef UI_H
 #define UI_H
+
+
 #include <SDL.h>
 #include <SDL_ttf.h>
+
+
+
 #include <string>
 #include <sstream>
 
@@ -12,7 +17,11 @@ public:
 	void AddKill();
 	int getkillcount();
 	std::string fireMode;
-	std::stringstream playerHealth;
+	int playerHealth;
+	int maxplayerhealth;
+
+	int SCRW = 800;
+	int SCRH = 600;
 
 	int RenderText (SDL_Renderer* ren, std::string text, int x, int y);
 
@@ -20,7 +29,6 @@ public:
 
 	UI()
 	{
-		playerHealth << 100 << "%";
 		fireMode = "burst fire";
 	}
 

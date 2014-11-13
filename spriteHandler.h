@@ -1,9 +1,6 @@
 #ifndef SPRITEHANDLER_H
 #define SPRITEHANDLER_H
 
-#define SCRW 800
-#define SCRH 600
-
 #include <map>
 #include <vector>
 #include <time.h>
@@ -18,6 +15,7 @@
 #include "zombie.h"
 #include "tile.h"
 #include "UI.h"
+#include "zombiespawner.h"
 
 class SpriteHandler
 {
@@ -39,7 +37,7 @@ public:
 
 
 
-	void Initialize();
+	void Initialize(UI* ui);
 
 	void Update(UI* ui, double frameTime);
 

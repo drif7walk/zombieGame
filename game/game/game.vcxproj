@@ -22,6 +22,7 @@
     <ClCompile Include="..\..\UI.cpp" />
     <ClCompile Include="..\..\vector.cpp" />
     <ClCompile Include="..\..\zombie.cpp" />
+    <ClCompile Include="..\..\zombiespawner.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\bullet.h" />
@@ -34,6 +35,7 @@
     <ClInclude Include="..\..\UI.h" />
     <ClInclude Include="..\..\vector.h" />
     <ClInclude Include="..\..\zombie.h" />
+    <ClInclude Include="..\..\zombiespawner.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1459038C-CC11-426C-8C8E-DEAA1931E5F5}</ProjectGuid>

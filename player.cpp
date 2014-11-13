@@ -5,6 +5,7 @@ void Player::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
 		std::vector<Sprite*>* spawnList, std::map<std::string, Sprite*>*sprites)
 
 {
+
 	const Uint8* keybuf = SDL_GetKeyboardState(NULL);
 	Uint32 mouse = SDL_GetMouseState(NULL, NULL);
 
@@ -49,14 +50,14 @@ void Player::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
 		this->accelerationVec = this->directionVec * 4.0f;
 		this->velocityVec = this->velocityVec + this->accelerationVec;
 		this->velocityVec.limit(this->maxVelocity);
-		this->locationVec = this->locationVec + this->velocityVec * deltaTime;
 
+		this->locationVec = this->locationVec + this->velocityVec * deltaTime;
 
 	if (timeSinceLastHit >= 0)
 	{
 		timeSinceLastHit -= deltaTime * 25;
 	}
-	Uint32 mouse = SDL_GetMouseState(NULL, NULL); 
+
 	for (std::vector<Sprite*>::iterator it = entlist->begin(); it != entlist->end(); it++)
 	{
 		if (strcmp((*it)->name.c_str(), "zombie") == 0 && timeSinceLastHit <= 0)
@@ -71,18 +72,14 @@ void Player::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
 
 			if (intersect)
 			{
-				this->timeSinceLastHit = 100;
-				this->healthPoints -= rand() % 20 + 20;
+				this->timeSinceLastHit = 80;
+				this->healthPoints -= 1;
 				if (this->healthPoints <= 0)
 				{
+					/* die(); ? */
 					this->destroyed = true;
-					ui->playerHealth.str(std::string());
-					ui->playerHealth << "DEAD";
 					continue;
 				}
-				ui->playerHealth.str(std::string());
-				int buffer = (double)healthPoints / (double)maxHealth * 100;
-				ui->playerHealth << buffer << "%";
 				continue;
 			}
 		}
@@ -95,25 +92,19 @@ void Player::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
 				{ 
 					bulletDelay = 300;
 					Vector bulletDirection((*it)->locationVec - locationVec);
-					spawnList->push_back(new Bullet(
+
+					for (int i = 0; i < 3; i++)
+					{
+						spawnList->push_back(new Bullet(
 						/*     warning     */	sprites->operator[]("bullet"),
 						/*placeholder magic*/	locationVec,
 						/*                 */	bulletDirection));
 					bulletDirection.rotate(rand() % 20 - 10);
-					spawnList->push_back(new Bullet(
-						/*     warning     */	sprites->operator[]("bullet"),
-						/*placeholder magic*/	locationVec,
-						/*                 */	bulletDirection));
-					bulletDirection = (*it)->locationVec - locationVec;
-					bulletDirection.rotate(rand() % 20 - 10);
-					spawnList->push_back(new Bullet(
-						/*     warning     */	sprites->operator[]("bullet"),
-						/*placeholder magic*/	locationVec,
-						/*                 */	bulletDirection));
+					}
 				}
 				else
 				{
-					bulletDelay = 80;
+					bulletDelay = 10;
 					Vector bulletDirection((*it)->locationVec
 						- locationVec);
 					spawnList->push_back(new Bullet(
@@ -158,13 +149,19 @@ void Player::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
 	{
 		switchDelay -= deltaTime * 25;
 	}
+
+	/* Set UI */
+	ui->maxplayerhealth = this->maxHealth;
+	ui->playerHealth = healthPoints;
 }
 
 Player::Player(Sprite* templatesprite): Sprite(templatesprite) 
 {
 	maxVelocity = 23.0f;
+	this->maxHealth = 100;
 	healthPoints = maxHealth;
 	this->plane = 1;
+	scale = 2;
 }
 
 Player::Player(std::string filename, SDL_Renderer* ren): Sprite(filename, ren)

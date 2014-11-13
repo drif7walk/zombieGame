@@ -24,7 +24,7 @@
 # @ZOMBIE
 # zombie.bmp
 # zombie
-# 4
+# 9
 # 3
 # @
 # 
@@ -33,6 +33,13 @@
 # 1
 # 1
 # @
+
+@ZOMBIESPAWNER
+zombiespawner.bmp
+zombiespawner
+1
+1
+@
 
 @CURSOR
 cursor.bmp
@@ -56,7 +63,7 @@ bullet
 @ZOMBIE
 knifezombie.bmp
 zombie
-4
+9
 3
 @
 

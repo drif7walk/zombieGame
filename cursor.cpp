@@ -1,10 +1,8 @@
 #include "cursor.h"
 
-#include <SDL.h>
-
 void Cursor::Render(SDL_Renderer* ren)
 {
-	SDL_Rect r = { (int)this->locationVec.x - this->w / 2, (int)this->locationVec.y - this->h / 2, (int)this->framewidth*this->scale, (int)this->frameheight*this->scale };
+	SDL_Rect r = { (int)(this->locationVec.x - this->w / 2), (int)(this->locationVec.y - this->h / 2), (int)(this->framewidth*this->scale), (int)(this->frameheight*this->scale) };
 	SDL_RenderCopy(ren, this->texture, &src, &r);
 }
 

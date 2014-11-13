@@ -2,6 +2,8 @@
 #define TILE_H
 
 #include <SDL.h>
+#include <SDL_ttf.h>
+
 #include "sprite.h"
 #include "UI.h"
 

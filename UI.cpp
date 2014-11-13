@@ -1,3 +1,4 @@
+/* TODO: Render HUD. */
 #include "UI.h"
 
 int killcount = 0;
@@ -14,7 +15,7 @@ int UI::getkillcount()
 void UI::Render(SDL_Renderer* ren)
 {
 	std::stringstream ss (std::stringstream::in | std::stringstream::out);
-
+/*
 	ss << "KILLS: " << this->getkillcount();
 
 	RenderText(ren, ss.str(), 10, 10);
@@ -25,9 +26,27 @@ void UI::Render(SDL_Renderer* ren)
 	RenderText(ren, ss.str(), 10, 25);
 
 	ss.str(std::string());
+*/
 
-	ss << "HEALTH: " << playerHealth.str();
-	RenderText(ren, ss.str(), 10, 40);
+	ss << "FIRE MODE: " << fireMode;
+	RenderText(ren, ss.str(), 10, 10);
+
+	/* Draw health bar */
+	int h = 15;
+	int x = 0;
+	int y = SCRH - h;
+
+	/* Background */
+	SDL_SetRenderDrawColor( ren, 55, 55, 55, 255 );
+	SDL_Rect r = { x, y, this->maxplayerhealth, h };
+	SDL_RenderFillRect(ren, &r);
+	SDL_SetRenderDrawColor( ren, 0, 0, 0, 255 );
+
+	/* Bar */
+	SDL_SetRenderDrawColor( ren, 255, 0, 0, 255 );
+	r = { x + 5, y + 5, this->playerHealth - 5, h - 5};
+	SDL_RenderFillRect(ren, &r);
+	SDL_SetRenderDrawColor( ren, 0, 0, 0, 255 );
 }
 
 int UI::RenderText (SDL_Renderer* ren, std::string text, int x, int y)

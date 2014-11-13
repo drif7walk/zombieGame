@@ -31,7 +31,7 @@ SpriteHandler::~SpriteHandler()
 	delete spawnList;
 }
 
-void SpriteHandler::Initialize()
+void SpriteHandler::Initialize(UI* ui)
 {
 	spawnList = new std::vector<Sprite*>;
 	sprites = new std::map<std::string, Sprite*>;
@@ -49,17 +49,17 @@ void SpriteHandler::Initialize()
 	{
 		/* Modifying spawned entities happens as back() */
 		entities->push_back(new Zombie((*sprites)["zombie"]));
-		entities->back()->locationVec.x = rand() % SCRW;
-		entities->back()->locationVec.y = rand() % SCRH;
+		entities->back()->locationVec.x = rand() % ui->SCRW;
+		entities->back()->locationVec.y = rand() % ui->SCRH;
 	}
 
 	/* Cursor */
 	entities->push_back(new Cursor((*sprites)["cursor"]));
 
 	/* Create a tilemap */
-	for (int y = 0; y <= SCRH / 32; y++)
+	for (int y = 0; y <= ui->SCRH / 32; y++)
 	{
-		for (int x = 0; x <= SCRW / 32; x++)
+		for (int x = 0; x <= ui->SCRW / 32; x++)
 		{
 		/* Modifying spawned entities happens as back() */	
 		entities->push_back(new Tile((*sprites)["floor"]));
@@ -68,6 +68,13 @@ void SpriteHandler::Initialize()
 		}
 	}
 	
+	/* Create MANY zombie spawner */
+	for (int i = 0; i < 10; i++)
+	{
+		entities->push_back(new Zombiespawner(sprites->operator[]("zombiespawner") ));
+		entities->back()->locationVec.x = rand() % ui->SCRW;
+		entities->back()->locationVec.y = rand() % ui->SCRH;
+	}
 }
 
 int zombieclock = 0;
@@ -78,27 +85,39 @@ void SpriteHandler::Update(UI* ui, double frameTime)
 	sort(entities->begin(), entities->end(), [](const Sprite* a, const Sprite* b) -> bool { return a->locationVec.y < b->locationVec.y; });
 	sort(entities->begin(), entities->end(), [](const Sprite* a, const Sprite* b) -> bool { return a->plane < b->plane; });
 
-		
-
-
-	SDL_Rect screen = { 0, 0, SCRW, SCRH };
-
-	/* Draw entities */
 	std::vector<Sprite*>::iterator it = entities->begin();
+	Vector offset;
+	offset.x = ui->SCRW / 2;
+	offset.y = ui->SCRH / 2;
 	while (it != entities->end())
 	{
-		(*it)->Update(ui, entities, frameTime, spawnList, sprites);
-		(*it)->Render(renderer); 
+		if (strcmp((*it)->name.c_str(), "player") == 0)
+		{
+			offset -= (*it)->locationVec;
+		}
 		it++;
 	}
 
+	SDL_Rect screen = { (int)-offset.x, (int)-offset.y, ui->SCRW, ui->SCRH };
 
-
+	/* Iterate through entities, draw, update, etc */
 	it = entities->begin();
 	while (it != entities->end())
 	{
-		SDL_Rect entity = { (*it)->locationVec.x, (*it)->locationVec.y, (*it)->w, (*it)->h, };
-		if (!SDL_HasIntersection(&screen, &entity))//check if outside bounds
+
+		(*it)->Update(ui, entities, frameTime, spawnList, sprites);
+
+		/* If UI element, then change its x and y to not be affected by the offset */
+		if ((*it)->plane == 2) 
+		{
+			(*it)->locationVec -= offset;
+		}
+		(*it)->Render(renderer, offset); 
+		
+
+		/* Check if outside bounds, unless persistent */
+		SDL_Rect entity = { (int)(*it)->locationVec.x, (int)(*it)->locationVec.y, (int)(*it)->w, (int)(*it)->h, };
+		if (!SDL_HasIntersection(&screen, &entity) && !(*it)->persistent)
 		{
 			delete (*it);
 			it = entities->erase(it);
@@ -113,21 +132,13 @@ void SpriteHandler::Update(UI* ui, double frameTime)
 		it++;
 	}
 
-	spawn();//mainly bullets for now;
-
-	/*
-	XXX: zombie spawning
-	*/
-	zombieclock++;
-	if (zombieclock > zombietimeout)
+	/* Spawnlist */
+	for (auto itt = spawnList->begin(); itt != spawnList->end(); itt++)
 	{
-		zombieclock = 0;
-
-		entities->push_back(new Zombie( sprites->operator[]("zombie") ));
-		entities->back()->locationVec.x = rand() % 700 + 50;
-		entities->back()->locationVec.y = rand() % 500 + 50;
+		entities->push_back((*itt));
 	}
 
+	spawnList->clear();
 
 }
 
@@ -282,6 +293,32 @@ void SpriteHandler::LoadSpritesFromList(SDL_Renderer* ren, std::map<std::string,
 				sprmap->insert(std::pair<std::string, Sprite*>(spr->name, spr));
 			}
 
+			if (s.compare("@ZOMBIESPAWNER") == 0)
+			{
+				SDL_Log("Loading zombie spawner...");
+				Zombiespawner* spr;
+
+				/* name */
+				std::string inln;
+				getline(conffile, inln);
+				spr = new Zombiespawner(inln, ren);
+
+				getline(conffile, spr->name);
+
+				/* rows */
+				getline(conffile, inln);
+				spr->rows = atoi(inln.c_str());
+
+				/* columns */
+				getline(conffile, inln);
+				spr->cols = atoi(inln.c_str());
+
+				spr->framewidth = spr->w / spr->cols;
+				spr->frameheight = spr->h / spr->rows;
+
+				sprmap->insert(std::pair<std::string, Sprite*>(spr->name, spr));
+			}
+
 			/* etc.  */
 
 
@@ -297,13 +334,3 @@ void SpriteHandler::LoadSpritesFromList(SDL_Renderer* ren, std::map<std::string,
 	}
 }
 
-void SpriteHandler::spawn()
-{
-	for (auto itt = spawnList->begin(); itt != spawnList->end(); itt++)
-	{
-		entities->push_back((*itt));
-	}
-
-	spawnList->clear();
-	
-}

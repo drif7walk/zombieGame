@@ -66,7 +66,7 @@ void Sprite::setDirection(Vector direction)
 
 SDL_Rect Sprite::GetRect()
 {
-	return { (int)this->locationVec.x, (int)this->locationVec.y, (int)(this->framewidth*this->scale), (int)(this->framewidth*this->scale) };
+	return { (int)this->locationVec.x, (int)this->locationVec.y, (int)(this->framewidth*this->scale), (int)(this->frameheight*this->scale) };
 }
 
 void Sprite::AnimateStep(int direction, double deltaTime)
@@ -84,6 +84,12 @@ void Sprite::FreezeStep(int direction)
 void Sprite::Render(SDL_Renderer* ren)
 {
 	SDL_Rect r = { (int)this->locationVec.x, (int)this->locationVec.y, (int)this->framewidth*this->scale, (int)this->frameheight*this->scale };
+	SDL_RenderCopy(ren, this->texture, &src, &r);
+}
+
+void Sprite::Render(SDL_Renderer* ren, Vector offset)
+{
+	SDL_Rect r = { (int)(this->locationVec.x + offset.x), (int)(this->locationVec.y + offset.y), (int)this->framewidth*this->scale, (int)this->frameheight*this->scale };
 	SDL_RenderCopy(ren, this->texture, &src, &r);
 }
 
@@ -119,7 +125,10 @@ Sprite::Sprite(std::string filename, SDL_Renderer* ren)
 	this->destroyed = false;
 
 	SDL_Surface* ls = SDL_LoadBMP(filename.c_str());
-	/* if null then [...] */
+	if (ls == NULL) 
+	{
+		SDL_Log("Could not load %s", filename.c_str());
+	}
 
 	SDL_SetColorKey(ls, 1, 0xFF00FF);
 

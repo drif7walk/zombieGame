@@ -8,7 +8,6 @@
 class Player : public Sprite {
 private:	
 	int switchDelay = 0;
-	const int maxHealth = 300;
 	int timeSinceLastHit = 0;
 	int bulletDelay = 0;
 
