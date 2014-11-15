@@ -16,15 +16,14 @@
 #include "tile.h"
 #include "UI.h"
 #include "zombiespawner.h"
+#include "magazine.h"
 
 class SpriteHandler
 {
 private:
 	SDL_Renderer* renderer;
 
-
-
-
+	bool playerIsAlive = true;
 
 	void LoadSpritesFromList(SDL_Renderer* ren, std::map<std::string, Sprite*>* sprmap);
 	void spawn();

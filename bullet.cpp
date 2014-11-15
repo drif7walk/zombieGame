@@ -20,17 +20,12 @@ void Bullet::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
 			bool intersect = SDL_HasIntersection( &r, &r2 );
 
 			if (intersect)
-			{
-				(*it)->healthPoints -= 2;
-				this->destroyed = true;
-				if ((*it)->healthPoints < 0)
+			{			
+				if ((*it)->healthPoints > 0)
 				{
-					if ((*it)->destroyed == false)
-					{
-						ui->AddKill();
-					}
-					(*it)->destroyed = true;
+					this->destroyed = true;
 				}
+				(*it)->healthPoints -= 1;
 				break;
 			}
 		}

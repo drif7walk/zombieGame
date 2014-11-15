@@ -1,25 +1,60 @@
 #include "zombie.h"
 
+#include "magazine.h"
+
 void Zombie::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
 	std::vector<Sprite*>* spawnList, std::map<std::string, Sprite*>*sprites)
 {
-	
-	/* Play spawning animation */
-	if (state == 0) 
+	/* Do not update if destroyed */
+	if (this->destroyed)
 	{
-		if (framecount >= 3) 
+		return;
+	}
+
+	/* Play spawning animation */
+	if (this->state == 0)
+	{
+		if (this->framecount >= 3)
 		{
-			state = 1;
-			framecount = 0;
+			this->state = 1;
+			this->framecount = 0;
 			return;
 		}
 		this->AnimateStep(8, deltaTime);
 		return;
 	}
 
+	if (this->state == 2)
+	{
+		this->animSpeed = 1.2;
+		/* XXX: Death animation repeats first frame if 3 - why? */
+		if (this->framecount > 2)
+		{
+			ui->AddKill();
+			this->destroyed = true;
+
+			if (rand() % 50 == 0)
+			{
+				spawnList->push_back(new Magazine(sprites->operator[]("magazine")));
+				spawnList->back()->locationVec = this->locationVec;
+			}
+
+			return;
+		}
+		this->AnimateStep(9, deltaTime);
+		return;
+	}
+
+	/* Check health */
+	if (this->healthPoints <= 0)
+	{
+		this->state = 2;
+		this->framecount = 0;
+		return;
+	}
+
 	/* Stalk player */
-	double stepx = 0;
-	double stepy = 0;
+
 	bool playerIsAlive = false;
 	for (std::vector<Sprite*>::iterator it = entlist->begin(); it != entlist->end(); it++)
 	{
@@ -35,6 +70,7 @@ void Zombie::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
 			velocityVec.limit(maxVelocity);
 			locationVec = locationVec + velocityVec * deltaTime;
 			playerIsAlive = true;
+			break;
 		}
 		if (strcmp((*it)->name.c_str(), "player") == 0)
 		{
@@ -44,8 +80,10 @@ void Zombie::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
 				playerFound = true;
 			}
 			playerIsAlive = true;
+			break;
 		}
 	}
+
 	if (playerFound == false || playerIsAlive == false)
 	{
 		directionVec.random();
@@ -64,14 +102,14 @@ void Zombie::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
 }
 
 Zombie::Zombie(Sprite* templatesprite) : Sprite(templatesprite)  {
-	maxVelocity = 1.2f;
+	maxVelocity = 2.2f;
 	healthPoints = 1;
 	playerFound = false;
-	scale = 2;
+	scale = 3;
 }
 
 Zombie::Zombie(std::string filename, SDL_Renderer* ren) : Sprite(filename, ren) {
-	maxVelocity = 1.2f;
-	healthPoints = 1;
+	maxVelocity = 2.2f;
+	healthPoints = 3;
 	playerFound = false;
 }

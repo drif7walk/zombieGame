@@ -71,7 +71,7 @@ SDL_Rect Sprite::GetRect()
 
 void Sprite::AnimateStep(int direction, double deltaTime)
 {
-	framecount += (double)0.6*deltaTime;
+	framecount += (double)animSpeed * deltaTime;
 	int row = (int)framecount % cols;
 	this->src = { row*framewidth, direction*frameheight, this->framewidth, this->frameheight };
 }
@@ -101,7 +101,6 @@ void Sprite::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
 
 Sprite::Sprite(Sprite* templatesprite)
 {
-
 	this->destroyed = templatesprite->destroyed;
 
 	this->texture = templatesprite->texture;
@@ -145,7 +144,7 @@ Sprite::Sprite(std::string filename, SDL_Renderer* ren)
 	this->framewidth = this->rows;
 	this->frameheight = this->cols;
 
-	this->plane = 1;
+	this->plane = 2;
 		
 }
 

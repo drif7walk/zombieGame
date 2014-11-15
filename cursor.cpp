@@ -22,6 +22,6 @@ Cursor::Cursor(Sprite* templatesprite): Sprite(templatesprite)  {}
 Cursor::Cursor(std::string filename, SDL_Renderer* ren): Sprite(filename, ren)
 {
 	SDL_ShowCursor(false);
-	this->plane = 2;
+	this->plane = 3;
 }
 

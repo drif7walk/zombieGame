@@ -1,9 +1,7 @@
 #ifndef SOURCERY_H
 #define SOURCERY_H
 
-#include <SDL.h>
-#include <SDL_ttf.h>
-
+#include "sdl.hpp"
 
 #include <fstream>
 #include <string>

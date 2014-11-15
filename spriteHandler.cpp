@@ -45,6 +45,14 @@ void SpriteHandler::Initialize(UI* ui)
 
 	entities->push_back(new Player((*sprites)["player"]));
 
+	Vector playerLocation = entities->back()->locationVec;
+	for (int i = 0; i < 5; i++)
+	{
+		entities->push_back(new Magazine((*sprites)["magazine"]));
+		entities->back()->locationVec = playerLocation;
+	}
+
+
 	for (int i = 0; i < 50; i++)
 	{
 		/* Modifying spawned entities happens as back() */
@@ -85,17 +93,46 @@ void SpriteHandler::Update(UI* ui, double frameTime)
 	sort(entities->begin(), entities->end(), [](const Sprite* a, const Sprite* b) -> bool { return a->locationVec.y < b->locationVec.y; });
 	sort(entities->begin(), entities->end(), [](const Sprite* a, const Sprite* b) -> bool { return a->plane < b->plane; });
 
-	std::vector<Sprite*>::iterator it = entities->begin();
-	Vector offset;
-	offset.x = ui->SCRW / 2;
-	offset.y = ui->SCRH / 2;
-	while (it != entities->end())
+	auto it = entities->begin();
+	Vector offset(ui->SCRW / 2, ui->SCRH / 2);
+
+	if (playerIsAlive == true)
 	{
-		if (strcmp((*it)->name.c_str(), "player") == 0)
+		bool playerNotFound = true;
+		while (it != entities->end())
 		{
-			offset -= (*it)->locationVec;
+			if (strcmp((*it)->name.c_str(), "player") == 0)
+			{
+				offset -= (*it)->locationVec;
+				playerNotFound = false;
+			}
+			it++;
 		}
-		it++;
+		if (playerNotFound == true)
+		{
+			it = entities->begin();
+			while (it != entities->end())
+			{
+				if (strcmp((*it)->name.c_str(), "playerZombie") == 0)
+				{
+					offset -= (*it)->locationVec;
+					playerNotFound = false;
+				}
+				it++;
+			}
+			playerIsAlive = false;
+		}
+	}
+	else
+	{
+		while (it != entities->end())
+		{
+			if (strcmp((*it)->name.c_str(), "playerZombie") == 0)
+			{
+				offset -= (*it)->locationVec;
+			}
+			it++;
+		}
 	}
 
 	SDL_Rect screen = { (int)-offset.x, (int)-offset.y, ui->SCRW, ui->SCRH };
@@ -107,12 +144,16 @@ void SpriteHandler::Update(UI* ui, double frameTime)
 
 		(*it)->Update(ui, entities, frameTime, spawnList, sprites);
 
-		/* If UI element, then change its x and y to not be affected by the offset */
-		if ((*it)->plane == 2) 
+		/* Do not render if destroyed */
+		if (!(*it)->destroyed)
 		{
-			(*it)->locationVec -= offset;
+			/* If UI element, then change its x and y to not be affected by the offset */
+			if ((*it)->plane == 3)
+			{
+				(*it)->locationVec -= offset;
+			}
+			(*it)->Render(renderer, offset);
 		}
-		(*it)->Render(renderer, offset); 
 		
 
 		/* Check if outside bounds, unless persistent */
@@ -318,6 +359,33 @@ void SpriteHandler::LoadSpritesFromList(SDL_Renderer* ren, std::map<std::string,
 
 				sprmap->insert(std::pair<std::string, Sprite*>(spr->name, spr));
 			}
+
+			if (s.compare("@MAGAZINE") == 0)
+			{
+				SDL_Log("Loading magazine...");
+				Magazine* spr;
+
+				/* name */
+				std::string inln;
+				getline(conffile, inln);
+				spr = new Magazine(inln, ren);
+
+				getline(conffile, spr->name);
+
+				/* rows */
+				getline(conffile, inln);
+				spr->rows = atoi(inln.c_str());
+
+				/* columns */
+				getline(conffile, inln);
+				spr->cols = atoi(inln.c_str());
+
+				spr->framewidth = spr->w / spr->cols;
+				spr->frameheight = spr->h / spr->rows;
+
+				sprmap->insert(std::pair<std::string, Sprite*>(spr->name, spr));
+			}
+
 
 			/* etc.  */
 

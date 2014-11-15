@@ -1,5 +1,6 @@
-#include <SDL.h>
-#include <SDL_ttf.h>
+#include <vld.h>
+
+#include "sdl.hpp"
 
 #include "sourcery.h"
 
@@ -9,18 +10,6 @@
 
 int main(int argc, char** argv)
 {
-	Vector a(1, 0);
-	int b = 0;
-	for (int i = 0; i <= 720; i+= 36)
-	{
-		a.rotate(36);
-		b = a.angle();
-	}
-
-	a = Vector(0, -1);
-	b = a.angle();
-
-
 	SDL_Event e;
 	bool quit = false;
 

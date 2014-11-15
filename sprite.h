@@ -1,10 +1,7 @@
 #ifndef SPRITE_H
 #define SPRITE_H
 
-
-#include <SDL.h>
-#include <SDL_ttf.h>
-
+#include "sdl.hpp"
 
 #include <string>
 #include <vector>
@@ -25,8 +22,10 @@ public:
 	Vector locationVec;
 	double w = 1;
 	double h = 1;
-	int plane; // 0 - bg, 1 - items, 2 - ui 
+	int plane; // 0 - bg, 1 - entities on ground , 2 - entities with z-axis, 3 - ui
 	double velocity;
+	int state = 0;
+	float animSpeed = 0.6;
 
 	Vector velocityVec;
 	Vector accelerationVec;
@@ -34,6 +33,7 @@ public:
 	float maxVelocity;
 
 	bool destroyed;
+	bool item;
 
 	int healthPoints;
 	int maxHealth;
@@ -42,7 +42,7 @@ public:
 
 	int rows = 1;
 	int cols = 1;
-	int scale = 2;
+	float scale = 2;
 	int framewidth;
 	int frameheight;
 	double framecount = 0;
@@ -63,6 +63,8 @@ public:
 
 	Sprite(Sprite* templatesprite);
 	Sprite(std::string filename, SDL_Renderer* ren);
+
+	virtual ~Sprite(){};
 
 };
 
