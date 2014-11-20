@@ -9,13 +9,15 @@ class Cursor: public Sprite {
 private:
 
 public:
-	void Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
-		std::vector<Sprite*>* spawnList, std::map<std::string, Sprite*>*sprites) override;
-	
-	void Render(SDL_Renderer* ren) override;
+	void Update(double deltaTime, std::shared_ptr<UI> ui,
+		std::shared_ptr< std::vector< std::shared_ptr< Sprite > > > entlist,
+		std::shared_ptr< std::vector< std::shared_ptr< Sprite > > > spawnlist,
+		std::shared_ptr< std::map < std::string, std::shared_ptr< Sprite > > > sprites) override;
 
-	Cursor(Sprite* templatesprite) ;
-	Cursor(std::string filename, SDL_Renderer* ren);
+	void Render(std::shared_ptr< SDL_Renderer > ren) override;
+
+	Cursor(std::shared_ptr< Sprite > templatesprite);
+	Cursor(std::string filename, std::shared_ptr< SDL_Renderer > ren);
 
 };
 

@@ -1,6 +1,8 @@
 #ifndef SOURCERY_H
 #define SOURCERY_H
 
+#include <memory>
+
 #include "sdl.hpp"
 
 #include <fstream>
@@ -19,15 +21,19 @@
 class Sourcery {
 
 private:
+	
+	int state = 0;// 0 - mainmenu, 1 - game
 
 public:
-	SDL_Window* window;
-	SDL_Renderer* renderer;
-	SpriteHandler* spriteHandler;
-	UI* ui;
+
+	std::shared_ptr< SDL_Window > window;
+	std::shared_ptr< SDL_Renderer > renderer;
+	std::shared_ptr< SpriteHandler > spriteHandler;
+	std::shared_ptr< UI > ui;
 
 
-	int Update(double frameTime);
+	int UpdateGame(double frameTime);
+
 
 	Sourcery();
 	~Sourcery();

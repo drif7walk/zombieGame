@@ -12,15 +12,17 @@ class Zombiespawner: public Sprite {
 private:
 
 public:
-	int interval = 120;
+	int interval = 60;
 	int spawntimer = 0;
 	int maxzombies = 50;
 
-	void Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
-		std::vector<Sprite*>* spawnList, std::map<std::string, Sprite*>*sprites) override;
+	void Update(double deltaTime, std::shared_ptr<UI> ui,
+		std::shared_ptr< std::vector< std::shared_ptr< Sprite > > > entlist,
+		std::shared_ptr< std::vector< std::shared_ptr< Sprite > > > spawnlist,
+		std::shared_ptr< std::map < std::string, std::shared_ptr< Sprite > > > sprites) override;
 
-	Zombiespawner(Sprite* templatesprite) ;
-	Zombiespawner(std::string filename, SDL_Renderer* ren);
+	Zombiespawner(std::shared_ptr< Sprite > templatesprite) ;
+	Zombiespawner(std::string filename, std::shared_ptr< SDL_Renderer > ren);
 
 };
 

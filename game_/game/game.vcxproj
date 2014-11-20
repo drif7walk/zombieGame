@@ -71,6 +71,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>C:\Users\user\Desktop\SDL Open GL libraries\SDL2_mixer-2.0.0\include;C:\Users\user\Desktop\SDL Open GL libraries\SDL2_ttf-2.0.12\include;C:\Users\user\Desktop\SDL Open GL libraries\SDL2-2.0.3\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\user\Desktop\SDL Open GL libraries\SDL2_mixer-2.0.0\lib\x86;C:\Users\user\Desktop\SDL Open GL libraries\SDL2_mixer-2.0.0\lib\x86;C:\Users\user\Desktop\SDL Open GL libraries\SDL2_ttf-2.0.12\lib\x86;C:\Users\user\Desktop\SDL Open GL libraries\SDL2-2.0.3\lib\x86;$(LibraryPath)</LibraryPath>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>C:\Users\user\Desktop\SDL Open GL libraries\SDL2_mixer-2.0.0\include;C:\Users\user\Desktop\SDL Open GL libraries\SDL2_ttf-2.0.12\include;C:\Users\user\Desktop\SDL Open GL libraries\SDL2-2.0.3\include;$(IncludePath)</IncludePath>
@@ -82,7 +83,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>HAVE_LIBC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <BrowseInformation>true</BrowseInformation>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>

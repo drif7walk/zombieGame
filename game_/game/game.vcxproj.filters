@@ -39,9 +39,6 @@
     <ClCompile Include="..\..\UI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\magazine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\vector.cpp">
       <Filter>utility</Filter>
     </ClCompile>
@@ -66,6 +63,9 @@
     <ClCompile Include="..\..\zombiespawner.cpp">
       <Filter>sprites\cpp</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\magazine.cpp">
+      <Filter>sprites\cpp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\sourcery.h">
@@ -75,9 +75,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\UI.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\magazine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\vector.h">
@@ -106,6 +103,9 @@
     </ClInclude>
     <ClInclude Include="..\..\sdl.hpp">
       <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\magazine.h">
+      <Filter>sprites\include</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

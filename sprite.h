@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <memory>
 
 #include "vector.h"
 #include "UI.h"
@@ -55,14 +56,17 @@ public:
 
 	SDL_Rect GetRect();
 
-	virtual void Render(SDL_Renderer* ren);
-	virtual void Render(SDL_Renderer* ren, Vector offset);
+	virtual void Render(std::shared_ptr< SDL_Renderer > ren);
+	virtual void Render(std::shared_ptr< SDL_Renderer > ren, Vector offset);
 
-	virtual void Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
-		std::vector<Sprite*>* spawnList, std::map<std::string, Sprite*>*sprites);
+	virtual void Update(double deltaTime, std::shared_ptr<UI> ui,
+		std::shared_ptr< std::vector< std::shared_ptr< Sprite > > > entlist,
+		std::shared_ptr< std::vector< std::shared_ptr< Sprite > > > spawnlist,
+		std::shared_ptr< std::map < std::string, std::shared_ptr< Sprite > > > sprites);
 
-	Sprite(Sprite* templatesprite);
-	Sprite(std::string filename, SDL_Renderer* ren);
+
+	Sprite(std::shared_ptr< Sprite > templatesprite);
+	Sprite(std::string filename, std::shared_ptr< SDL_Renderer > ren);
 
 	virtual ~Sprite(){};
 

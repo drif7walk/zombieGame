@@ -1,5 +1,7 @@
 #include <vld.h>
 
+#include <memory>
+
 #include "sdl.hpp"
 
 #include "sourcery.h"
@@ -10,17 +12,22 @@
 
 int main(int argc, char** argv)
 {
-	SDL_Event e;
-	bool quit = false;
+	auto e = SDL_Event{};
 
-	double startTime;
-	double deltaTime = 1;
-	float alpha = 0.2f;
-	Uint32 getticks, frametimedelta, frametimelast = 0;
-	float frametime = 0;
-	double _fps = 1000 / 120.0f;
+	auto quit = false;
 
-	Sourcery* sourcery = new Sourcery();
+	auto startTime = 1.0;
+	auto deltaTime = 1.0;
+	auto alpha = 0.2;
+	auto getticks = uint64_t( 0 );
+	auto frametimedelta = uint64_t( 0 );
+	auto frametimelast = uint64_t( 0 );
+	auto frametime = 0.0;
+	auto _fps = 1000.0 / 120.0;
+
+	auto state = 0;
+	//			type				new Sourcery
+	auto sourcery = std::unique_ptr < Sourcery > {std::make_unique< Sourcery >()};
 
 	sourcery->spriteHandler->Initialize(sourcery->ui);
 
@@ -38,7 +45,13 @@ int main(int argc, char** argv)
 			}
 		}
 
-		sourcery->Update(deltaTime / 100.0f);
+
+		if (state == 0)
+		{
+			sourcery->UpdateGame(deltaTime / 100.0f);
+		}
+
+
 
 		/* Frames per second */
 		
@@ -53,7 +66,7 @@ int main(int argc, char** argv)
 		deltaTime = SDL_GetTicks() - startTime;
 	}
 
-	delete sourcery;
+
 
 	return 0;
 }

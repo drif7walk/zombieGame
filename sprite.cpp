@@ -2,7 +2,7 @@
 
 void Sprite::setDirection(Vector direction)
 {
-	float angle = direction.angle();
+	auto angle = direction.angle();
 
 	if (angle > 22.5f && angle <202.5f)
 	{
@@ -72,7 +72,7 @@ SDL_Rect Sprite::GetRect()
 void Sprite::AnimateStep(int direction, double deltaTime)
 {
 	framecount += (double)animSpeed * deltaTime;
-	int row = (int)framecount % cols;
+	auto row = (int)framecount % cols;
 	this->src = { row*framewidth, direction*frameheight, this->framewidth, this->frameheight };
 }
 
@@ -81,25 +81,27 @@ void Sprite::FreezeStep(int direction)
 	this->src = { 0, direction*frameheight, this->framewidth, this->frameheight };
 }
 
-void Sprite::Render(SDL_Renderer* ren)
+void Sprite::Render(std::shared_ptr< SDL_Renderer > ren)
 {
-	SDL_Rect r = { (int)this->locationVec.x, (int)this->locationVec.y, (int)this->framewidth*this->scale, (int)this->frameheight*this->scale };
-	SDL_RenderCopy(ren, this->texture, &src, &r);
+	auto r = SDL_Rect{ (int)this->locationVec.x, (int)this->locationVec.y, (int)this->framewidth*this->scale, (int)this->frameheight*this->scale };
+	SDL_RenderCopy(ren.get(), this->texture, &src, &r);
 }
 
-void Sprite::Render(SDL_Renderer* ren, Vector offset)
+void Sprite::Render(std::shared_ptr< SDL_Renderer > ren, Vector offset)
 {
-	SDL_Rect r = { (int)(this->locationVec.x + offset.x), (int)(this->locationVec.y + offset.y), (int)this->framewidth*this->scale, (int)this->frameheight*this->scale };
-	SDL_RenderCopy(ren, this->texture, &src, &r);
+	auto r = SDL_Rect{ (int)(this->locationVec.x + offset.x), (int)(this->locationVec.y + offset.y), (int)this->framewidth*this->scale, (int)this->frameheight*this->scale };
+	SDL_RenderCopy(ren.get(), this->texture, &src, &r);
 }
 
-void Sprite::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
-		std::vector<Sprite*>* spawnList, std::map<std::string, Sprite*>*sprites)
+void Sprite::Update(double deltaTime, std::shared_ptr<UI> ui,
+		std::shared_ptr< std::vector< std::shared_ptr< Sprite > > > entlist,
+		std::shared_ptr< std::vector< std::shared_ptr< Sprite > > > spawnlist,
+		std::shared_ptr< std::map < std::string, std::shared_ptr< Sprite > > > sprites)
 {
-		this->FreezeStep(direction);
+	this->FreezeStep(direction);
 }
 
-Sprite::Sprite(Sprite* templatesprite)
+Sprite::Sprite(std::shared_ptr< Sprite > templatesprite)
 {
 	this->destroyed = templatesprite->destroyed;
 
@@ -117,7 +119,7 @@ Sprite::Sprite(Sprite* templatesprite)
 	this->plane = templatesprite->plane;
 }
 
-Sprite::Sprite(std::string filename, SDL_Renderer* ren)
+Sprite::Sprite(std::string filename, std::shared_ptr< SDL_Renderer > ren)
 {
 	this->texture = NULL;
 
@@ -131,12 +133,13 @@ Sprite::Sprite(std::string filename, SDL_Renderer* ren)
 
 	SDL_SetColorKey(ls, 1, 0xFF00FF);
 
-	this->texture = SDL_CreateTextureFromSurface(ren, ls);
+	this->texture = SDL_CreateTextureFromSurface(ren.get(), ls);
 	/* if null then */
 
 	SDL_FreeSurface(ls);
 
-	int w, h;
+	auto w = 0;
+	auto h = 0;
 	SDL_QueryTexture(this->texture, NULL, NULL, &w, &h);
 	this->w = (double)w;
 	this->h = (double)h;
