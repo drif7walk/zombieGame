@@ -1,15 +1,7 @@
 #ifndef SOURCERY_H
 #define SOURCERY_H
 
-<<<<<<< HEAD
-#include <memory>
-
 #include "sdl.hpp"
-=======
-#include <SDL.h>
-#include <SDL_ttf.h>
-
->>>>>>> parent of 7bd50a5... magazine update for rapid fire mode
 
 #include <fstream>
 #include <string>
@@ -27,19 +19,15 @@
 class Sourcery {
 
 private:
-	
-	int state = 0;// 0 - mainmenu, 1 - game
 
 public:
+	SDL_Window* window;
+	SDL_Renderer* renderer;
+	SpriteHandler* spriteHandler;
+	UI* ui;
 
-	std::shared_ptr< SDL_Window > window;
-	std::shared_ptr< SDL_Renderer > renderer;
-	std::shared_ptr< SpriteHandler > spriteHandler;
-	std::shared_ptr< UI > ui;
 
-
-	int UpdateGame(double frameTime);
-
+	int Update(double frameTime);
 
 	Sourcery();
 	~Sourcery();

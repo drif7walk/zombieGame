@@ -1,15 +1,11 @@
 #ifndef SPRITE_H
 #define SPRITE_H
 
-
-#include <SDL.h>
-#include <SDL_ttf.h>
-
+#include "sdl.hpp"
 
 #include <string>
 #include <vector>
 #include <map>
-#include <memory>
 
 #include "vector.h"
 #include "UI.h"
@@ -26,8 +22,10 @@ public:
 	Vector locationVec;
 	double w = 1;
 	double h = 1;
-	int plane; // 0 - bg, 1 - items, 2 - ui 
+	int plane; // 0 - bg, 1 - entities on ground , 2 - entities with z-axis, 3 - ui
 	double velocity;
+	int state = 0;
+	float animSpeed = 0.6;
 
 	Vector velocityVec;
 	Vector accelerationVec;
@@ -35,6 +33,7 @@ public:
 	float maxVelocity;
 
 	bool destroyed;
+	bool item;
 
 	int healthPoints;
 	int maxHealth;
@@ -43,7 +42,7 @@ public:
 
 	int rows = 1;
 	int cols = 1;
-	int scale = 2;
+	float scale = 2;
 	int framewidth;
 	int frameheight;
 	double framecount = 0;
@@ -56,17 +55,16 @@ public:
 
 	SDL_Rect GetRect();
 
-	virtual void Render(std::shared_ptr< SDL_Renderer > ren);
-	virtual void Render(std::shared_ptr< SDL_Renderer > ren, Vector offset);
+	virtual void Render(SDL_Renderer* ren);
+	virtual void Render(SDL_Renderer* ren, Vector offset);
 
-	virtual void Update(double deltaTime, std::shared_ptr<UI> ui,
-		std::shared_ptr< std::vector< std::shared_ptr< Sprite > > > entlist,
-		std::shared_ptr< std::vector< std::shared_ptr< Sprite > > > spawnlist,
-		std::shared_ptr< std::map < std::string, std::shared_ptr< Sprite > > > sprites);
+	virtual void Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
+		std::vector<Sprite*>* spawnList, std::map<std::string, Sprite*>*sprites);
 
+	Sprite(Sprite* templatesprite);
+	Sprite(std::string filename, SDL_Renderer* ren);
 
-	Sprite(std::shared_ptr< Sprite > templatesprite);
-	Sprite(std::string filename, std::shared_ptr< SDL_Renderer > ren);
+	virtual ~Sprite(){};
 
 };
 

@@ -1,11 +1,6 @@
 #ifndef BULLET_H
 #define BULLET_H
-<<<<<<< HEAD
 
-#include <memory>
-
-=======
->>>>>>> parent of 7bd50a5... magazine update for rapid fire mode
 #include "sprite.h"
 #include "UI.h"
 
@@ -14,14 +9,12 @@ class Bullet: public Sprite {
 private:
 	float angle;
 public:
-	void Update(double deltaTime, std::shared_ptr<UI> ui,
-		std::shared_ptr< std::vector< std::shared_ptr< Sprite > > > entlist,
-		std::shared_ptr< std::vector< std::shared_ptr< Sprite > > > spawnlist,
-		std::shared_ptr< std::map < std::string, std::shared_ptr< Sprite > > > sprites) override;
+	void Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
 	
-	Bullet(std::shared_ptr< Sprite > templatesprite, Vector location, Vector direction);
-	Bullet(std::string filename, std::shared_ptr< SDL_Renderer > ren);
-	void Render(std::shared_ptr < SDL_Renderer > ren) override;
+	std::vector<Sprite*>* spawnList, std::map<std::string, Sprite*>*sprites) override;
+	Bullet(Sprite* templatesprite, Vector location, Vector direction);
+	Bullet(std::string filename, SDL_Renderer* ren);
+	void Render(SDL_Renderer* ren) override;
 
 };
 

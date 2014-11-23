@@ -7,7 +7,6 @@
 #include <fstream>
 #include <string>
 #include <algorithm>
-#include <memory>
 
 #include "sprite.h"
 #include "player.h"
@@ -17,34 +16,31 @@
 #include "tile.h"
 #include "UI.h"
 #include "zombiespawner.h"
+#include "magazine.h"
 
 class SpriteHandler
 {
 private:
-	std::shared_ptr<SDL_Renderer> renderer;
+	SDL_Renderer* renderer;
 
+	bool playerIsAlive = true;
 
-
-
-
-	void LoadSpritesFromList(std::shared_ptr<SDL_Renderer> ren,	
-		std::shared_ptr<std::map<std::string, std::shared_ptr< Sprite > > > sprmap);
-
+	void LoadSpritesFromList(SDL_Renderer* ren, std::map<std::string, Sprite*>* sprmap);
 	void spawn();
 
 public:
 
-	std::shared_ptr< std::map< std::string, std::shared_ptr<Sprite> > > sprites;
-	std::shared_ptr< std::vector< std::shared_ptr< Sprite > > > entities;
-	std::shared_ptr< std::vector< std::shared_ptr< Sprite > > > spawnList;
+	std::map<std::string, Sprite*>* sprites;
+	std::vector<Sprite*>* entities;
+	std::vector<Sprite*>* spawnList;
 
 
 
-	void Initialize(std::shared_ptr<UI> ui);
+	void Initialize(UI* ui);
 
-	void Update(std::shared_ptr<UI> ui, double frameTime);
+	void Update(UI* ui, double frameTime);
 
-	SpriteHandler(std::shared_ptr<SDL_Renderer> renderer);
+	SpriteHandler(SDL_Renderer* renderer);
 	~SpriteHandler();
 
 };

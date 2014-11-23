@@ -9,15 +9,12 @@ private:
 	double velocity = 1.2;
 	bool playerFound;
 	int aggrodist = 500;
-	int state = 0; /* 0 - spawning, 1 - walking */
+	int state = 0; /* 0 - spawning, 1 - walking, 2 - dying, 3 - deceased */
 public:
-	void Update(double deltaTime, std::shared_ptr<UI> ui,
-		std::shared_ptr< std::vector< std::shared_ptr< Sprite > > > entlist,
-		std::shared_ptr< std::vector< std::shared_ptr< Sprite > > > spawnlist,
-		std::shared_ptr< std::map < std::string, std::shared_ptr< Sprite > > > sprites) override;
-	
-	Zombie(std::shared_ptr< Sprite > templatesprite) ;
-	Zombie(std::string filename, std::shared_ptr< SDL_Renderer > ren);
+	void Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
+		std::vector<Sprite*>* spawnList, std::map<std::string, Sprite*>*sprites) override;
+	Zombie(Sprite* templatesprite) ;
+	Zombie(std::string filename, SDL_Renderer* ren);
 
 };
 

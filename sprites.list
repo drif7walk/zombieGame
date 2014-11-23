@@ -24,7 +24,7 @@
 # @ZOMBIE
 # zombie.bmp
 # zombie
-# 9
+# 10
 # 3
 # @
 # 
@@ -63,7 +63,7 @@ bullet
 @ZOMBIE
 knifezombie.bmp
 zombie
-9
+10
 3
 @
 
@@ -72,4 +72,11 @@ floor.bmp
 floor
 1
 1
+@
+
+@MAGAZINE
+magazine.bmp
+magazine
+1
+6
 @

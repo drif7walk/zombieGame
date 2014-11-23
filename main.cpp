@@ -1,13 +1,6 @@
-<<<<<<< HEAD
 #include <vld.h>
 
-#include <memory>
-
 #include "sdl.hpp"
-=======
-#include <SDL.h>
-#include <SDL_ttf.h>
->>>>>>> parent of 7bd50a5... magazine update for rapid fire mode
 
 #include "sourcery.h"
 
@@ -17,39 +10,17 @@
 
 int main(int argc, char** argv)
 {
-<<<<<<< HEAD
-	auto e = SDL_Event{};
-
-	auto quit = false;
-=======
-	Vector a(1, 0);
-	int b = 0;
-	for (int i = 0; i <= 720; i+= 36)
-	{
-		a.rotate(36);
-		b = a.angle();
-	}
-
-	a = Vector(0, -1);
-	b = a.angle();
-
-
 	SDL_Event e;
 	bool quit = false;
->>>>>>> parent of 7bd50a5... magazine update for rapid fire mode
 
-	auto startTime = 1.0;
-	auto deltaTime = 1.0;
-	auto alpha = 0.2;
-	auto getticks = uint64_t( 0 );
-	auto frametimedelta = uint64_t( 0 );
-	auto frametimelast = uint64_t( 0 );
-	auto frametime = 0.0;
-	auto _fps = 1000.0 / 120.0;
+	double startTime;
+	double deltaTime = 1;
+	float alpha = 0.2f;
+	Uint32 getticks, frametimedelta, frametimelast = 0;
+	float frametime = 0;
+	double _fps = 1000 / 120.0f;
 
-	auto state = 0;
-	//			type				new Sourcery
-	auto sourcery = std::unique_ptr < Sourcery > {std::make_unique< Sourcery >()};
+	Sourcery* sourcery = new Sourcery();
 
 	sourcery->spriteHandler->Initialize(sourcery->ui);
 
@@ -67,13 +38,7 @@ int main(int argc, char** argv)
 			}
 		}
 
-
-		if (state == 0)
-		{
-			sourcery->UpdateGame(deltaTime / 100.0f);
-		}
-
-
+		sourcery->Update(deltaTime / 100.0f);
 
 		/* Frames per second */
 		
@@ -88,7 +53,7 @@ int main(int argc, char** argv)
 		deltaTime = SDL_GetTicks() - startTime;
 	}
 
-
+	delete sourcery;
 
 	return 0;
 }

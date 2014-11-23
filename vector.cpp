@@ -27,14 +27,14 @@ Vector& Vector::operator-=(const Vector& rhs)
 
 Vector Vector::operator+(const Vector& rhs)const
 {
-	auto vec(*this);
+	Vector vec(*this);
 	vec += rhs;
 	return vec;
 }
 
 Vector Vector::operator-(const Vector& rhs)const
 {
-	auto vec(*this);
+	Vector vec(*this);
 	vec -= rhs;
 	return vec;
 }
@@ -55,14 +55,14 @@ Vector& Vector::operator/=(const float& rhs)
 
 Vector Vector::operator*(const float& rhs)const
 {
-	auto vec(*this);
+	Vector vec(*this);
 	vec *= rhs;
 	return vec;
 }
 
 Vector Vector::operator/(const float& rhs)const
 {
-	auto vec(*this);
+	Vector vec(*this);
 	vec /= rhs;
 	return vec;
 }
@@ -73,7 +73,7 @@ float Vector::magnitude()
 }
 
 void Vector::normalize() {
-	auto m = magnitude();
+	float m = magnitude();
 	if (m != 0) {
 		(*this) = (*this) / m;
 	}
@@ -90,11 +90,11 @@ void Vector::limit(const float& n)
 
 void Vector::rotate(const float& angle)
 {
-	auto _angle = angle * M_PI / 180;
-	auto _cos = cos(_angle);
-	auto _sin = sin(_angle);
-	auto px = this->x * _cos - this->y * _sin;
-	auto py = this->x * _sin + this->y * _cos;
+	float _angle = angle * M_PI / 180;
+	float _cos = cos(_angle);
+	float _sin = sin(_angle);
+	float px = this->x * _cos - this->y * _sin;
+	float py = this->x * _sin + this->y * _cos;
 	this->x = px;
 	this->y = py;
 }
@@ -110,8 +110,7 @@ float Vector::angle()
 	//	angle = angle + 360;
 	//}
 	//return 360-angle;
-
-	auto angle = atan2(-y, x) * 57.2957795131f;
+	float angle = atan2(-y, x) * 57.2957795131f;
 	if (angle < 0)
 	{
 		angle *= -1;
