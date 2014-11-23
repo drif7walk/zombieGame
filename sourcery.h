@@ -1,9 +1,15 @@
 #ifndef SOURCERY_H
 #define SOURCERY_H
 
+<<<<<<< HEAD
 #include <memory>
 
 #include "sdl.hpp"
+=======
+#include <SDL.h>
+#include <SDL_ttf.h>
+
+>>>>>>> parent of 7bd50a5... magazine update for rapid fire mode
 
 #include <fstream>
 #include <string>

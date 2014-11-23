@@ -1,31 +1,32 @@
 #include "zombie.h"
 
+<<<<<<< HEAD
 #include "magazine.h"
 
 void Zombie::Update(double deltaTime, std::shared_ptr<UI> ui,
 		std::shared_ptr< std::vector< std::shared_ptr< Sprite > > > entlist,
 		std::shared_ptr< std::vector< std::shared_ptr< Sprite > > > spawnlist,
 		std::shared_ptr< std::map < std::string, std::shared_ptr< Sprite > > > sprites) 
+=======
+void Zombie::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
+	std::vector<Sprite*>* spawnList, std::map<std::string, Sprite*>*sprites)
+>>>>>>> parent of 7bd50a5... magazine update for rapid fire mode
 {
-	/* Do not update if destroyed */
-	if (this->destroyed)
-	{
-		return;
-	}
-
+	
 	/* Play spawning animation */
-	if (this->state == 0)
+	if (state == 0) 
 	{
-		if (this->framecount >= 3)
+		if (framecount >= 3) 
 		{
-			this->state = 1;
-			this->framecount = 0;
+			state = 1;
+			framecount = 0;
 			return;
 		}
 		this->AnimateStep(8, deltaTime);
 		return;
 	}
 
+<<<<<<< HEAD
 	if (this->state == 2)
 	{
 		this->animSpeed = 1.2;
@@ -59,6 +60,13 @@ void Zombie::Update(double deltaTime, std::shared_ptr<UI> ui,
 
 	auto playerIsAlive = false;
 	for (auto it = entlist->begin(); it != entlist->end(); it++)
+=======
+	/* Stalk player */
+	double stepx = 0;
+	double stepy = 0;
+	bool playerIsAlive = false;
+	for (std::vector<Sprite*>::iterator it = entlist->begin(); it != entlist->end(); it++)
+>>>>>>> parent of 7bd50a5... magazine update for rapid fire mode
 	{
 		if (strcmp((*it)->name.c_str(), "player") == 0 && playerFound == true)
 		{
@@ -72,7 +80,6 @@ void Zombie::Update(double deltaTime, std::shared_ptr<UI> ui,
 			velocityVec.limit(maxVelocity);
 			locationVec = locationVec + velocityVec * deltaTime;
 			playerIsAlive = true;
-			break;
 		}
 		if (strcmp((*it)->name.c_str(), "player") == 0)
 		{
@@ -82,10 +89,8 @@ void Zombie::Update(double deltaTime, std::shared_ptr<UI> ui,
 				playerFound = true;
 			}
 			playerIsAlive = true;
-			break;
 		}
 	}
-
 	if (playerFound == false || playerIsAlive == false)
 	{
 		directionVec.random();
@@ -103,15 +108,26 @@ void Zombie::Update(double deltaTime, std::shared_ptr<UI> ui,
 	this->AnimateStep(direction, deltaTime);
 }
 
+<<<<<<< HEAD
 Zombie::Zombie(std::shared_ptr< Sprite > templatesprite) : Sprite(templatesprite)  {
 	maxVelocity = 2.2f;
+=======
+Zombie::Zombie(Sprite* templatesprite) : Sprite(templatesprite)  {
+	maxVelocity = 1.2f;
+>>>>>>> parent of 7bd50a5... magazine update for rapid fire mode
 	healthPoints = 1;
 	playerFound = false;
-	scale = 3;
+	scale = 2;
 }
 
+<<<<<<< HEAD
 Zombie::Zombie(std::string filename, std::shared_ptr< SDL_Renderer > ren) : Sprite(filename, ren) {
 	maxVelocity = 2.2f;
 	healthPoints = 3;
+=======
+Zombie::Zombie(std::string filename, SDL_Renderer* ren) : Sprite(filename, ren) {
+	maxVelocity = 1.2f;
+	healthPoints = 1;
+>>>>>>> parent of 7bd50a5... magazine update for rapid fire mode
 	playerFound = false;
 }

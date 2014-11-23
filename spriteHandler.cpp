@@ -41,6 +41,7 @@ void SpriteHandler::Initialize(std::shared_ptr<UI> ui)
 	entities->push_back(std::make_shared< Player >((*sprites)["player"]));
 
 
+<<<<<<< HEAD
 	auto playerLocation = entities->back()->locationVec;
 	for (auto i = 0; i < 5; i++)
 	{
@@ -49,6 +50,9 @@ void SpriteHandler::Initialize(std::shared_ptr<UI> ui)
 	}
 
 	for (auto i = 0; i < 50; i++)
+=======
+	for (int i = 0; i < 50; i++)
+>>>>>>> parent of 7bd50a5... magazine update for rapid fire mode
 	{
 		/* Modifying spawned entities happens as back() */
 		entities->push_back(std::make_shared< Zombie >((*sprites)["zombie"]));
@@ -94,6 +98,7 @@ void SpriteHandler::Update(std::shared_ptr<UI> ui, double frameTime)
 		[](const std::shared_ptr< Sprite > a, const std::shared_ptr< Sprite > b)
 		-> bool { return a->plane < b->plane; });
 
+<<<<<<< HEAD
 	auto it = entities->begin();
 	auto offset = Vector(ui->SCRW / 2, ui->SCRH / 2);
 
@@ -125,15 +130,19 @@ void SpriteHandler::Update(std::shared_ptr<UI> ui, double frameTime)
 		}
 	}
 	else
+=======
+	std::vector<Sprite*>::iterator it = entities->begin();
+	Vector offset;
+	offset.x = ui->SCRW / 2;
+	offset.y = ui->SCRH / 2;
+	while (it != entities->end())
+>>>>>>> parent of 7bd50a5... magazine update for rapid fire mode
 	{
-		while (it != entities->end())
+		if (strcmp((*it)->name.c_str(), "player") == 0)
 		{
-			if (strcmp((*it)->name.c_str(), "playerZombie") == 0)
-			{
-				offset -= (*it)->locationVec;
-			}
-			it++;
+			offset -= (*it)->locationVec;
 		}
+		it++;
 	}
 
 	auto screen = SDL_Rect{ (int)-offset.x, (int)-offset.y, ui->SCRW, ui->SCRH };
@@ -145,16 +154,12 @@ void SpriteHandler::Update(std::shared_ptr<UI> ui, double frameTime)
 
 		(*it)->Update(frameTime, ui, entities, spawnList, sprites);
 
-		/* Do not render if destroyed */
-		if (!(*it)->destroyed)
+		/* If UI element, then change its x and y to not be affected by the offset */
+		if ((*it)->plane == 2) 
 		{
-			/* If UI element, then change its x and y to not be affected by the offset */
-			if ((*it)->plane == 3)
-			{
-				(*it)->locationVec -= offset;
-			}
-			(*it)->Render(renderer, offset);
+			(*it)->locationVec -= offset;
 		}
+		(*it)->Render(renderer, offset); 
 		
 
 		/* Check if outside bounds, unless persistent */
@@ -355,6 +360,7 @@ void SpriteHandler::LoadSpritesFromList(std::shared_ptr<SDL_Renderer> ren,
 				sprmap->insert(std::pair<std::string, std::shared_ptr< Sprite > >(spr->name, spr));
 			}
 
+<<<<<<< HEAD
 			if (s.compare("@MAGAZINE") == 0)
 			{
 				SDL_Log("Loading magazine...");
@@ -381,6 +387,8 @@ void SpriteHandler::LoadSpritesFromList(std::shared_ptr<SDL_Renderer> ren,
 			}
 
 
+=======
+>>>>>>> parent of 7bd50a5... magazine update for rapid fire mode
 			/* etc.  */
 
 

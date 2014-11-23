@@ -1,8 +1,13 @@
+<<<<<<< HEAD
 #include <vld.h>
 
 #include <memory>
 
 #include "sdl.hpp"
+=======
+#include <SDL.h>
+#include <SDL_ttf.h>
+>>>>>>> parent of 7bd50a5... magazine update for rapid fire mode
 
 #include "sourcery.h"
 
@@ -12,9 +17,26 @@
 
 int main(int argc, char** argv)
 {
+<<<<<<< HEAD
 	auto e = SDL_Event{};
 
 	auto quit = false;
+=======
+	Vector a(1, 0);
+	int b = 0;
+	for (int i = 0; i <= 720; i+= 36)
+	{
+		a.rotate(36);
+		b = a.angle();
+	}
+
+	a = Vector(0, -1);
+	b = a.angle();
+
+
+	SDL_Event e;
+	bool quit = false;
+>>>>>>> parent of 7bd50a5... magazine update for rapid fire mode
 
 	auto startTime = 1.0;
 	auto deltaTime = 1.0;

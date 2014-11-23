@@ -71,8 +71,13 @@ SDL_Rect Sprite::GetRect()
 
 void Sprite::AnimateStep(int direction, double deltaTime)
 {
+<<<<<<< HEAD
 	framecount += (double)animSpeed * deltaTime;
 	auto row = (int)framecount % cols;
+=======
+	framecount += (double)0.6*deltaTime;
+	int row = (int)framecount % cols;
+>>>>>>> parent of 7bd50a5... magazine update for rapid fire mode
 	this->src = { row*framewidth, direction*frameheight, this->framewidth, this->frameheight };
 }
 
@@ -103,6 +108,7 @@ void Sprite::Update(double deltaTime, std::shared_ptr<UI> ui,
 
 Sprite::Sprite(std::shared_ptr< Sprite > templatesprite)
 {
+
 	this->destroyed = templatesprite->destroyed;
 
 	this->texture = templatesprite->texture;
@@ -147,7 +153,7 @@ Sprite::Sprite(std::string filename, std::shared_ptr< SDL_Renderer > ren)
 	this->framewidth = this->rows;
 	this->frameheight = this->cols;
 
-	this->plane = 2;
+	this->plane = 1;
 		
 }
 

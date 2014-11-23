@@ -13,17 +13,27 @@ int UI::getkillcount()
 
 void UI::Render(std::shared_ptr< SDL_Renderer > ren)
 {
+<<<<<<< HEAD
 	auto ss = std::stringstream (std::stringstream::in | std::stringstream::out);
 
+=======
+	std::stringstream ss (std::stringstream::in | std::stringstream::out);
+/*
+>>>>>>> parent of 7bd50a5... magazine update for rapid fire mode
 	ss << "KILLS: " << this->getkillcount();
 
 	RenderText(ren, ss.str(), 10, 10);
 
 	ss.str(std::string());
 
+	ss << "FIRE MODE: " << fireMode;
+	RenderText(ren, ss.str(), 10, 25);
+
+	ss.str(std::string());
+*/
 
 	ss << "FIRE MODE: " << fireMode;
-	RenderText(ren, ss.str(), 10, 20);
+	RenderText(ren, ss.str(), 10, 10);
 
 	/* Draw health bar */
 	auto h = 15;

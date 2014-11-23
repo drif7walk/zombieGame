@@ -1,6 +1,6 @@
 #include "player.h"
-
 #include "bullet.h"
+<<<<<<< HEAD
 #include "zombie.h"
 
 #include <algorithm>
@@ -39,6 +39,8 @@ void Player::reload()
 		}
 	}
 }
+=======
+>>>>>>> parent of 7bd50a5... magazine update for rapid fire mode
 
 void Player::Update(double deltaTime, std::shared_ptr<UI> ui,
 		std::shared_ptr< std::vector< std::shared_ptr< Sprite > > > entlist,
@@ -48,52 +50,68 @@ void Player::Update(double deltaTime, std::shared_ptr<UI> ui,
 	auto keybuf = SDL_GetKeyboardState(NULL);
 	auto mouse = SDL_GetMouseState(NULL, NULL);
 
+<<<<<<< HEAD
 	auto keydown = false;
 	
 	this->directionVec = Vector(0, 0);
 	if (keybuf[SDL_SCANCODE_R] && reloading == false)
+=======
+	const Uint8* keybuf = SDL_GetKeyboardState(NULL);
+	Uint32 mouse = SDL_GetMouseState(NULL, NULL);
+
+	bool keydown = false;
+
+	if (this->healthPoints > 0)
+>>>>>>> parent of 7bd50a5... magazine update for rapid fire mode
 	{
-		this->reload();
-	}
-	if (keybuf[SDL_SCANCODE_W])
-	{
-		this->directionVec = this->directionVec + Vector(0, -1);
-		keydown = true;
-	}
-	if (keybuf[SDL_SCANCODE_A])
-	{
-		this->directionVec = this->directionVec + Vector(-1, 0);
-		keydown = true;
-	}
-	if (keybuf[SDL_SCANCODE_S])
-	{
-		this->directionVec = this->directionVec + Vector(0, 1);
-		keydown = true;
-	}
-	if (keybuf[SDL_SCANCODE_D])
-	{
-		this->directionVec = this->directionVec + Vector(1, 0);
-		keydown = true;
-	}
-	if (mouse & SDL_BUTTON(SDL_BUTTON_RIGHT) && switchDelay <=0)
-	{
-		switchDelay = 500;
-		if (strcmp(ui->fireMode.data(), "rapid fire") == 0)
+		this->directionVec = Vector(0, 0);
+		if (keybuf[SDL_SCANCODE_W])
 		{
-			ui->fireMode = "burst fire";
+			this->directionVec = this->directionVec + Vector(0, -1);
+			keydown = true;
 		}
-		else
+		if (keybuf[SDL_SCANCODE_A])
 		{
-			ui->fireMode = "rapid fire";
+			this->directionVec = this->directionVec + Vector(-1, 0);
+			keydown = true;
 		}
+<<<<<<< HEAD
 	}
 
 	this->directionVec.normalize();
 	this->accelerationVec = this->directionVec * 4.0f;
 	this->velocityVec = this->velocityVec + this->accelerationVec;
 	this->velocityVec.limit(this->maxVelocity);
+=======
+		if (keybuf[SDL_SCANCODE_S])
+		{
+			this->directionVec = this->directionVec + Vector(0, 1);
+			keydown = true;
+		}
+		if (keybuf[SDL_SCANCODE_D])
+		{
+			this->directionVec = this->directionVec + Vector(1, 0);
+			keydown = true;
+		}
+		if (mouse & SDL_BUTTON(SDL_BUTTON_RIGHT) && switchDelay <=0)
+		{
+			switchDelay = 500;
+			if (strcmp(ui->fireMode.data(), "rapid fire") == 0)
+			{
+				ui->fireMode = "burst fire";
+			}
+			else
+			{
+				ui->fireMode = "rapid fire";
+			}
+		}
+		this->directionVec.normalize();
+		this->accelerationVec = this->directionVec * 4.0f;
+		this->velocityVec = this->velocityVec + this->accelerationVec;
+		this->velocityVec.limit(this->maxVelocity);
+>>>>>>> parent of 7bd50a5... magazine update for rapid fire mode
 
-	this->locationVec = this->locationVec + this->velocityVec * deltaTime;
+		this->locationVec = this->locationVec + this->velocityVec * deltaTime;
 
 	if (timeSinceLastHit >= 0)
 	{
@@ -102,6 +120,7 @@ void Player::Update(double deltaTime, std::shared_ptr<UI> ui,
 
 	for (auto it = entlist->begin(); it != entlist->end(); it++)
 	{
+<<<<<<< HEAD
 		if (strcmp((*it)->name.c_str(), "magazine") == 0)
 		{
 			auto r = this->GetRect();
@@ -138,6 +157,8 @@ void Player::Update(double deltaTime, std::shared_ptr<UI> ui,
 				continue;
 			}
 		}
+=======
+>>>>>>> parent of 7bd50a5... magazine update for rapid fire mode
 		if (strcmp((*it)->name.c_str(), "zombie") == 0 && timeSinceLastHit <= 0)
 		{
 			auto r = this->GetRect();
@@ -148,14 +169,18 @@ void Player::Update(double deltaTime, std::shared_ptr<UI> ui,
 			if (intersect)
 			{
 				this->timeSinceLastHit = 80;
-				this->healthPoints -= 10;
+				this->healthPoints -= 1;
 				if (this->healthPoints <= 0)
 				{
+<<<<<<< HEAD
 					/* when you die you turn into a zombie */
 					spawnlist->push_back(std::make_shared< Zombie >((*sprites)["zombie"]));
 					spawnlist->back()->name.assign("playerZombie");
 					spawnlist->back()->locationVec = this->locationVec;
 					spawnlist->back()->state = 1;// this wont work
+=======
+					/* die(); ? */
+>>>>>>> parent of 7bd50a5... magazine update for rapid fire mode
 					this->destroyed = true;
 					continue;
 				}
@@ -164,6 +189,7 @@ void Player::Update(double deltaTime, std::shared_ptr<UI> ui,
 		}
 		if (strcmp((*it)->name.c_str(), "cursor") == 0 && mouse & SDL_BUTTON(SDL_BUTTON_LEFT))
 		{
+			
 			if (mouse & SDL_BUTTON(SDL_BUTTON_LEFT) && bulletDelay <= 0)
 			{
 				auto mid = Vector(locationVec.x + framewidth / 2, locationVec.y + frameheight / 2);
@@ -183,6 +209,7 @@ void Player::Update(double deltaTime, std::shared_ptr<UI> ui,
 				}
 				else
 				{
+<<<<<<< HEAD
 					if (currentMagazine != nullptr && magazines->size() != 0)
 					{
 						if (currentMagazine->getCount() > 0 && reloading == false)
@@ -206,6 +233,15 @@ void Player::Update(double deltaTime, std::shared_ptr<UI> ui,
 						reload();
 					}
 
+=======
+					bulletDelay = 10;
+					Vector bulletDirection((*it)->locationVec
+						- locationVec);
+					spawnList->push_back(new Bullet(
+						/*     warning     */	sprites->operator[]("bullet"),
+						/*placeholder magic*/	locationVec,
+						/*                 */	bulletDirection));
+>>>>>>> parent of 7bd50a5... magazine update for rapid fire mode
 				}
 			}
 
@@ -233,6 +269,7 @@ void Player::Update(double deltaTime, std::shared_ptr<UI> ui,
 	{
 		AnimateStep(direction, deltaTime);
 	}
+	}
 
 	if (bulletDelay > 0)
 	{
@@ -242,6 +279,7 @@ void Player::Update(double deltaTime, std::shared_ptr<UI> ui,
 	{
 		switchDelay -= deltaTime * 25;
 	}
+<<<<<<< HEAD
 	if (reloadDelay > 0)
 	{
 		reloadDelay -= deltaTime * 25;
@@ -258,28 +296,41 @@ void Player::Update(double deltaTime, std::shared_ptr<UI> ui,
 		(*it2)->locationVec = Vector((*it2)->framewidth * i, 550);
 		i++;
 	}
+=======
+>>>>>>> parent of 7bd50a5... magazine update for rapid fire mode
 
 	/* Set UI */
 	ui->maxplayerhealth = this->maxHealth;
 	ui->playerHealth = healthPoints;
+<<<<<<< HEAD
 
 }
 
 Player::Player(std::shared_ptr< Sprite > templatesprite): Sprite(templatesprite) 
+=======
+}
+
+Player::Player(Sprite* templatesprite): Sprite(templatesprite) 
+>>>>>>> parent of 7bd50a5... magazine update for rapid fire mode
 {
 	maxVelocity = 23.0f;
 	this->maxHealth = 100;
 	healthPoints = maxHealth;
+<<<<<<< HEAD
 	this->plane = 2;
 	scale = 3;
 
 	magazines = std::make_shared< std::vector< std::shared_ptr< Magazine > > >();
+=======
+	this->plane = 1;
+	scale = 2;
+>>>>>>> parent of 7bd50a5... magazine update for rapid fire mode
 }
 
 Player::Player(std::string filename, std::shared_ptr< SDL_Renderer > ren): Sprite(filename, ren)
 {
 	maxVelocity = 23.0f;
-	this->plane = 2;
+	this->plane = 1;
 }
 
 

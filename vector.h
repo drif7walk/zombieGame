@@ -1,7 +1,7 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
-#include "sdl.hpp"
+#include <SDL.h>
 
 #include <math.h>
 #include <stdlib.h>

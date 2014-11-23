@@ -1,7 +1,11 @@
 #ifndef UI_H
 #define UI_H
 
-#include "sdl.hpp"
+
+#include <SDL.h>
+#include <SDL_ttf.h>
+
+
 
 #include <string>
 #include <sstream>

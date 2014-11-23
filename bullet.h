@@ -1,8 +1,11 @@
 #ifndef BULLET_H
 #define BULLET_H
+<<<<<<< HEAD
 
 #include <memory>
 
+=======
+>>>>>>> parent of 7bd50a5... magazine update for rapid fire mode
 #include "sprite.h"
 #include "UI.h"
 

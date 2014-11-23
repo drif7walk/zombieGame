@@ -13,22 +13,30 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="sprites">
-      <UniqueIdentifier>{12d3c6cd-f492-4563-ab0f-981782fb710a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sprites\cpp">
-      <UniqueIdentifier>{d68a6a9f-3145-4e85-9368-5d893ab019aa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sprites\include">
-      <UniqueIdentifier>{79f0aba1-267f-46cf-95db-5686d7a42b36}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="utility">
-      <UniqueIdentifier>{8b8d6aa3-2310-40e2-85a7-6a1e68f42f87}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\sourcery.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sprite.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zombie.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+<<<<<<< HEAD:game_/game/game.vcxproj.filters
+    <ClCompile Include="..\..\vector.cpp">
+      <Filter>utility</Filter>
+=======
+    <ClCompile Include="..\..\bullet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\cursor.cpp">
+      <Filter>Source Files</Filter>
+>>>>>>> parent of 7bd50a5... magazine update for rapid fire mode:game/game/game.vcxproj.filters
     </ClCompile>
     <ClCompile Include="..\..\main.cpp">
       <Filter>Source Files</Filter>
@@ -36,73 +44,60 @@
     <ClCompile Include="..\..\spriteHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\vector.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\UI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\vector.cpp">
-      <Filter>utility</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\bullet.cpp">
-      <Filter>sprites\cpp</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\cursor.cpp">
-      <Filter>sprites\cpp</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\player.cpp">
-      <Filter>sprites\cpp</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\sprite.cpp">
-      <Filter>sprites\cpp</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\tile.cpp">
-      <Filter>sprites\cpp</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\zombie.cpp">
-      <Filter>sprites\cpp</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\zombiespawner.cpp">
-      <Filter>sprites\cpp</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\magazine.cpp">
       <Filter>sprites\cpp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\sourcery.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sprite.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+<<<<<<< HEAD:game_/game/game.vcxproj.filters
+    <ClInclude Include="..\..\vector.h">
+      <Filter>utility</Filter>
+=======
+    <ClInclude Include="..\..\bullet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\cursor.h">
+      <Filter>Header Files</Filter>
+>>>>>>> parent of 7bd50a5... magazine update for rapid fire mode:game/game/game.vcxproj.filters
+    </ClInclude>
+    <ClInclude Include="..\..\zombie.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\spriteHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\vector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\UI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\vector.h">
-      <Filter>utility</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\bullet.h">
-      <Filter>sprites\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\cursor.h">
-      <Filter>sprites\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\player.h">
-      <Filter>sprites\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\sprite.h">
-      <Filter>sprites\include</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\tile.h">
-      <Filter>sprites\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\zombie.h">
-      <Filter>sprites\include</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\zombiespawner.h">
-      <Filter>sprites\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\sdl.hpp">
-      <Filter>utility</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\magazine.h">
       <Filter>sprites\include</Filter>

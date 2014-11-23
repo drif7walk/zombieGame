@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -13,7 +13,6 @@
   <ItemGroup>
     <ClCompile Include="..\..\bullet.cpp" />
     <ClCompile Include="..\..\cursor.cpp" />
-    <ClCompile Include="..\..\magazine.cpp" />
     <ClCompile Include="..\..\main.cpp" />
     <ClCompile Include="..\..\player.cpp" />
     <ClCompile Include="..\..\sourcery.cpp" />
@@ -28,9 +27,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\bullet.h" />
     <ClInclude Include="..\..\cursor.h" />
-    <ClInclude Include="..\..\magazine.h" />
     <ClInclude Include="..\..\player.h" />
-    <ClInclude Include="..\..\sdl.hpp" />
     <ClInclude Include="..\..\sourcery.h" />
     <ClInclude Include="..\..\sprite.h" />
     <ClInclude Include="..\..\spriteHandler.h" />
@@ -69,7 +66,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Users\user\Desktop\SDL Open GL libraries\SDL2_mixer-2.0.0\include;C:\Users\user\Desktop\SDL Open GL libraries\SDL2_ttf-2.0.12\include;C:\Users\user\Desktop\SDL Open GL libraries\SDL2-2.0.3\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\user\Desktop\SDL Open GL libraries\SDL2_mixer-2.0.0\include;C:\Users\user\Desktop\SDL Open GL libraries\SDL2_mixer-2.0.0\include;C:\Users\user\Desktop\SDL Open GL libraries\SDL2_ttf-2.0.12\include;C:\Users\user\Desktop\SDL Open GL libraries\SDL2-2.0.3\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\user\Desktop\SDL Open GL libraries\SDL2_mixer-2.0.0\lib\x86;C:\Users\user\Desktop\SDL Open GL libraries\SDL2_mixer-2.0.0\lib\x86;C:\Users\user\Desktop\SDL Open GL libraries\SDL2_ttf-2.0.12\lib\x86;C:\Users\user\Desktop\SDL Open GL libraries\SDL2-2.0.3\lib\x86;$(LibraryPath)</LibraryPath>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
@@ -83,9 +80,12 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>HAVE_LIBC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+<<<<<<< HEAD:game_/game/game.vcxproj
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <BrowseInformation>true</BrowseInformation>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
+=======
+>>>>>>> parent of 7bd50a5... magazine update for rapid fire mode:game/game/game.vcxproj
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -93,11 +93,7 @@
       <SubSystem>Windows</SubSystem>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <AdditionalLibraryDirectories>C:\Users\user\Desktop\SDL Open GL libraries\SDL2_ttf-2.0.12\lib\x86;C:\Users\user\Desktop\SDL Open GL libraries\SDL2-2.0.3\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <Profile>true</Profile>
     </Link>
-    <Bscmake>
-      <PreserveSbr>true</PreserveSbr>
-    </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -120,7 +116,6 @@
       <SubSystem>Windows</SubSystem>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <AdditionalLibraryDirectories>C:\Users\user\Desktop\SDL Open GL libraries\SDL2_ttf-2.0.12\lib\x86;C:\Users\user\Desktop\SDL Open GL libraries\SDL2-2.0.3\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <Profile>true</Profile>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

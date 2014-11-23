@@ -18,12 +18,17 @@ void Bullet::Update(double deltaTime, std::shared_ptr<UI> ui,
 			auto intersect = SDL_HasIntersection( &r, &r2 );
 
 			if (intersect)
-			{			
-				if ((*it)->healthPoints > 0)
+			{
+				(*it)->healthPoints -= 2;
+				this->destroyed = true;
+				if ((*it)->healthPoints < 0)
 				{
-					this->destroyed = true;
+					if ((*it)->destroyed == false)
+					{
+						ui->AddKill();
+					}
+					(*it)->destroyed = true;
 				}
-				(*it)->healthPoints -= 1;
 				break;
 			}
 		}

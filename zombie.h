@@ -9,7 +9,7 @@ private:
 	double velocity = 1.2;
 	bool playerFound;
 	int aggrodist = 500;
-	int state = 0; /* 0 - spawning, 1 - walking, 2 - dying, 3 - deceased */
+	int state = 0; /* 0 - spawning, 1 - walking */
 public:
 	void Update(double deltaTime, std::shared_ptr<UI> ui,
 		std::shared_ptr< std::vector< std::shared_ptr< Sprite > > > entlist,
