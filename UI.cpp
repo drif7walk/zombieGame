@@ -1,7 +1,6 @@
 /* TODO: Render HUD. */
 #include "UI.h"
 
-int killcount = 0;
 
 void UI::AddKill()
 {
@@ -12,9 +11,9 @@ int UI::getkillcount()
 	return killcount;
 }
 
-void UI::Render(SDL_Renderer* ren)
+void UI::Render(boost::shared_ptr< SDL_Renderer > ren)
 {
-	std::stringstream ss (std::stringstream::in | std::stringstream::out);
+	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 
 	ss << "KILLS: " << this->getkillcount();
 
@@ -27,45 +26,52 @@ void UI::Render(SDL_Renderer* ren)
 	RenderText(ren, ss.str(), 10, 20);
 
 	/* Draw health bar */
-	int h = 15;
-	int x = 0;
-	int y = SCRH - h;
+	auto h = 15;
+	auto x = 0;
+	auto y = SCRH - h;
 
 	/* Background */
-	SDL_SetRenderDrawColor( ren, 55, 55, 55, 255 );
-	SDL_Rect r = { x, y, this->maxplayerhealth, h };
-	SDL_RenderFillRect(ren, &r);
-	SDL_SetRenderDrawColor( ren, 0, 0, 0, 255 );
+	SDL_SetRenderDrawColor( ren.get(), 55, 55, 55, 255 );
+	auto r = SDL_Rect{ x, y, this->maxplayerhealth, h };
+	SDL_RenderFillRect(ren.get(), &r);
+	SDL_SetRenderDrawColor( ren.get(), 0, 0, 0, 255 );
 
 	/* Bar */
-	SDL_SetRenderDrawColor( ren, 255, 0, 0, 255 );
+	SDL_SetRenderDrawColor( ren.get(), 255, 0, 0, 255 );
 	r = { x + 5, y + 5, this->playerHealth - 5, h - 5};
-	SDL_RenderFillRect(ren, &r);
-	SDL_SetRenderDrawColor( ren, 0, 0, 0, 255 );
+	SDL_RenderFillRect(ren.get(), &r);
+	SDL_SetRenderDrawColor( ren.get(), 0, 0, 0, 255 );
 }
 
-int UI::RenderText (SDL_Renderer* ren, std::string text, int x, int y)
+int UI::RenderText (boost::shared_ptr< SDL_Renderer > ren, std::string text, int x, int y)
 {
-	TTF_Font* font = NULL;
-	font = TTF_OpenFont("font.ttf", 12);
-	if (font == NULL)
+
+	auto font = boost::shared_ptr< TTF_Font >(
+		TTF_OpenFont("font.ttf", 12),
+		[](TTF_Font* font_){TTF_CloseFont(font_); });
+
+	if (font.get() == NULL)
+	{
 		SDL_Log("Font is null: %s", SDL_GetError());
+	}
 
-	SDL_Color col = { 255, 255, 255, 255 };
+	auto col = SDL_Color{ 255, 255, 255, 255 };
 
-	SDL_Surface* surf = TTF_RenderText_Solid(font, (const char*)text.c_str(), col);
-	SDL_Texture* mytex = SDL_CreateTextureFromSurface( ren, surf);	
+	auto surf = boost::shared_ptr< SDL_Surface >(
+		TTF_RenderText_Solid(font.get(), (const char*)text.c_str(), col),
+		[](SDL_Surface* surf){SDL_FreeSurface(surf); });
 
-	TTF_CloseFont(font);
+	auto mytext = boost::shared_ptr< SDL_Texture >(
+		SDL_CreateTextureFromSurface(ren.get(), surf.get()),
+		[](SDL_Texture* mytext){SDL_DestroyTexture(mytext); });
 
-	int w, h;
-	SDL_QueryTexture(mytex, NULL, NULL, &w, &h);
+	auto w = 0, h = 0;
 
-	SDL_Rect r = { x, y, w, h };
-	SDL_RenderCopy(ren, mytex, NULL, &r);
-	SDL_FreeSurface(surf);
-	SDL_DestroyTexture(mytex);
-	mytex = nullptr;
+	SDL_QueryTexture(mytext.get(), NULL, NULL, &w, &h);
+
+	auto r = SDL_Rect{ x, y, w, h };
+
+	SDL_RenderCopy(ren.get(), mytext.get(), NULL, &r);;
 
 	return 0;
 }

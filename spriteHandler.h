@@ -7,6 +7,7 @@
 #include <fstream>
 #include <string>
 #include <algorithm>
+#include <memory>
 
 #include "sprite.h"
 #include "player.h"
@@ -21,26 +22,28 @@
 class SpriteHandler
 {
 private:
-	SDL_Renderer* renderer;
+	boost::shared_ptr<SDL_Renderer> renderer;
 
 	bool playerIsAlive = true;
 
-	void LoadSpritesFromList(SDL_Renderer* ren, std::map<std::string, Sprite*>* sprmap);
+	void LoadSpritesFromList(boost::shared_ptr<SDL_Renderer> ren,
+		boost::shared_ptr<std::map<std::string, boost::shared_ptr< Sprite > > > sprmap);
+
 	void spawn();
 
 public:
 
-	std::map<std::string, Sprite*>* sprites;
-	std::vector<Sprite*>* entities;
-	std::vector<Sprite*>* spawnList;
+	boost::shared_ptr< std::map< std::string, boost::shared_ptr<Sprite> > > sprites;
+	boost::shared_ptr< std::vector< boost::shared_ptr< Sprite > > > entities;
+	boost::shared_ptr< std::vector< boost::shared_ptr< Sprite > > > spawnList;
 
 
 
-	void Initialize(UI* ui);
+	void Initialize(boost::shared_ptr<UI> ui);
 
-	void Update(UI* ui, double frameTime);
+	void Update(boost::shared_ptr<UI> ui, double frameTime);
 
-	SpriteHandler(SDL_Renderer* renderer);
+	SpriteHandler(boost::shared_ptr<SDL_Renderer> renderer);
 	~SpriteHandler();
 
 };

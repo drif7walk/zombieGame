@@ -14,12 +14,17 @@ void Player::reload()
 		{
 			if ((*it)->destroyed == true)
 			{
-			it = magazines->erase(it);
+				it = magazines->erase(it);
 				this->magazineCount -= 1;
+				if (magazineCount == 0)
+				{
+					return;
+				}
 				continue;
 			}
 			it++;
 		}
+
 
 		reloading = true;
 		reloadDelay = 400;
@@ -35,17 +40,16 @@ void Player::reload()
 	}
 }
 
-void Player::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
-		std::vector<Sprite*>* spawnList, std::map<std::string, Sprite*>*sprites)
-
+void Player::Update(double deltaTime, boost::shared_ptr<UI> ui,
+		boost::shared_ptr< std::vector< boost::shared_ptr< Sprite > > > entlist,
+		boost::shared_ptr< std::vector< boost::shared_ptr< Sprite > > > spawnlist,
+		boost::shared_ptr< std::map < std::string, boost::shared_ptr< Sprite > > > sprites)
 {
+	auto keybuf = SDL_GetKeyboardState(NULL);
+	auto mouse = SDL_GetMouseState(NULL, NULL);
 
-	const Uint8* keybuf = SDL_GetKeyboardState(NULL);
-	Uint32 mouse = SDL_GetMouseState(NULL, NULL);
+	auto keydown = false;
 
-	bool keydown = false;
-
-	
 	this->directionVec = Vector(0, 0);
 	if (keybuf[SDL_SCANCODE_R] && reloading == false)
 	{
@@ -83,6 +87,7 @@ void Player::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
 			ui->fireMode = "rapid fire";
 		}
 	}
+
 	this->directionVec.normalize();
 	this->accelerationVec = this->directionVec * 4.0f;
 	this->velocityVec = this->velocityVec + this->accelerationVec;
@@ -95,34 +100,36 @@ void Player::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
 		timeSinceLastHit -= deltaTime * 25;
 	}
 
-	for (std::vector<Sprite*>::iterator it = entlist->begin(); it != entlist->end(); it++)
+	for (auto it = entlist->begin(); it != entlist->end(); it++)
 	{
 		if (strcmp((*it)->name.c_str(), "magazine") == 0)
 		{
-			SDL_Rect r;
-			r = this->GetRect();
+			auto r = this->GetRect();
+			auto r2 = (*it)->GetRect();
 
-			SDL_Rect r2;
-			r2 = (*it)->GetRect();
-
-			bool intersect = SDL_HasIntersection(&r, &r2);
+			auto intersect = SDL_HasIntersection(&r, &r2);
 
 			if (intersect)
 			{
-				bool reload_ = false;
+				auto reload_ = false;
 				if (magazines->size() == 0)
 				{
 					reload_ = true;
 				}
-				dynamic_cast<Magazine*>(*it)->pickUp();
-				this->magazineCount++;
-				this->magazines->push_back(dynamic_cast<Magazine*>(*it));
 
-				sort(magazines->begin(), magazines->end(), 
-					[](const Magazine* a, const Magazine* b) -> 
+				auto magazine = boost::dynamic_pointer_cast < Magazine >(*it);
+
+				this->magazineCount++;
+
+				magazine->pickUp();
+
+				this->magazines->push_back(magazine);
+
+				sort(magazines->begin(), magazines->end(),
+					[](const boost::shared_ptr< Magazine > a, const boost::shared_ptr< Magazine > b) ->
 					bool { return a->getCount() < b->getCount(); });
 
-				int i = 1;
+				auto i = 1;
 
 				if (reload_ == true)
 				{
@@ -133,13 +140,10 @@ void Player::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
 		}
 		if (strcmp((*it)->name.c_str(), "zombie") == 0 && timeSinceLastHit <= 0)
 		{
-			SDL_Rect r;
-			r = this->GetRect();
+			auto r = this->GetRect();
+			auto r2 = (*it)->GetRect();
 
-			SDL_Rect r2;
-			r2 = (*it)->GetRect();
-
-			bool intersect = SDL_HasIntersection(&r, &r2);
+			auto intersect = SDL_HasIntersection(&r, &r2);
 
 			if (intersect)
 			{
@@ -148,10 +152,10 @@ void Player::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
 				if (this->healthPoints <= 0)
 				{
 					/* when you die you turn into a zombie */
-					spawnList->push_back(new Zombie(sprites->operator[]("zombie")));
-					spawnList->back()->name.assign("playerZombie");
-					spawnList->back()->locationVec = this->locationVec;
-					spawnList->back()->state = 1;// this wont work
+					spawnlist->push_back(boost::make_shared< Zombie >((*sprites)["zombie"]));
+					spawnlist->back()->name.assign("playerZombie");
+					spawnlist->back()->locationVec = this->locationVec;
+					spawnlist->back()->state = 1;// this wont work
 					this->destroyed = true;
 					continue;
 				}
@@ -162,16 +166,17 @@ void Player::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
 		{
 			if (mouse & SDL_BUTTON(SDL_BUTTON_LEFT) && bulletDelay <= 0)
 			{
+				auto mid = Vector(locationVec.x + framewidth / 2, locationVec.y + frameheight / 2);
 				if (strcmp(ui->fireMode.data(), "burst fire") == 0)
-				{ 
+				{
 					bulletDelay = 300;
-					Vector bulletDirection((*it)->locationVec - locationVec);
+					auto bulletDirection = (*it)->locationVec - locationVec;
 
 					for (int i = 0; i < 3; i++)
 					{
-						spawnList->push_back(new Bullet(
+						spawnlist->push_back(boost::make_shared< Bullet >(
 						/*     warning     */	sprites->operator[]("bullet"),
-						/*placeholder magic*/	locationVec,
+						/*placeholder magic*/	mid,
 						/*                 */	bulletDirection));
 					bulletDirection.rotate(rand() % 20 - 10);
 					}
@@ -184,10 +189,10 @@ void Player::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
 						{
 							currentMagazine->decrement();
 							bulletDelay = 10;
-							Vector bulletDirection((*it)->locationVec - locationVec);
-							spawnList->push_back(new Bullet(
+							auto bulletDirection((*it)->locationVec - locationVec);
+							spawnlist->push_back(boost::make_shared< Bullet >(
 								/*     warning     */	sprites->operator[]("bullet"),
-								/*placeholder magic*/	locationVec,
+								/*placeholder magic*/	mid,
 								/*                 */	bulletDirection));
 						}
 						else if (currentMagazine->getCount() <= 0)
@@ -204,20 +209,19 @@ void Player::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
 				}
 			}
 
-
 			setDirection((*it)->locationVec - locationVec);
 
 			continue;
 		}
-			else if (!(mouse & SDL_BUTTON(SDL_BUTTON_LEFT)))
+		else if (!(mouse & SDL_BUTTON(SDL_BUTTON_LEFT)))
+		{
+			if (velocityVec.x == 0 && velocityVec.y == 0)
 			{
-				if (velocityVec.x == 0 && velocityVec.y == 0)
-				{
-					this->direction = 0;
-					continue;
-				}
-				setDirection(velocityVec);
+				this->direction = 0;
+				continue;
 			}
+			setDirection(velocityVec);
+		}
 	}
 
 	if (!keydown)
@@ -248,7 +252,7 @@ void Player::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
 	}
 
 	/* places the magazines in player inventory on the bottom of the screen */
-	int i = 0;
+	auto i = 0;
 	for (auto it2 = magazines->begin(); it2 != magazines->end(); it2++)
 	{
 		(*it2)->locationVec = Vector((*it2)->framewidth * i, 550);
@@ -261,14 +265,7 @@ void Player::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
 
 }
 
-Player::~Player()
-{
-	SDL_Log("player destructor...");
-	delete magazines;/* entity list still points to the magazine
-	objects so no need to delete those her*/
-}
-
-Player::Player(Sprite* templatesprite): Sprite(templatesprite) 
+Player::Player(boost::shared_ptr< Sprite > templatesprite): Sprite(templatesprite)
 {
 	maxVelocity = 23.0f;
 	this->maxHealth = 100;
@@ -276,10 +273,10 @@ Player::Player(Sprite* templatesprite): Sprite(templatesprite)
 	this->plane = 2;
 	scale = 3;
 
-	magazines = new std::vector<Magazine*>;
+	magazines = boost::make_shared< std::vector< boost::shared_ptr< Magazine > > >();
 }
 
-Player::Player(std::string filename, SDL_Renderer* ren): Sprite(filename, ren)
+Player::Player(std::string filename, boost::shared_ptr< SDL_Renderer > ren): Sprite(filename, ren)
 {
 	maxVelocity = 23.0f;
 	this->plane = 2;

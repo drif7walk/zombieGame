@@ -1,41 +1,19 @@
 #include "spriteHandler.h"
 
-SpriteHandler::SpriteHandler(SDL_Renderer* renderer)
+SpriteHandler::SpriteHandler(boost::shared_ptr<SDL_Renderer> renderer)
 {
 	this->renderer = renderer;
-	
 }
 
 SpriteHandler::~SpriteHandler()
 {
-	std::vector<Sprite*>::iterator a;
-	for (a = entities->begin(); a != entities->end(); a++)
-	{
-		delete(*a);
-	}
-	entities->clear();
-	delete entities;
-
-	std::map<std::string, Sprite*>::iterator p;
-	for (p = sprites->begin(); p != sprites->end(); p++) {
-		delete p->second;
-	}
-	sprites->erase(sprites->begin(), sprites->end());
-	delete sprites;
-
-	std::vector<Sprite*>::iterator c;
-	for (c = spawnList->begin(); c != spawnList->end(); c++) {
-		delete (*c);
-	}
-	spawnList->erase(spawnList->begin(), spawnList->end());
-	delete spawnList;
 }
 
-void SpriteHandler::Initialize(UI* ui)
+void SpriteHandler::Initialize(boost::shared_ptr<UI> ui)
 {
-	spawnList = new std::vector<Sprite*>;
-	sprites = new std::map<std::string, Sprite*>;
-	entities = new std::vector<Sprite*>;
+	spawnList = boost::make_shared< std::vector< boost::shared_ptr< Sprite > > >();
+	sprites = boost::make_shared< std::map< std::string, boost::shared_ptr< Sprite > > >();
+	entities = boost::make_shared< std::vector< boost::shared_ptr< Sprite > > >();
 
 	LoadSpritesFromList(renderer, sprites);
 
@@ -43,62 +21,68 @@ void SpriteHandler::Initialize(UI* ui)
 
 	/* Create a player object */
 
-	entities->push_back(new Player((*sprites)["player"]));
+	entities->push_back(boost::make_shared< Player >((*sprites)["player"]));
 
-	Vector playerLocation = entities->back()->locationVec;
-	for (int i = 0; i < 5; i++)
+
+	auto playerLocation = entities->back()->locationVec;
+	for (auto i = 0; i < 5; i++)
 	{
-		entities->push_back(new Magazine((*sprites)["magazine"]));
+		entities->push_back(boost::make_shared< Magazine >((*sprites)["magazine"]));
 		entities->back()->locationVec = playerLocation;
 	}
 
-
-	for (int i = 0; i < 50; i++)
+	for (auto i = 0; i < 50; i++)
 	{
 		/* Modifying spawned entities happens as back() */
-		entities->push_back(new Zombie((*sprites)["zombie"]));
+		entities->push_back(boost::make_shared< Zombie >((*sprites)["zombie"]));
 		entities->back()->locationVec.x = rand() % ui->SCRW;
 		entities->back()->locationVec.y = rand() % ui->SCRH;
 	}
 
 	/* Cursor */
-	entities->push_back(new Cursor((*sprites)["cursor"]));
+	entities->push_back(boost::make_shared< Cursor >((*sprites)["cursor"]));
 
 	/* Create a tilemap */
-	for (int y = 0; y <= ui->SCRH / 32; y++)
+	for (auto y = 0; y <= ui->SCRH / 32; y++)
 	{
-		for (int x = 0; x <= ui->SCRW / 32; x++)
+		for (auto x = 0; x <= ui->SCRW / 32; x++)
 		{
-		/* Modifying spawned entities happens as back() */	
-		entities->push_back(new Tile((*sprites)["floor"]));
+		/* Modifying spawned entities happens as back() */
+		entities->push_back(boost::make_shared< Tile >((*sprites)["floor"]));
 		entities->back()->locationVec.x = entities->back()->w * x * entities->back()->scale;
 		entities->back()->locationVec.y = entities->back()->h * y * entities->back()->scale;
 		}
 	}
-	
+
 	/* Create MANY zombie spawner */
-	for (int i = 0; i < 10; i++)
+	for (auto i = 0; i < 10; i++)
 	{
-		entities->push_back(new Zombiespawner(sprites->operator[]("zombiespawner") ));
+		entities->push_back(boost::make_shared< Zombiespawner >((*sprites)["zombiespawner"]));
 		entities->back()->locationVec.x = rand() % ui->SCRW;
 		entities->back()->locationVec.y = rand() % ui->SCRH;
 	}
 }
 
-int zombieclock = 0;
-int zombietimeout = 12;
-void SpriteHandler::Update(UI* ui, double frameTime)
+auto zombieclock = 0;
+auto zombietimeout = 12;
+
+void SpriteHandler::Update(boost::shared_ptr<UI> ui, double frameTime)
 {
 
-	sort(entities->begin(), entities->end(), [](const Sprite* a, const Sprite* b) -> bool { return a->locationVec.y < b->locationVec.y; });
-	sort(entities->begin(), entities->end(), [](const Sprite* a, const Sprite* b) -> bool { return a->plane < b->plane; });
+	sort(entities->begin(), entities->end(),
+		[](const boost::shared_ptr< Sprite > a, const boost::shared_ptr< Sprite > b)
+		-> bool { return a->locationVec.y < b->locationVec.y; });
+
+	sort(entities->begin(), entities->end(),
+		[](const boost::shared_ptr< Sprite > a, const boost::shared_ptr< Sprite > b)
+		-> bool { return a->plane < b->plane; });
 
 	auto it = entities->begin();
-	Vector offset(ui->SCRW / 2, ui->SCRH / 2);
+	auto offset = Vector(ui->SCRW / 2, ui->SCRH / 2);
 
 	if (playerIsAlive == true)
 	{
-		bool playerNotFound = true;
+		auto playerNotFound = true;
 		while (it != entities->end())
 		{
 			if (strcmp((*it)->name.c_str(), "player") == 0)
@@ -135,14 +119,14 @@ void SpriteHandler::Update(UI* ui, double frameTime)
 		}
 	}
 
-	SDL_Rect screen = { (int)-offset.x, (int)-offset.y, ui->SCRW, ui->SCRH };
+	auto screen = SDL_Rect{ (int)-offset.x, (int)-offset.y, ui->SCRW, ui->SCRH };
 
 	/* Iterate through entities, draw, update, etc */
 	it = entities->begin();
 	while (it != entities->end())
 	{
 
-		(*it)->Update(ui, entities, frameTime, spawnList, sprites);
+		(*it)->Update(frameTime, ui, entities, spawnList, sprites);
 
 		/* Do not render if destroyed */
 		if (!(*it)->destroyed)
@@ -154,19 +138,17 @@ void SpriteHandler::Update(UI* ui, double frameTime)
 			}
 			(*it)->Render(renderer, offset);
 		}
-		
+
 
 		/* Check if outside bounds, unless persistent */
-		SDL_Rect entity = { (int)(*it)->locationVec.x, (int)(*it)->locationVec.y, (int)(*it)->w, (int)(*it)->h, };
+		auto entity = SDL_Rect{ (int)(*it)->locationVec.x, (int)(*it)->locationVec.y, (int)(*it)->w, (int)(*it)->h, };
 		if (!SDL_HasIntersection(&screen, &entity) && !(*it)->persistent)
 		{
-			delete (*it);
 			it = entities->erase(it);
 			continue;
 		}
 		else if ((*it)->destroyed == true)
 		{
-			delete(*it);
 			it = entities->erase(it);
 			continue;
 		}
@@ -174,19 +156,20 @@ void SpriteHandler::Update(UI* ui, double frameTime)
 	}
 
 	/* Spawnlist */
-	for (auto itt = spawnList->begin(); itt != spawnList->end(); itt++)
+	for (it = spawnList->begin(); it != spawnList->end(); it++)
 	{
-		entities->push_back((*itt));
+		entities->push_back((*it));
 	}
-
 	spawnList->clear();
 
 }
 
-void SpriteHandler::LoadSpritesFromList(SDL_Renderer* ren, std::map<std::string, Sprite*>* sprmap)
+void SpriteHandler::LoadSpritesFromList(boost::shared_ptr<SDL_Renderer> ren,
+	boost::shared_ptr<std::map<std::string, boost::shared_ptr< Sprite > > > sprmap)
 {
 	/* open config then parse config */
-	std::string s;
+
+	auto s = std::string();
 	std::ifstream conffile("sprites.list");
 
 	if (conffile.is_open()) // File exists
@@ -197,37 +180,37 @@ void SpriteHandler::LoadSpritesFromList(SDL_Renderer* ren, std::map<std::string,
 			/* C++ does not do switch on strings, use if/else if/else if */
 			if (s[0] == '#') continue; // comment
 
-			if (s.compare("@SPRITE") == 0)
-			{
-				SDL_Log("Loading sprite...");
-				Sprite* spr;
-
-				std::string inln;
-				getline(conffile, inln);
-				spr = new Sprite(inln, ren);
-
-				getline(conffile, spr->name);
-
-				getline(conffile, inln);
-				spr->rows = atoi(inln.c_str());
-
-				getline(conffile, inln);
-				spr->cols = atoi(inln.c_str());
-
-				spr->framewidth = spr->w / spr->cols;
-				spr->frameheight = spr->h / spr->rows;
-
-				sprmap->insert(std::pair<std::string, Sprite*>(spr->name, spr));
-			}
+			//if (s.compare("@SPRITE") == 0)
+			//{
+			//	SDL_Log("Loading sprite...");
+			//	Sprite* spr;
+			//
+			//	std::string inln;
+			//	getline(conffile, inln);
+			//	spr = new Sprite(inln, ren);
+			//
+			//	getline(conffile, spr->name);
+			//
+			//	getline(conffile, inln);
+			//	spr->rows = atoi(inln.c_str());
+			//
+			//	getline(conffile, inln);
+			//	spr->cols = atoi(inln.c_str());
+			//
+			//	spr->framewidth = spr->w / spr->cols;
+			//	spr->frameheight = spr->h / spr->rows;
+			//
+			//	sprmap->insert(std::pair<std::string, Sprite*>(spr->name, spr));
+			//}
 
 			if (s.compare("@TILE") == 0)
 			{
 				SDL_Log("Loading tile...");
-				Sprite* spr;
 
-				std::string inln;
+				auto inln = std::string();
 				getline(conffile, inln);
-				spr = new Sprite(inln, ren);
+
+				auto spr = boost::shared_ptr < Sprite > {boost::make_shared< Tile >(inln, ren)};
 
 				getline(conffile, spr->name);
 
@@ -240,17 +223,16 @@ void SpriteHandler::LoadSpritesFromList(SDL_Renderer* ren, std::map<std::string,
 				spr->framewidth = spr->w / spr->cols;
 				spr->frameheight = spr->h / spr->rows;
 
-				sprmap->insert(std::pair<std::string, Sprite*>(spr->name, spr));
+				sprmap->insert(std::pair<std::string,boost::shared_ptr< Sprite > >(spr->name, spr));
 			}
 
 			if (s.compare("@PLAYER") == 0)
 			{
 				SDL_Log("Loading player...");
-				Player* spr;
 
-				std::string inln;
+				auto inln = std::string();
 				getline(conffile, inln);
-				spr = new Player(inln, ren);
+				auto spr = boost::shared_ptr < Sprite > { boost::make_shared< Sprite >(inln, ren)};
 
 				getline(conffile, spr->name);
 
@@ -263,17 +245,16 @@ void SpriteHandler::LoadSpritesFromList(SDL_Renderer* ren, std::map<std::string,
 				spr->framewidth = spr->w / spr->cols;
 				spr->frameheight = spr->h / spr->rows;
 
-				sprmap->insert(std::pair<std::string, Sprite*>(spr->name, spr));
+				sprmap->insert(std::pair<std::string, boost::shared_ptr< Sprite > >(spr->name, spr));
 			}
 
 			if (s.compare("@CURSOR") == 0)
 			{
 				SDL_Log("Loading cursor...");
-				Cursor* spr;
 
-				std::string inln;
+				auto inln = std::string();
 				getline(conffile, inln);
-				spr = new Cursor(inln, ren);
+				auto spr = boost::shared_ptr < Sprite > { boost::make_shared< Cursor >(inln, ren)};
 
 				getline(conffile, spr->name);
 
@@ -286,17 +267,16 @@ void SpriteHandler::LoadSpritesFromList(SDL_Renderer* ren, std::map<std::string,
 				spr->framewidth = spr->w / spr->cols;
 				spr->frameheight = spr->h / spr->rows;
 
-				sprmap->insert(std::pair<std::string, Sprite*>(spr->name, spr));
+				sprmap->insert(std::pair<std::string, boost::shared_ptr< Sprite > >(spr->name, spr));;
 			}
 
 			if (s.compare("@PROJECTILE") == 0)
 			{
 				SDL_Log("Loading projectile...");
-				Bullet* spr;
 
-				std::string inln;
+				auto inln = std::string();
 				getline(conffile, inln);
-				spr = new Bullet(inln, ren);
+				auto spr = boost::shared_ptr < Sprite > { boost::make_shared< Bullet >(inln, ren)};
 
 				getline(conffile, spr->name);
 				getline(conffile, inln);
@@ -304,21 +284,20 @@ void SpriteHandler::LoadSpritesFromList(SDL_Renderer* ren, std::map<std::string,
 
 				getline(conffile, inln);
 				spr->cols = 1;
-				
+
 				spr->framewidth = spr->w / spr->cols;
 				spr->frameheight = spr->h / spr->rows;
 
-				sprmap->insert(std::pair<std::string, Sprite*>(spr->name, spr));
+				sprmap->insert(std::pair<std::string, boost::shared_ptr< Sprite > >(spr->name, spr));
 			}
 
 			if (s.compare("@ZOMBIE") == 0)
 			{
 				SDL_Log("Loading zombie...");
-				Zombie* spr;
 
-				std::string inln;
+				auto inln = std::string();
 				getline(conffile, inln);
-				spr = new Zombie(inln, ren);
+				auto spr = boost::shared_ptr < Sprite > {boost::make_shared< Zombie >(inln, ren)};
 
 				getline(conffile, spr->name);
 
@@ -331,18 +310,17 @@ void SpriteHandler::LoadSpritesFromList(SDL_Renderer* ren, std::map<std::string,
 				spr->framewidth = spr->w / spr->cols;
 				spr->frameheight = spr->h / spr->rows;
 
-				sprmap->insert(std::pair<std::string, Sprite*>(spr->name, spr));
+				sprmap->insert(std::pair<std::string, boost::shared_ptr< Sprite > >(spr->name, spr));
 			}
 
 			if (s.compare("@ZOMBIESPAWNER") == 0)
 			{
 				SDL_Log("Loading zombie spawner...");
-				Zombiespawner* spr;
 
 				/* name */
-				std::string inln;
+				auto inln = std::string();
 				getline(conffile, inln);
-				spr = new Zombiespawner(inln, ren);
+				auto spr = boost::shared_ptr < Sprite > {boost::make_shared< Zombiespawner >(inln, ren)};
 
 				getline(conffile, spr->name);
 
@@ -357,18 +335,17 @@ void SpriteHandler::LoadSpritesFromList(SDL_Renderer* ren, std::map<std::string,
 				spr->framewidth = spr->w / spr->cols;
 				spr->frameheight = spr->h / spr->rows;
 
-				sprmap->insert(std::pair<std::string, Sprite*>(spr->name, spr));
+				sprmap->insert(std::pair<std::string, boost::shared_ptr< Sprite > >(spr->name, spr));
 			}
 
 			if (s.compare("@MAGAZINE") == 0)
 			{
 				SDL_Log("Loading magazine...");
-				Magazine* spr;
 
 				/* name */
-				std::string inln;
+				auto inln = std::string();
 				getline(conffile, inln);
-				spr = new Magazine(inln, ren);
+				auto spr = boost::shared_ptr < Sprite > {boost::make_shared< Magazine >(inln, ren)};
 
 				getline(conffile, spr->name);
 
@@ -383,7 +360,7 @@ void SpriteHandler::LoadSpritesFromList(SDL_Renderer* ren, std::map<std::string,
 				spr->framewidth = spr->w / spr->cols;
 				spr->frameheight = spr->h / spr->rows;
 
-				sprmap->insert(std::pair<std::string, Sprite*>(spr->name, spr));
+				sprmap->insert(std::pair<std::string, boost::shared_ptr< Sprite > >(spr->name, spr));
 			}
 
 

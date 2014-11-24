@@ -1,72 +1,58 @@
 #include "sourcery.h"
 
-int Sourcery::Update(double frameTime)
+
+int Sourcery::UpdateGame(double frameTime)
 {
-	SDL_RenderClear(renderer);
-	
+	SDL_RenderClear(renderer.get());
+
 	spriteHandler->Update(ui, frameTime);
- 
+
 	ui->Render(renderer);
 
-	SDL_RenderPresent(renderer);
+	SDL_RenderPresent(renderer.get());
 	return 0;
 }
 
 
 Sourcery::Sourcery()
 {
-	ui = new UI();
+	ui = boost::make_shared<UI>();
 
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0 )
 	{
 		SDL_Log("Failed to initialize.");
 	}
 
-	window = SDL_CreateWindow("hl3.exe", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, ui->SCRW, ui->SCRH, SDL_WINDOW_SHOWN);
+	window = boost::shared_ptr<SDL_Window>(
+		SDL_CreateWindow("hl3.exe", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+			ui->SCRW, ui->SCRH, SDL_WINDOW_SHOWN),
+		[](SDL_Window* wind){SDL_DestroyWindow(wind); });
 
 	if (window == nullptr)
 	{
 		SDL_Log("Failed to initialize.");
 	}
-		
-	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
-	if ( TTF_Init() == -1 ) 
+	renderer = boost::shared_ptr<SDL_Renderer>(
+		SDL_CreateRenderer(window.get(), -1, SDL_RENDERER_ACCELERATED),
+		[](SDL_Renderer* ren){SDL_DestroyRenderer(ren); });
+
+	if ( TTF_Init() == -1 )
 	{
 		SDL_Log("Could not initialize SDL_TTF.");
 	}
 
-	spriteHandler = new SpriteHandler(renderer);
+	spriteHandler = boost::make_shared<SpriteHandler>(renderer);
 
 	//LoadSpritesFromList(renderer, sprites);
 
 	srand(time(NULL));
-		
+
 
 }
 Sourcery::~Sourcery()
 {
 	/* Delete every texture from map */
-	delete spriteHandler;
-
-	//std::vector<Sprite*>::iterator a;
-	//for (a = entities->begin(); a != entities->end(); a++)
-	//{
-	//	delete(*a);
-	//}
-	//entities->clear();
-	//delete entities;
-	//
-	//std::map<std::string, Sprite*>::iterator p;
-	//for(p = sprites->begin(); p != sprites->end(); p++) {
-	//  	delete p->second;
-	// 	}
-	//sprites->erase(sprites->begin(), sprites->end());
-	//delete sprites;
-
-	delete ui;
-	SDL_DestroyRenderer(renderer);
-	SDL_DestroyWindow(window);
 	SDL_Quit();
 }
 

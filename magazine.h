@@ -9,10 +9,13 @@ private:
 	int bulletCount = 0;
 
 public:
-	void Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
-		std::vector<Sprite*>* spawnList, std::map<std::string, Sprite*>*sprites) override;
-	Magazine(Sprite* templatesprite) ;
-	Magazine(std::string filename, SDL_Renderer* ren);
+	void Update(double deltaTime, boost::shared_ptr<UI> ui,
+		boost::shared_ptr< std::vector< boost::shared_ptr< Sprite > > > entlist,
+		boost::shared_ptr< std::vector< boost::shared_ptr< Sprite > > > spawnlist,
+		boost::shared_ptr< std::map < std::string, boost::shared_ptr< Sprite > > > sprites) override;
+
+	Magazine(boost::shared_ptr< Sprite > templatesprite);
+	Magazine(std::string filename, boost::shared_ptr< SDL_Renderer > ren);
 
 	void decrement();
 	int getCount() const;
@@ -20,4 +23,4 @@ public:
 };
 
 
-#endif 
+#endif

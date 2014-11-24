@@ -1,11 +1,16 @@
 #ifndef SPRITE_H
 #define SPRITE_H
 
-#include "sdl.hpp"
+#include <boost/smart_ptr/shared_ptr.hpp>
+#include <boost/smart_ptr/make_shared.hpp>
 
+#include <SDL2/SDL.h>
+
+#include <string.h>
 #include <string>
 #include <vector>
 #include <map>
+#include <memory>
 
 #include "vector.h"
 #include "UI.h"
@@ -14,7 +19,7 @@ class Sprite {
 
 protected:
 	virtual void setDirection(Vector direction);// virtual because zombie is lacking textures and using the
-	//full aglo will make the zombies dissapear under certain conditions so zombie has an override to 
+	//full aglo will make the zombies dissapear under certain conditions so zombie has an override to
 	//setDirection(Vector direction)
 
 public:
@@ -55,14 +60,17 @@ public:
 
 	SDL_Rect GetRect();
 
-	virtual void Render(SDL_Renderer* ren);
-	virtual void Render(SDL_Renderer* ren, Vector offset);
+	virtual void Render(boost::shared_ptr< SDL_Renderer > ren);
+	virtual void Render(boost::shared_ptr< SDL_Renderer > ren, Vector offset);
 
-	virtual void Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
-		std::vector<Sprite*>* spawnList, std::map<std::string, Sprite*>*sprites);
+	virtual void Update(double deltaTime, boost::shared_ptr<UI> ui,
+		boost::shared_ptr< std::vector< boost::shared_ptr< Sprite > > > entlist,
+		boost::shared_ptr< std::vector< boost::shared_ptr< Sprite > > > spawnlist,
+		boost::shared_ptr< std::map < std::string, boost::shared_ptr< Sprite > > > sprites);
 
-	Sprite(Sprite* templatesprite);
-	Sprite(std::string filename, SDL_Renderer* ren);
+
+	Sprite(boost::shared_ptr< Sprite > templatesprite);
+	Sprite(std::string filename, boost::shared_ptr< SDL_Renderer > ren);
 
 	virtual ~Sprite(){};
 

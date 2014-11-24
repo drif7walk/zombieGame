@@ -2,8 +2,10 @@
 
 #include "magazine.h"
 
-void Zombie::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
-	std::vector<Sprite*>* spawnList, std::map<std::string, Sprite*>*sprites)
+void Zombie::Update(double deltaTime, boost::shared_ptr<UI> ui,
+		boost::shared_ptr< std::vector< boost::shared_ptr< Sprite > > > entlist,
+		boost::shared_ptr< std::vector< boost::shared_ptr< Sprite > > > spawnlist,
+		boost::shared_ptr< std::map < std::string, boost::shared_ptr< Sprite > > > sprites)
 {
 	/* Do not update if destroyed */
 	if (this->destroyed)
@@ -35,8 +37,8 @@ void Zombie::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
 
 			if (rand() % 50 == 0)
 			{
-				spawnList->push_back(new Magazine(sprites->operator[]("magazine")));
-				spawnList->back()->locationVec = this->locationVec;
+				spawnlist->push_back(boost::make_shared< Magazine >(sprites->operator[]("magazine")));
+				spawnlist->back()->locationVec = this->locationVec;
 			}
 
 			return;
@@ -55,12 +57,12 @@ void Zombie::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
 
 	/* Stalk player */
 
-	bool playerIsAlive = false;
-	for (std::vector<Sprite*>::iterator it = entlist->begin(); it != entlist->end(); it++)
+	auto playerIsAlive = false;
+	for (auto it = entlist->begin(); it != entlist->end(); it++)
 	{
 		if (strcmp((*it)->name.c_str(), "player") == 0 && playerFound == true)
 		{
-			Vector playerVec((*it)->locationVec);
+			auto playerVec((*it)->locationVec);
 			directionVec = playerVec - locationVec;
 			directionVec.normalize();
 			directionVec = directionVec * 0.025f;
@@ -101,14 +103,14 @@ void Zombie::Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
 	this->AnimateStep(direction, deltaTime);
 }
 
-Zombie::Zombie(Sprite* templatesprite) : Sprite(templatesprite)  {
+Zombie::Zombie(boost::shared_ptr< Sprite > templatesprite) : Sprite(templatesprite)  {
 	maxVelocity = 2.2f;
 	healthPoints = 1;
 	playerFound = false;
 	scale = 3;
 }
 
-Zombie::Zombie(std::string filename, SDL_Renderer* ren) : Sprite(filename, ren) {
+Zombie::Zombie(std::string filename, boost::shared_ptr< SDL_Renderer > ren) : Sprite(filename, ren) {
 	maxVelocity = 2.2f;
 	healthPoints = 3;
 	playerFound = false;

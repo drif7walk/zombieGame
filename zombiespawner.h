@@ -1,8 +1,7 @@
 #ifndef ZOMBIESPAWNER_H
 #define ZOMBIESPAWNER_H
 
-#include <SDL.h>
-#include <SDL_ttf.h>
+#include <SDL2/SDL.h>
 
 #include "sprite.h"
 #include "UI.h"
@@ -12,15 +11,17 @@ class Zombiespawner: public Sprite {
 private:
 
 public:
-	int interval = 120;
+	int interval = 60;
 	int spawntimer = 0;
 	int maxzombies = 50;
 
-	void Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
-		std::vector<Sprite*>* spawnList, std::map<std::string, Sprite*>*sprites) override;
+	void Update(double deltaTime, boost::shared_ptr<UI> ui,
+		boost::shared_ptr< std::vector< boost::shared_ptr< Sprite > > > entlist,
+		boost::shared_ptr< std::vector< boost::shared_ptr< Sprite > > > spawnlist,
+		boost::shared_ptr< std::map < std::string, boost::shared_ptr< Sprite > > > sprites) override;
 
-	Zombiespawner(Sprite* templatesprite) ;
-	Zombiespawner(std::string filename, SDL_Renderer* ren);
+	Zombiespawner(boost::shared_ptr< Sprite > templatesprite) ;
+	Zombiespawner(std::string filename, boost::shared_ptr< SDL_Renderer > ren);
 
 };
 

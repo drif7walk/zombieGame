@@ -1,4 +1,0 @@
-#!/bin/bash
-g++ -std=c++1y main.cpp UI.cpp tile.cpp zombie.cpp spriteHandler.cpp vector.cpp cursor.cpp sprite.cpp bullet.cpp player.cpp sourcery.cpp -lSDL2 -lSDL2_ttf -lSDL2main  -o game -Os
-
-

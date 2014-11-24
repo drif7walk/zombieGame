@@ -11,10 +11,13 @@ private:
 	int aggrodist = 500;
 	int state = 0; /* 0 - spawning, 1 - walking, 2 - dying, 3 - deceased */
 public:
-	void Update(UI* ui, std::vector<Sprite*>* entlist, double deltaTime,
-		std::vector<Sprite*>* spawnList, std::map<std::string, Sprite*>*sprites) override;
-	Zombie(Sprite* templatesprite) ;
-	Zombie(std::string filename, SDL_Renderer* ren);
+	void Update(double deltaTime, boost::shared_ptr<UI> ui,
+		boost::shared_ptr< std::vector< boost::shared_ptr< Sprite > > > entlist,
+		boost::shared_ptr< std::vector< boost::shared_ptr< Sprite > > > spawnlist,
+		boost::shared_ptr< std::map < std::string, boost::shared_ptr< Sprite > > > sprites) override;
+
+	Zombie(boost::shared_ptr< Sprite > templatesprite) ;
+	Zombie(std::string filename, boost::shared_ptr< SDL_Renderer > ren);
 
 };
 
