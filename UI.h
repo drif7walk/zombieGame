@@ -27,6 +27,7 @@ public:
 
 	int RenderText (boost::shared_ptr< SDL_Renderer > ren, std::string text, int x, int y);
 
+	void RenderMainMenu(boost::shared_ptr< SDL_Renderer > ren);
 	void Render(boost::shared_ptr< SDL_Renderer > ren);
 
 	UI()

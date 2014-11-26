@@ -19,48 +19,6 @@ void SpriteHandler::Initialize(boost::shared_ptr<UI> ui)
 
 	srand(time(NULL));
 
-	/* Create a player object */
-
-	entities->push_back(boost::make_shared< Player >((*sprites)["player"]));
-
-
-	auto playerLocation = entities->back()->locationVec;
-	for (auto i = 0; i < 5; i++)
-	{
-		entities->push_back(boost::make_shared< Magazine >((*sprites)["magazine"]));
-		entities->back()->locationVec = playerLocation;
-	}
-
-	for (auto i = 0; i < 50; i++)
-	{
-		/* Modifying spawned entities happens as back() */
-		entities->push_back(boost::make_shared< Zombie >((*sprites)["zombie"]));
-		entities->back()->locationVec.x = rand() % ui->SCRW;
-		entities->back()->locationVec.y = rand() % ui->SCRH;
-	}
-
-	/* Cursor */
-	entities->push_back(boost::make_shared< Cursor >((*sprites)["cursor"]));
-
-	/* Create a tilemap */
-	for (auto y = 0; y <= ui->SCRH / 32; y++)
-	{
-		for (auto x = 0; x <= ui->SCRW / 32; x++)
-		{
-		/* Modifying spawned entities happens as back() */
-		entities->push_back(boost::make_shared< Tile >((*sprites)["floor"]));
-		entities->back()->locationVec.x = entities->back()->w * x * entities->back()->scale;
-		entities->back()->locationVec.y = entities->back()->h * y * entities->back()->scale;
-		}
-	}
-
-	/* Create MANY zombie spawner */
-	for (auto i = 0; i < 10; i++)
-	{
-		entities->push_back(boost::make_shared< Zombiespawner >((*sprites)["zombiespawner"]));
-		entities->back()->locationVec.x = rand() % ui->SCRW;
-		entities->back()->locationVec.y = rand() % ui->SCRH;
-	}
 }
 
 auto zombieclock = 0;
@@ -126,12 +84,10 @@ void SpriteHandler::Update(boost::shared_ptr<UI> ui, double frameTime)
 	while (it != entities->end())
 	{
 
-		(*it)->Update(frameTime, ui, entities, spawnList, sprites);
-
 		/* Do not render if destroyed */
 		if (!(*it)->destroyed)
 		{
-			/* If UI element, then change its x and y to not be affected by the offset */
+			/* Plane 3, then change its x and y to not be affected by the offset */
 			if ((*it)->plane == 3)
 			{
 				(*it)->locationVec -= offset;
@@ -142,6 +98,14 @@ void SpriteHandler::Update(boost::shared_ptr<UI> ui, double frameTime)
 
 		/* Check if outside bounds, unless persistent */
 		auto entity = SDL_Rect{ (int)(*it)->locationVec.x, (int)(*it)->locationVec.y, (int)(*it)->w, (int)(*it)->h, };
+
+		/* Only update if inside screen. */
+		if (SDL_HasIntersection(&screen, &entity))
+		{
+
+			(*it)->Update(frameTime, ui, entities, spawnList, sprites);
+
+		}
 		if (!SDL_HasIntersection(&screen, &entity) && !(*it)->persistent)
 		{
 			it = entities->erase(it);

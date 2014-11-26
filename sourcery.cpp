@@ -5,9 +5,44 @@ int Sourcery::UpdateGame(double frameTime)
 {
 	SDL_RenderClear(renderer.get());
 
-	spriteHandler->Update(ui, frameTime);
+	switch (this->state)
+	{
+		case 0:
+		{
+			spriteHandler->Update(ui, frameTime);
+			ui->RenderMainMenu(renderer);
 
-	ui->Render(renderer);
+			auto keybuf = SDL_GetKeyboardState(NULL);
+
+			if (keybuf[SDL_SCANCODE_Z])
+			{
+				this->state = 1;
+
+				//===========================
+				// CREATE GAME
+				spriteHandler->entities->clear();
+								/* Create a player object */
+
+				spriteHandler->entities->push_back(boost::make_shared< Player >((*spriteHandler->sprites)["player"]));
+
+
+				auto playerLocation = spriteHandler->entities->back()->locationVec;
+				for (auto i = 0; i < 5; i++)
+				{
+					spriteHandler->entities->push_back(boost::make_shared< Magazine >((*spriteHandler->sprites)["magazine"]));
+					spriteHandler->entities->back()->locationVec = playerLocation;
+				}
+
+			}
+			
+		}
+		break;
+		case 1:
+			spriteHandler->Update(ui, frameTime);
+			ui->Render(renderer);
+		break;
+		
+	}
 
 	SDL_RenderPresent(renderer.get());
 	return 0;
@@ -44,7 +79,16 @@ Sourcery::Sourcery()
 
 	spriteHandler = boost::make_shared<SpriteHandler>(renderer);
 
-	//LoadSpritesFromList(renderer, sprites);
+	/* Create demo scenario. */
+				auto playerLocation = spriteHandler->entities->back()->locationVec;
+				for (auto i = 0; i < 5; i++)
+				{
+					spriteHandler->entities->push_back(boost::make_shared< Magazine >((*spriteHandler->sprites)["magazine"]));
+					spriteHandler->entities->back()->locationVec = playerLocation;
+				}
+				this->state = 1;
+
+	spriteHandler->Initialize(ui);
 
 	srand(time(NULL));
 

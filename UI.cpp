@@ -11,6 +11,11 @@ int UI::getkillcount()
 	return killcount;
 }
 
+void UI::RenderMainMenu(boost::shared_ptr< SDL_Renderer > ren)
+{
+	RenderText(ren, "Press Z for Game", 10, 10);
+}
+
 void UI::Render(boost::shared_ptr< SDL_Renderer > ren)
 {
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
